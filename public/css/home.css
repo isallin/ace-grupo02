@@ -1,4 +1,4 @@
-:root{
+:root {
   --destaque: #6AD6EE;
   --contraste: #B87333;
   --preto: #131319;
@@ -16,6 +16,59 @@
 
 body {
   background-image: url("../../Assets/background.png");
+}
+
+.hero-ace {
+  width: 85%;
+  margin: 40px auto;
+}
+
+.hero-container {
+  background: var(--fundo1);
+  border: 2px solid var(--destaque);
+  border-radius: 10px;
+
+  padding: 70px 40px;
+
+  text-align: center;
+
+  background: rgba(23, 39, 57, 0.85);
+  backdrop-filter: blur(8px);
+
+  box-shadow:
+    0 0 30px rgba(0,0,0,0.5),
+    0 0 20px rgba(106, 214, 238, 0.2);
+}
+
+.hero-title {
+  font-size: 56px;
+  font-weight: 800;
+
+  color: var(--destaque);
+
+  letter-spacing: 2px;
+
+  margin-bottom: 25px;
+
+  line-height: 1.2;
+}
+
+.hero-description {
+  max-width: 800px;
+
+  margin: auto;
+
+  font-size: 20px;
+
+  color: var(--branco);
+
+  opacity: 0.85;
+
+  line-height: 1.7;
+}
+
+.hero-description strong {
+  color: var(--destaque);
 }
 
 .swiper {
@@ -40,7 +93,7 @@ body {
   font-size: 24px;
   padding: 0px 30px;
   padding-bottom: 20px;
-} 
+}
 
 #main h1 {
   justify-self: left;
@@ -173,7 +226,7 @@ nav a:hover {
 .card:hover {
   transform: translateY(-8px);
   border-color: #6ddcff;
-  box-shadow: 
+  box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.5),
     0 0 20px rgba(109, 220, 255, 0.3);
 }
@@ -205,4 +258,114 @@ nav a:hover {
   justify-self: center;
   color: var(--branco);
   margin-bottom: 20px;
+}
+
+@media (max-width: 420px) {
+
+  .topbar {
+    width: 95%;
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .logo img {
+    width: 140px;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav a {
+    font-size: 14px;
+    margin: 5px 10px;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  .hero-ace {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .hero-container {
+    padding: 40px 20px;
+  }
+
+  .hero-title {
+    font-size: 28px;
+    letter-spacing: 1px;
+  }
+
+  .hero-description {
+    font-size: 16px;
+  }
+
+  .news {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .news h2 {
+    font-size: 22px;
+    margin-bottom: 30px;
+  }
+
+  .swiper {
+    height: 400px;
+  }
+
+  .noticia {
+    height: 400px;
+  }
+
+  #main {
+    margin-top: 55%;
+    font-size: 14px;
+    padding: 15px;
+  }
+
+  #main h1 {
+    font-size: 26px;
+  }
+
+  .cards {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .cardContainer {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .card {
+    width: 100%;
+    height: auto;
+  }
+
+  .card img {
+    height: 70px;
+  }
+
+  .card p {
+    font-size: 14px;
+  }
+
+  .card h2 {
+    font-size: 20px;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 14px;
+    padding: 20px;
+  }
+
 }
