@@ -1,0 +1,33 @@
+:root {
+  --destaque: #6AD6EE;
+  --contraste: #B87333;
+  --preto: #131319;
+  --branco: #D9D9D9;
+  --fundo1: #172739;
+  --frente1: #838690;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Unbounded', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--fundo1);
+}
+
+#central {
+    height: 92%;
+    width: 97%;
+    -webkit-box-shadow:0px 0px 231px 6px rgba(106,214,238,0.31);
+    -moz-box-shadow: 0px 0px  6px rgba(106,214,238,0.31);
+    box-shadow: 0px 0px 231px 6px rgba(106,214,238,0.31);
+    border: 2px solid #6ad6ee35;
+    border-radius: 7px;
+}
