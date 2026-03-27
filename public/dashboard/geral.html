@@ -8,7 +8,52 @@
 </head>
 <body>
     <div id="central">
-        <h1>oi</h1>
+        <div id="sidebar">
+            <div id="sidebaritems">
+                <img src="../../assets/logo.png" alt="" id="logo">
+                <div id="botoes">
+                    <button id="botaoside">Geral</button>
+                    <button id="botaoside">Mapas</button>
+                    <button id="botaoside">Agentes</button>
+                    <button id="botaoside">Enviar composição</button>
+                </div>
+                <div id="userinfo">
+                    <img src="../../assets/login.png" alt="" id="userphoto">
+                    <button>Sair</button>
+                </div>
+            </div>
+        </div>
+        <div id="conteudo">
+            <div id="bemvindo">
+                <span id="bemvindo-saudacao">Bem-vindo,</span>
+                <span id="bemvindo-usuario">Usuário</span>
+            </div>
+            <div id="kpis">
+                <div class="kpi-card">
+                    <span class="kpi-label">KPI 1</span>
+                    <span class="kpi-valor">—</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">KPI 2</span>
+                    <span class="kpi-valor">—</span>
+                </div>
+            </div>
+
+            <div id="graficos">
+                <div class="grafico-card" id="grafico-card-1">
+                    <span class="grafico-titulo">Gráfico 1</span>
+                    <div class="grafico-canvas">
+                        <canvas id="grafico1"></canvas>
+                    </div>
+                </div>
+                <div class="grafico-card" id="grafico-card-2">
+                    <span class="grafico-titulo">Gráfico 2</span>
+                    <div class="grafico-canvas">
+                        <canvas id="grafico2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
