@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/dashboard.css">
     <title>Painel Geral</title>
 </head>
+
 <body>
     <div id="central">
         <div id="sidebar">
@@ -29,16 +31,23 @@
                 <span id="bemvindo-usuario">Usuário</span>
             </div>
             <div id="kpis">
-                <div class="kpi-card">
-                    <span class="kpi-label">KPI 1</span>
-                    <span class="kpi-valor">—</span>
+                <div class="kpi-card agent" id="kpiagent">
+                    <img class="agent-img" id="kpi-img" src="../../assets/Chamber_icon.png" alt="">
+                    <div class="agent-textos" id="txtagent">
+                        <span class="kpi-label">Melhor agente no mapa</span>
+                        <span class="kpi-valor" id="kpi-mapa">LOTUS</span>
+                    </div>
+                    <div class="agent-winrate">
+                        <span class="winrate-label">Taxa de Win Rate</span>
+                        <span class="winrate-valor" id="kpi-wr">89.7%</span>
+                    </div>
                 </div>
+
                 <div class="kpi-card">
                     <span class="kpi-label">KPI 2</span>
                     <span class="kpi-valor">—</span>
                 </div>
             </div>
-
             <div id="graficos">
                 <div class="grafico-card" id="grafico-card-1">
                     <span class="grafico-titulo">Gráfico 1</span>
@@ -56,4 +65,91 @@
         </div>
     </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('grafico1')
+    const ctx2 = document.getElementById('grafico2')
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+            datasets: [{
+                label: '# of Votes',
+                data: [65, 55, 98, 88, 59],
+                backgroundColor: 'rgba(106,214,238,0.15)',
+                borderColor: '#6AD6EE',
+                borderWidth: 1,
+                borderRadius: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+                x: {
+                    min: 50,
+                    max: 100
+                }
+            },
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            grid: { display: false },
+        }
+    });
+
+    new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+            datasets: [{
+                label: '# of Votes',
+                data: [65, 55, 98, 88, 59],
+                backgroundColor: [
+                    'rgba(106,214,238,0.85)',
+                    'rgba(106,214,238,0.55)',
+                    'rgba(106,214,238,0.35)',
+                    'rgba(106,214,238,0.18)'
+                ],
+                borderColor: '#172739',
+                borderWidth: 3,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            grid: { display: false },
+            cutout: '65%'
+        }
+    });
+
+    const agentes = [
+        { nome: "Jett", mapa: "Ascent", wr: "51%", img: "../../assets/Jett_icon.png" },
+        { nome: "Raze", mapa: "Bind", wr: "49%", img: "../../assets/Raze_icon.png" },
+        { nome: "Omen", mapa: "Haven", wr: "50%", img: "../../assets/Omen_icon.png" }
+    ];
+
+    let atual = 0
+
+    function trocarKpi() {
+        const a = agentes[atual]
+
+        const agImg = document.getElementById('kpi-img')
+        const agWr = document.getElementById('kpi-wr')
+        const agMapa = document.getElementById('kpi-mapa')
+
+        if (agMapa) agMapa.innerHTML = a.mapa;
+        if (agWr) agWr.innerHTML = a.wr;
+        if (agImg) agImg.src = a.img
+
+        atual = (atual + 1) % agentes.length
+    }
+
+    trocarKpi()
+    setInterval(trocarKpi, 3000)
+
+</script>
+
 </html>
