@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACE Cadastro</title>
+    <script src="./js/cadastroReq.js"></script> 
     <link rel="stylesheet" href="./css/home.css">
     <link rel="stylesheet" href="./css/cadastro.css">
 </head>
@@ -30,17 +31,17 @@
             <div>
                 <h2>Cadastro</h2>
                 <label>Nome completo</label>
-                <input type="text" placeholder="Nome completo">
+                <input id="ipt_nomecompleto" type="text" placeholder="Nome completo">
                 <label>Usuário</label>
-                <input type="text" placeholder="Usuário">
+                <input id="ipt_usuario" type="text" placeholder="Usuário">
                 <label>E-mail</label>
-                <input type="email" placeholder="email@teste.com">
+                <input id="ipt_email" type="email" placeholder="email@teste.com">
                 <label>Código de ativação</label>
-                <input type="text" placeholder="">
+                <input id="ipt_codigo" type="text" placeholder="">
                 <label>Senha</label>
-                <input type="password" placeholder="********">
+                <input id="ipt_senha" type="password" placeholder="********">
                 <span>(8 caracteres com letras e números)</span>
-                <button>Cadastrar</button>
+                <button onclick="validacao()">Cadastrar</button>
                 <a href="./login.html" class="login-link">Já tem conta? Entrar</a>
             </div>
             <div>
@@ -53,51 +54,50 @@
     </footer>
 
     <div class="cadastro-mobile">
-
-    <div class="topbar-mobile">
-        <div class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="topbar-mobile">
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
+
+        <nav class="nav-mobile" id="mobileNav">
+            <a href="../index.html">SISTEMA A.C.E</a>
+            <a href="">AGENTES</a>
+            <a href="">MAPAS</a>
+            <a href="./login.html">LOGIN</a>
+            <a href="./cadastro.html">CADASTRO</a>
+
+        </nav>
+
+        <img src="../Assets/logo.png" class="logo-mobile">
+
+        <div class="form-mobile">
+            <label>Nome completo</label>
+            <input id="ipt_nomecompleto" type="text" placeholder="Nome completo">
+            <label>Usuário</label>
+            <input id="ipt_usuario" type="text" placeholder="Usuário">
+            <label>E-mail</label>
+            <input id="ipt_email" type="email" placeholder="email@teste.com">
+            <label>Código de ativação</label>
+            <input id="ipt_codigo" type="text" placeholder="">
+            <label>Senha</label>
+            <input id="ipt_senha" type="password" placeholder="********">
+            <span>(Mínimo 8 caracteres)</span>
+            <button onclick="validacao()">Cadastrar</button>
+            <a href="./login.html" class="login-link">Já tem conta? Entrar</a>
+        </div>
+
+        <span class="footer-mobile">ACE - SPTech &copy; 2026</span>
     </div>
-
-    <nav class="nav-mobile" id="mobileNav">
-        <a href="../index.html">SISTEMA A.C.E</a>
-        <a href="">AGENTES</a>
-        <a href="">MAPAS</a>
-        <a href="./login.html">LOGIN</a>
-        <a href="./cadastro.html">CADASTRO</a>
-        
-    </nav>
-
-    <img src="../Assets/logo.png" class="logo-mobile">
-
-    <div class="form-mobile">
-        <label>Nome completo</label>
-        <input type="text" placeholder="Nome completo">
-        <label>Usuário</label>
-        <input type="text" placeholder="Usuário">
-        <label>E-mail</label>
-        <input type="email" placeholder="email@teste.com">
-        <label>Código de ativação</label>
-        <input type="text" placeholder="">
-        <label>Senha</label>
-        <input type="password" placeholder="********">
-        <span>(8 caracteres com letras e números)</span>
-        <button>Cadastrar</button>
-        <a href="./login.html" class="login-link">Já tem conta? Entrar</a>
-    </div>
-
-    <span class="footer-mobile">ACE - SPTech &copy; 2026</span>
-</div>
 </body>
 <script>
     var hamburger = document.getElementById('hamburger');
     var mobileNav = document.getElementById('mobileNav');
     var menuAberto = false;
 
-    hamburger.onclick = function() {
+    hamburger.onclick = function () {
         if (menuAberto) {
             mobileNav.style.display = 'none';
             menuAberto = false;
@@ -107,4 +107,6 @@
         }
     };
 </script>
+<script src="./js/cadastroReq.js"></script>
+
 </html>
