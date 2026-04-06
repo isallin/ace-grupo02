@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
     <title>Painel Geral</title>
 </head>
 
@@ -12,13 +13,13 @@
     <div id="central">
         <div id="sidebar">
             <div id="sidebaritems">
-                <img src="../../assets/logo.png" alt="" id="logo">
+                <img src="../assets/logo.png" alt="" id="logo">
                 <div id="botoes">
-                    <button id="botaoside">Geral</button>
-                    <button id="botaoside">Mapas</button>
+                    <button id="botaoside" style="filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741)); border-color: var(--destaque);">Geral</button>
+                    <button id="botaoside" onclick="window.location.href='mapas.html'">Mapas</button>
                     <button id="botaoside">Agentes</button>
                     <button id="botaoside">Enviar composição</button>
-                </div>
+                </div>  
                 <div id="userinfo">
                     <img src="../assets/login.png" alt="" id="userphoto">
                     <button>Sair</button>
@@ -31,32 +32,47 @@
                 <span id="bemvindo-usuario">Usuário</span>
             </div>
             <div id="kpis">
+
                 <div class="kpi-card agent" id="kpiagent">
-                    <img class="agent-img" id="kpi-img" src="../../assets/Chamber_icon.png" alt="">
+                    <img class="agent-img" id="kpi-img" src="" alt="">
                     <div class="agent-textos" id="txtagent">
                         <span class="kpi-label">Melhor agente no mapa</span>
-                        <span class="kpi-valor" id="kpi-mapa">LOTUS</span>
+                        <span class="kpi-valor" id="kpi-mapa"></span>
                     </div>
                     <div class="agent-winrate">
                         <span class="winrate-label">Taxa de Win Rate</span>
-                        <span class="winrate-valor" id="kpi-wr">89.7%</span>
+                        <span class="winrate-valor" id="kpi-wr"></span>
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <span class="kpi-label">KPI 2</span>
-                    <span class="kpi-valor">—</span>
+                <div class="kpi-card" id="kpi2">
+                    <div class="agent-textos">
+                        <span class="kpi-label">Win Rate por lado</span>
+                        <span class="kpi-valor" id="kpi2-mapa"></span>
+                    </div>
+                    <div class="kpi2-lados">
+                        <div class="kpi2-lado">
+                            <span class="kpi2-label">ATAQUE</span>
+                            <span class="kpi2-valor atk" id="kpi2-atk"></span>
+                        </div>
+                        <div class="kpi2-divider"></div>
+                        <div class="kpi2-lado">
+                            <span class="kpi2-label">DEFESA</span>
+                            <span class="kpi2-valor def" id="kpi2-def"></span>
+                        </div>
+                    </div>
                 </div>
+
             </div>
             <div id="graficos">
                 <div class="grafico-card" id="grafico-card-1">
-                    <span class="grafico-titulo">Gráfico 1</span>
+                    <span class="grafico-titulo">PARTIDAS JOGADAS POR MAPA | VCT CHAMPIONS PARIS 2025</span>
                     <div class="grafico-canvas">
                         <canvas id="grafico1"></canvas>
                     </div>
                 </div>
                 <div class="grafico-card" id="grafico-card-2">
-                    <span class="grafico-titulo">Gráfico 2</span>
+                    <span class="grafico-titulo">CLASSES MAIS JOGADAS</span>
                     <div class="grafico-canvas">
                         <canvas id="grafico2"></canvas>
                     </div>
@@ -67,16 +83,50 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('grafico1')
-    const ctx2 = document.getElementById('grafico2')
 
-    new Chart(ctx, {
+    const agentes = [
+        { mapa: 'ASCENT', wr: '54%', atk: '52%', def: '48%', img: '../assets/Jett_icon.png'    },
+        { mapa: 'BIND',   wr: '49%', atk: '45%', def: '55%', img: '../assets/Raze_icon.png'    },
+        { mapa: 'HAVEN',  wr: '50%', atk: '58%', def: '42%', img: '../assets/Omen_icon.png'    },
+        { mapa: 'LOTUS',  wr: '51%', atk: '49%', def: '51%', img: '../assets/Chamber_icon.png' },
+        { mapa: 'PEARL',  wr: '47%', atk: '44%', def: '56%', img: '../assets/Viper_icon.png'   },
+        { mapa: 'SPLIT',  wr: '53%', atk: '41%', def: '59%', img: '../assets/Cypher_icon.png'  },
+        { mapa: 'ABYSS',  wr: '56%', atk: '61%', def: '39%', img: '../assets/Neon_icon.png'    },
+    ]
+
+    let atual = 0
+
+    function trocarKpi() {
+        const a = agentes[atual]
+
+        const agImg    = document.getElementById('kpi-img')
+        const agWr     = document.getElementById('kpi-wr')
+        const agMapa   = document.getElementById('kpi-mapa')
+        const kpi2Mapa = document.getElementById('kpi2-mapa')
+        const kpi2Atk  = document.getElementById('kpi2-atk')
+        const kpi2Def  = document.getElementById('kpi2-def')
+
+        if (agMapa)   agMapa.innerHTML   = a.mapa
+        if (agWr)     agWr.innerHTML     = a.wr
+        if (agImg)    agImg.src          = a.img
+        if (kpi2Mapa) kpi2Mapa.innerHTML = a.mapa
+        if (kpi2Atk)  kpi2Atk.innerHTML  = a.atk
+        if (kpi2Def)  kpi2Def.innerHTML  = a.def
+
+        atual = (atual + 1) % agentes.length
+    }
+
+    trocarKpi()
+    setInterval(trocarKpi, 3000)
+
+
+    new Chart(document.getElementById('grafico1'), {
         type: 'bar',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+            labels: ['Ascent', 'Bind', 'Haven', 'Lotus', 'Pearl', 'Split', 'Abyss'],
             datasets: [{
-                label: '# of Votes',
-                data: [65, 55, 98, 88, 59],
+                label: 'Partidas',
+                data: [24, 18, 21, 15, 19, 22, 17],
                 backgroundColor: 'rgba(106,214,238,0.15)',
                 borderColor: '#6AD6EE',
                 borderWidth: 1,
@@ -84,29 +134,35 @@
             }]
         },
         options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                },
-                x: {
-                    min: 50,
-                    max: 100
-                }
-            },
             indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            grid: { display: false },
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.x + ' partidas' } }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(106,214,238,0.07)' },
+                    ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' } },
+                    border: { color: '#6ad6ee20' }
+                },
+                y: {
+                    grid: { display: false },
+                    ticks: { color: '#D9D9D9', font: { size: 10, family: 'Unbounded' } },
+                    border: { color: '#6ad6ee20' }
+                }
+            }
         }
-    });
+    })
 
-    new Chart(ctx2, {
+    new Chart(document.getElementById('grafico2'), {
         type: 'doughnut',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple'],
+            labels: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela'],
             datasets: [{
-                label: '# of Votes',
-                data: [65, 55, 98, 88, 59],
+                data: [42, 28, 18, 12],
                 backgroundColor: [
                     'rgba(106,214,238,0.85)',
                     'rgba(106,214,238,0.55)',
@@ -114,41 +170,26 @@
                     'rgba(106,214,238,0.18)'
                 ],
                 borderColor: '#172739',
-                borderWidth: 3,
+                borderWidth: 3
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            grid: { display: false },
-            cutout: '65%'
+            cutout: '65%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#6AD6EE',
+                        font: { size: 11, family: 'Unbounded', weight: '700' },
+                        boxWidth: 12,
+                        padding: 16
+                    }
+                }
+            }
         }
-    });
-
-    const agentes = [
-        { nome: "Jett", mapa: "Ascent", wr: "51%", img: "../assets/Jett_icon.png" },
-        { nome: "Raze", mapa: "Bind", wr: "49%", img: "../assets/Raze_icon.png" },
-        { nome: "Omen", mapa: "Haven", wr: "50%", img: "../assets/Omen_icon.png" }
-    ];
-
-    let atual = 0
-
-    function trocarKpi() {
-        const a = agentes[atual]
-
-        const agImg = document.getElementById('kpi-img')
-        const agWr = document.getElementById('kpi-wr')
-        const agMapa = document.getElementById('kpi-mapa')
-
-        if (agMapa) agMapa.innerHTML = a.mapa;
-        if (agWr) agWr.innerHTML = a.wr;
-        if (agImg) agImg.src = a.img
-
-        atual = (atual + 1) % agentes.length
-    }
-
-    trocarKpi()
-    setInterval(trocarKpi, 3000)
+    })
 
 </script>
 
