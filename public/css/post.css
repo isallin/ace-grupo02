@@ -1,0 +1,102 @@
+:root {
+  --destaque: #6AD6EE;
+  --contraste: #B87333;
+  --preto: #131319;
+  --branco: #D9D9D9;
+  --fundo1: #172739;
+  --frente1: #838690;
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  background-image: url("../assets/background.png");
+  font-family: 'Unbounded', sans-serif;
+}
+
+/* CONTAINER */
+.form-container {
+  width: 60%;
+  margin: 40px auto;
+  background: rgba(23, 39, 57, 0.85);
+  backdrop-filter: blur(8px);
+  border: 2px solid var(--destaque);
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(106, 214, 238, 0.2);
+}
+
+/* TITULO */
+.form-container h2 {
+  color: var(--destaque);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* FORM */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* INPUTS */
+input, select {
+  padding: 12px;
+  background: transparent;
+  border: 1px solid #6ad6ee35;
+  color: var(--branco);
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+/* FOCUS */
+input:focus, select:focus {
+  border-color: var(--destaque);
+  box-shadow: 0 0 8px rgba(106, 214, 238, 0.4);
+}
+
+/* LABEL */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  color: var(--frente1);
+  font-size: 13px;
+}
+
+/* SELECT OPTION */
+select option {
+  background-color: #131319;
+}
+
+/* BOTÃO */
+button {
+  margin-top: 10px;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--destaque);
+  color: var(--destaque);
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* HOVER */
+button:hover {
+  background: var(--destaque);
+  color: black;
+}
+
