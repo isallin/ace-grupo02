@@ -1,142 +1,144 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLOG - SEU POST</title>
-    <link rel="stylesheet" href="../css/post.css">
+
+  <!-- FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+
+  <meta charset="UTF-8">
+  <title>Post</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/post.css"> <!-- NOVO -->
+
 </head>
 
 <body>
-    <div class="form-container">
 
-        <h2>Nova Recomendação</h2>
+<header class="topbar">
+  <div class="logo"><img src="../assets/logo.png"></div>
 
-        <form>
+  <nav>
+    <a href="blog.html">BLOG</a>
+  </nav>
+</header>
 
-            <input type="text" placeholder="Título da composição" required>
-            <input type="text" placeholder="Seu nome" required>
+<div class="container">
 
-            <div class="form-group">
-                <label>Mapa</label>
-                <select required>
-                    <option>Selecione</option>
-                    <option>Bind</option>
-                    <option>Breeze</option>
-                    <option>Fracture</option>
-                    <option>Haven</option>
-                    <option>Lotus</option>
-                    <option>Pearl</option>
-                    <option>Split</option>
-                </select>
-            </div>
+  <div class="post">
 
-            <div class="form-group">
-                <label>Controlador</label>
-                <select required>
-                    <option>Selecione</option>
-                    <option>Astra</option>
-                    <option>Brimstone</option>
-                    <option>Clove</option>
-                    <option>Harbor</option>
-                    <option>Omen</option>
-                    <option>Viper</option>
-                </select>
-            </div>
+    <h2 class="titulo"></h2>
+    <p class="data"></p>
 
-            <div class="form-group">
-                <label>Duelista</label>
-                <select required>
-                    <option>Selecione</option>
-                    <option>Iso</option>
-                    <option>Jett</option>
-                    <option>Neon</option>
-                    <option>Phoenix</option>
-                    <option>Raze</option>
-                    <option>Reyna</option>
-                    <option>Yoru</option>
-                </select>
-            </div>
+    <div class="agents"></div>
 
-            <div class="form-group">
-                <label>Iniciador</label>
-                <select required>
-                    <option>Selecione</option>
-                    <option>Breach</option>
-                    <option>Fade</option>
-                    <option>Gekko</option>
-                    <option>KAY/O</option>
-                    <option>Skye</option>
-                    <option>Sova</option>
-                </select>
-            </div>
+    <div class="banner"></div>
 
-            <div class="form-group">
-                <label>Sentinela</label>
-                <select required>
-                    <option>Selecione</option>
-                    <option>Chamber</option>
-                    <option>Cypher</option>
-                    <option>Deadlock</option>
-                    <option>Killjoy</option>
-                    <option>Sage</option>
-                </select>
-            </div>
+    <p class="autor"></p>
 
-            <div class="form-group">
-                <label>Flex (qualquer agente)</label>
-                <select required>
-                    <option>Selecione</option>
+    <!-- COMENTÁRIOS -->
+    <div class="comments">
 
-                    <optgroup label="Controladores">
-                        <option>Astra</option>
-                        <option>Brimstone</option>
-                        <option>Clove</option>
-                        <option>Harbor</option>
-                        <option>Omen</option>
-                        <option>Viper</option>
-                    </optgroup>
+      <h3>Comentários</h3>
 
-                    <optgroup label="Duelistas">
-                        <option>Iso</option>
-                        <option>Jett</option>
-                        <option>Neon</option>
-                        <option>Phoenix</option>
-                        <option>Raze</option>
-                        <option>Reyna</option>
-                        <option>Yoru</option>
-                    </optgroup>
+      <div class="comment-list"></div>
 
-                    <optgroup label="Iniciadores">
-                        <option>Breach</option>
-                        <option>Fade</option>
-                        <option>Gekko</option>
-                        <option>KAY/O</option>
-                        <option>Skye</option>
-                        <option>Sova</option>
-                    </optgroup>
-
-                    <optgroup label="Sentinelas">
-                        <option>Chamber</option>
-                        <option>Cypher</option>
-                        <option>Deadlock</option>
-                        <option>Killjoy</option>
-                        <option>Sage</option>
-                    </optgroup>
-
-                </select>
-            </div>
-
-            <button type="submit">Publicar</button>
-
-        </form>
+      <form class="comment-form">
+        <input type="text" placeholder="Seu nome" required>
+        <input type="text" placeholder="Comentário..." required>
+        <button type="submit">Enviar</button>
+      </form>
 
     </div>
-    <footer>
-        <p>© 2026 - ACE Grupo 02</p>
-    </footer>
+
+  </div>
+
+</div>
+
+<script>
+
+  const posts = [
+    {
+      id: 1,
+      titulo: "Composição Icebox",
+      data: "06/04/2026",
+      autor: "Batatinha do Bronze",
+      agentes: ["breach", "sova", "cypher", "omen", "waylay"],
+      banner: "Loading_Screen_Icebox.webp"
+    },
+    {
+      id: 2,
+      titulo: "Composição Bind",
+      data: "05/04/2026",
+      autor: "Anonimo",
+      agentes: ["raze", "omen", "cypher", "breach", "reyna"],
+      banner: "Loading_Screen_Bind.webp"
+    }
+  ];
+
+  const comentariosMock = {
+    1: [
+      { nome: "João", texto: "Essa composição é muito forte no bomb B!" },
+      { nome: "Ana", texto: "Usei ontem e deu muito certo " },
+      { nome: "Carlos", texto: "Muito boa para o ataque, impossivel ficar sem informação" }
+    ],
+    2: [
+      { nome: "Jose", texto: "Essa composição é muito forte" },
+      { nome: "Julia", texto: "Usei hoje e deu muito certo " },
+      { nome: "Maria", texto: "Talvez trocar o Cypher por Killjoy funcione melhor" }
+    ]
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const id = Number(params.get("id"));
+
+  const post = posts.find(p => p.id === id);
+
+  document.querySelector(".titulo").innerText = post.titulo;
+  document.querySelector(".data").innerText = post.data;
+  document.querySelector(".autor").innerText = "Recomendado por: " + post.autor;
+
+  const agentsDiv = document.querySelector(".agents");
+  post.agentes.forEach(a => {
+    agentsDiv.innerHTML += `<img src="../assets/${a}_icon.png">`;
+  });
+
+  document.querySelector(".banner").innerHTML =
+    `<img src="../assets/${post.banner}">`;
+
+  const list = document.querySelector(".comment-list");
+  const form = document.querySelector(".comment-form");
+
+  function carregarComentarios() {
+    list.innerHTML = "";
+    const comentarios = comentariosMock[id] || [];
+    comentarios.forEach(c => {
+      list.innerHTML += `<p><strong>${c.nome}:</strong> ${c.texto}</p>`;
+    });
+  }
+
+  carregarComentarios();
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const nome = form.children[0].value;
+    const texto = form.children[1].value;
+
+    if (!comentariosMock[id]) {
+      comentariosMock[id] = [];
+    }
+
+    comentariosMock[id].push({ nome, texto });
+
+    carregarComentarios();
+    form.reset();
+  });
+
+</script>
 
 </body>
-
 </html>
