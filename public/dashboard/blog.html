@@ -3,93 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Blog</title>
-
     <link rel="stylesheet" href="../css/home.css">
     <link rel="stylesheet" href="../css/blog.css">
 </head>
-
 <body>
-
-<header class="topbar">
-    <div class="logo">
-        <img src="../assets/logo.png" alt="">
-    </div>
-
-    <nav>
-        <a href="geral.html">DASHBOARD</a>
-        <a href="">MAPAS</a>
-        <a href="">AGENTES</a>
-    </nav>
-
-    <nav>
-        <a href="../index.html">SAIR</a>
-    </nav>
-</header>
-
-
-<div class="container">
-    <div class="actions">
-        <button onclick="window.location.href='add-post.html'" class="btn-add">+ Nova Recomendação</button>
-        <button onclick="window.location.href='add-post.html'" class="btn-add">Editar Post</button>
-        <button onclick="window.location.href='add-post.html'" class="btn-add">Deletar Post</button>
-
-    </div>
-    <div class="posts">
-
-        <div class="post">
-
-            <div class="post-content">
-                <h2>Composição Icebox</h2>
-                <p class="data">06/04/2026</p>
-
-                <div class="post-imgs">
-                    <img src="../assets/Breach_icon.png">
-                    <img src="../assets/Waylay_icon.png">
-                    <img src="../assets/Clove_icon.png">
-                    <img src="../assets/Cypher_icon.png">
-                    <img src="../assets/Sova_icon.png">
-                </div>
-
-                <p>Recomendado por: Batatinha do Bronze</p>
-                <a href="post.html?id=1" class="ver-mais-link">Ver mais...</a>
-            </div>
-
-            <div class="post-banner">
-                <img src="../assets/Loading_Screen_Icebox.webp">
-            </div>
-
+    <header class="topbar">
+        <div class="logo">
+            <img src="../assets/logo.png" alt="">
         </div>
+        <nav>
+            <a href="geral.html">DASHBOARD</a>
+            <a href="">MAPAS</a>
+            <a href="">AGENTES</a>
+        </nav>
+        <nav>
+            <a href="../index.html">SAIR</a>
+        </nav>
+    </header>
 
-        <div class="post">
-
-            <div class="post-content">
-                <h2>Composição Bind</h2>
-                <p class="data">Recomendado por: Anonimo</p>
-                
-                <div class="post-imgs">
-                    <img src="../assets/Raze_icon.png">
-                    <img src="../assets/Omen_icon.png">
-                    <img src="../assets/Cypher_icon.png">
-                    <img src="../assets/Breach_icon.png">
-                    <img src="../assets/Reyna_icon.png">
-                </div>
-
-                <a href="post.html?id=2" class="ver-mais-link">Ver mais...</a>
-            </div>
-
-            <div class="post-banner">
-                <img src="../assets/Loading_Screen_Bind.webp">
-            </div>
-
+    <div class="container">
+        <div class="actions">
+            <button onclick="window.location.href='add-post.html'" class="btn-action">
+                Nova Recomendação
+            </button>
         </div>
-
+        <div class="posts" id="lista-posts"></div>
     </div>
 
-</div>
+    <footer>
+        <p>© 2026 - ACE Grupo 02</p>
+    </footer>
 
-<footer>
-    <p>© 2026 - ACE Grupo 02</p>
-</footer>
-
+    <script src="../js/blog.js"></script>
 </body>
 </html>

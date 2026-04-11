@@ -146,7 +146,7 @@ footer {
   margin-bottom: 10px;
 }
 
-.btn-add {
+.btn-action {
   background: transparent;
   border: 1px solid var(--destaque);
   color: var(--destaque);
@@ -157,7 +157,7 @@ footer {
   border-radius: 6px;
 }
 
-.btn-add:hover {
+.btn-action:hover {
   background: var(--destaque);
   color: black;
 }
