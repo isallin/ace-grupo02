@@ -175,7 +175,14 @@ if (formAddPost) {
         const autor = document.getElementById('autor').value;
         const mapa = document.getElementById('mapa').value;
         const selectsAgentes = document.querySelectorAll('.agente-select');
+        
         const agentesSelecionados = Array.from(selectsAgentes).map(s => s.value);
+
+        const agentesUnicos = new Set(agentesSelecionados);
+        if (agentesUnicos.size !== agentesSelecionados.length) {
+            alert("Erro: Você selecionou agentes repetidos. Cada composição deve ter 5 agentes diferentes!");
+            return;
+        }
 
         if (currentId) {
             const index = posts.findIndex(p => p.id === currentId);
@@ -200,7 +207,7 @@ if (formAddPost) {
                 agentes: agentesSelecionados,
                 banner: `Loading_Screen_${mapa}.webp`
             };
-            posts.push(novoPost);
+            posts.unshift(novoPost);
             localStorage.setItem("posts", JSON.stringify(posts));
             alert("Recomendação publicada!");
             window.location.href = "blog.html";
