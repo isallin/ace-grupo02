@@ -72,7 +72,14 @@ function cadastrar(req, res) {
     }
 }
 
+function listarUsuarios(req, res) {
+  usuarioModel.listarUsuarios().then((resultado) => {
+    res.status(200).json(resultado);
+  });
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    listarUsuarios
 }

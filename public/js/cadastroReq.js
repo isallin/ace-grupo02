@@ -1,29 +1,54 @@
-function cadastroLista() {
+function obterDadosCadastro() {
+    if (window.innerWidth > 768) {
+        return cadastroWeb();
+    } else {
+        return cadastroMob();
+    }
+}
+
+function cadastroWeb() {
     return {
-        nome: document.getElementById("ipt_nomecompleto").value,
-        usuario: document.getElementById("ipt_usuario").value,
-        email: document.getElementById("ipt_email").value,
-        codigo: document.getElementById("ipt_codigo").value,
-        senha: document.getElementById("ipt_senha").value
+        nome: document.querySelector('#web_nome').value,
+        usuario: document.querySelector('#web_usuario').value,
+        email: document.querySelector('#web_email').value,
+        codigo: document.querySelector('#web_codigo').value,
+        senha: document.querySelector('#web_senha').value
     };
 }
 
-function validacao() {
-    const lista = cadastroLista();
-    const valoresLista = Object.values(lista);
+function cadastroMob() {
+    return {
+        nome: document.querySelector('#mob_nome').value,
+        usuario: document.querySelector('#mob_usuario').value,
+        email: document.querySelector('#mob_email').value,
+        codigo: document.querySelector('#mob_codigo').value,
+        senha: document.querySelector('#mob_senha').value
+    };
+}
 
-    //Verificando se está nulo
-    for (let i = 0; i < valoresLista.length; i++) {
-        if (valoresLista[i] == "") {
-            console.log("Preencha todos os campos")
-            return false;
-        }
+async function validacao() {
+    const listaWeb = obterDadosCadastro();
+    const listaValor = Object.values(listaWeb);
+
+    // 1. Verificação de campos vazios
+    if (listaValor.some(valor => valor.trim() === "")) {
+        console.log("Preencha todos os campos.");
+        return false;
     }
 
-    //Verificando tamanho do nome
-    if (lista.nome.length <= 3) {
+    if (listaWeb.nome.length <= 3) {
         console.log("Nome inválido")
         return false;
+    }
+
+    //Verificando se o user já existe no banco de dados
+    const listaUsuarios = await listarUsuarios();
+    for (let i = 0; i < listaUsuarios.length; i++) {
+        const user = listaUsuarios[i].nickname;
+        if (user == usuario) {
+            console.log("Usuário já existe!")
+            return;
+        }
     }
 
     //Verificando email
@@ -41,22 +66,15 @@ function validacao() {
     return true;
 }
 
-function listarUsuarios() {
-    let listaUsuarios = [];
-
-    fetch("/usuarios/listarUsuarios", {
-        method: "GET",
-    })
-        .then(function (resp) {
-            resp.json().then((usuarios) => {
-                usuarios.forEach((usuario) => {
-                    listaUsuarios.push(usuario);
-                });
-
-                console.log(listaUsuarios)
-            });
-        })
-        .catch(function (resp) {
-            console.log(`ERRO: ${resp}`);
-        });
+//Função para verificar se o @user que a
+//pessoa inseriu já existe no banco de dados
+async function listarUsuarios() {
+    try {
+        const resp = await fetch("/usuarios/listarUsuarios");
+        if (!resp.ok) throw new Error("Erro na rede");
+        return await resp.json();
+    } catch (error) {
+        console.error("ERRO:", error);
+        return [];
+    }
 }

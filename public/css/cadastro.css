@@ -95,7 +95,6 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-
     .topbar,
     .container,
     .footer {
@@ -245,7 +244,6 @@ button:hover {
 }
 
 @media (max-width: 360px) {
-
     .cadastro-mobile {
         padding: 0 22px 28px;
     }
