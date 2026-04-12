@@ -22,7 +22,13 @@ function cadastrar(nome, email, senha, fkEmpresa) {
     return database.executar(instrucaoSql);
 }
 
+function listarUsuarios() {
+  var instrucaoSql = `SELECT nickname FROM usuarios;`;
+  return database.executar(instrucaoSql);
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    listarUsuarios
 };
