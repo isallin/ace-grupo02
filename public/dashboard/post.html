@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Post</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/post.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="logo"><img src="../assets/logo.png"></div>
+    <nav>
+      <a href="blog.html">BLOG</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="actions">
+      <button class="btn-action" onclick="editarPost()">Editar Post</button>
+      <button class="btn-action" onclick="deletarPost()">Deletar Post</button>
+    </div>
+
+    <div class="post">
+      <h2 class="titulo">Carregando...</h2>
+      <p class="data"></p>
+      <div class="content-row">
+        <div class="map">
+          <div class="banner"></div>
+        </div>
+        <div class="agent-list"></div>
+      </div>
+
+      <p class="autor"></p>
+
+      <div class="comments">
+        <h3>Comentários</h3>
+        <div class="comment-list"></div>
+        <form class="comment-form">
+          <input type="text" placeholder="Seu nome" required>
+          <input type="text" placeholder="Comentário..." required>
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/blog.js"></script>
+</body>
+</html>

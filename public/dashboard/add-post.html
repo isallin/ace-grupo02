@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLOG - NOVO POST</title>
+    <link rel="stylesheet" href="../css/add-post.css">
+</head>
+
+<body>
+    <div class="form-container">
+
+        <h2>Nova Recomendação</h2>
+
+        <form id="form-add-post">
+
+            <input type="text" id="titulo" placeholder="Título da composição" required>
+            <input type="text" id="autor" placeholder="Seu nome" required>
+
+            <div class="form-group">
+                <label>Mapa</label>
+                <select id="mapa" required>
+                    <option value="">Selecione</option>
+                    <option value="Bind">Ascent</option>
+                    <option value="Breeze">Bind</option>
+                    <option value="Fracture">Haven</option>
+                    <option value="Haven">Lotus</option>
+                    <option value="Icebox">Pearl</option>
+                    <option value="Lotus">Split</option>
+                    <option value="Pearl">Abyss</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Controlador</label>
+                <select class="agente-select" required>
+                    <option value="">Selecione</option>
+                    <option value="Astra">Astra</option>
+                    <option value="Brimstone">Brimstone</option>
+                    <option value="Clove">Clove</option>
+                    <option value="Harbor">Harbor</option>
+                    <option value="Omen">Omen</option>
+                    <option value="Viper">Viper</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Duelista</label>
+                <select class="agente-select" required>
+                    <option value="">Selecione</option>
+                    <option value="Iso">Iso</option>
+                    <option value="Jett">Jett</option>
+                    <option value="Neon">Neon</option>
+                    <option value="Phoenix">Phoenix</option>
+                    <option value="Raze">Raze</option>
+                    <option value="Reyna">Reyna</option>
+                    <option value="Yoru">Yoru</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Iniciador</label>
+                <select class="agente-select" required>
+                    <option value="">Selecione</option>
+                    <option value="Breach">Breach</option>
+                    <option value="Fade">Fade</option>
+                    <option value="Gekko">Gekko</option>
+                    <option value="KAY/O">KAY/O</option>
+                    <option value="Skye">Skye</option>
+                    <option value="Sova">Sova</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Sentinela</label>
+                <select class="agente-select" required>
+                    <option value="">Selecione</option>
+                    <option value="Chamber">Chamber</option>
+                    <option value="Cypher">Cypher</option>
+                    <option value="Deadlock">Deadlock</option>
+                    <option value="Killjoy">Killjoy</option>
+                    <option value="Sage">Sage</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Flex (qualquer agente)</label>
+                <select class="agente-select" required>
+                    <option value="">Selecione</option>
+
+                    <optgroup label="Controladores">
+                        <option value="Astra">Astra</option>
+                        <option value="Brimstone">Brimstone</option>
+                        <option value="Clove">Clove</option>
+                        <option value="Harbor">Harbor</option>
+                        <option value="Omen">Omen</option>
+                        <option value="Viper">Viper</option>
+                    </optgroup>
+
+                    <optgroup label="Duelistas">
+                        <option value="Iso">Iso</option>
+                        <option value="Jett">Jett</option>
+                        <option value="Neon">Neon</option>
+                        <option value="Phoenix">Phoenix</option>
+                        <option value="Raze">Raze</option>
+                        <option value="Reyna">Reyna</option>
+                        <option value="Yoru">Yoru</option>
+                    </optgroup>
+
+                    <optgroup label="Iniciadores">
+                        <option value="Breach">Breach</option>
+                        <option value="Fade">Fade</option>
+                        <option value="Gekko">Gekko</option>
+                        <option value="KAY/O">KAY/O</option>
+                        <option value="Skye">Skye</option>
+                        <option value="Sova">Sova</option>
+                    </optgroup>
+
+                    <optgroup label="Sentinelas">
+                        <option value="Chamber">Chamber</option>
+                        <option value="Cypher">Cypher</option>
+                        <option value="Deadlock">Deadlock</option>
+                        <option value="Killjoy">Killjoy</option>
+                        <option value="Sage">Sage</option>
+                    </optgroup>
+
+                </select>
+            </div>
+
+            <button type="submit">Publicar</button>
+
+        </form>
+
+    </div>
+
+    <footer>
+        <p>© 2026 - ACE Grupo 02</p>
+    </footer>
+
+    <script src="../js/blog.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/blog.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo">
+            <img src="../assets/logo.png" alt="">
+        </div>
+        <nav>
+            <a href="geral.html">DASHBOARD</a>
+            <a href="">MAPAS</a>
+            <a href="">AGENTES</a>
+        </nav>
+        <nav>
+            <a href="../index.html">SAIR</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="actions">
+            <button onclick="window.location.href='add-post.html'" class="btn-action">
+                Nova Recomendação
+            </button>
+        </div>
+        <div class="posts" id="lista-posts"></div>
+    </div>
+
+    <footer>
+        <p>© 2026 - ACE Grupo 02</p>
+    </footer>
+
+    <script src="../js/blog.js"></script>
+</body>
+</html>
