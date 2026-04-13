@@ -36,25 +36,26 @@ function autenticar(req, res) {
 }
 
 function cadastrar(req, res) {
-    // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
-    var nome = req.body.nomeServer;
+    // var nome = req.body.nomeServer;
+    var usuario = req.body.usuarioServer;
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
-    var fkEmpresa = req.body.idEmpresaVincularServer;
+    var funcao = req.body.funcaoServer;
+    var codigo = req.body.codigoServer;
 
-    // Faça as validações dos valores
-    if (nome == undefined) {
-        res.status(400).send("Seu nome está undefined!");
+    // Validações básicas
+    if (usuario == undefined) {
+        res.status(400).send("Seu usuário está undefined!");
     } else if (email == undefined) {
-        res.status(400).send("Seu email está undefined!");
+        res.status(400).send("Seu usuário está undefined!");
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está undefined!");
-    } else if (fkEmpresa == undefined) {
-        res.status(400).send("Sua empresa a vincular está undefined!");
+    } else if (funcao == undefined) {
+        res.status(400).send("Sua função está undefined!");
+    } else if (codigo == undefined) {
+        res.status(400).send("Seu código está undefined!");
     } else {
-
-        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
-        usuarioModel.cadastrar(nome, email, senha, fkEmpresa)
+        usuarioModel.cadastrar(usuario, email, senha, funcao, codigo)
             .then(
                 function (resultado) {
                     res.json(resultado);
@@ -73,13 +74,20 @@ function cadastrar(req, res) {
 }
 
 function listarUsuarios(req, res) {
-  usuarioModel.listarUsuarios().then((resultado) => {
-    res.status(200).json(resultado);
-  });
+    usuarioModel.listarUsuarios().then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+
+function listarCodigos(req, res) {
+    usuarioModel.listarCodigos().then((resultado) => {
+        res.status(200).json(resultado);
+    });
 }
 
 module.exports = {
     autenticar,
     cadastrar,
-    listarUsuarios
+    listarUsuarios,
+    listarCodigos
 }
