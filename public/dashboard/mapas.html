@@ -17,7 +17,7 @@
                     <button id="botaoside" style="filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741)); border-color: var(--destaque);">Mapas</button>
                     <button id="botaoside">Agentes</button>
                     <button id="botaoside">Enviar composição</button>
-                </div>  
+                </div>
                 <div id="userinfo">
                     <img src="../assets/login.png" alt="" id="userphoto">
                     <button>Sair</button>
@@ -25,8 +25,234 @@
             </div>
         </div>
         <div id="conteudo">
-            
+
+            <div id="topo">
+                <div id="mapa-botoes">
+                    <span id="botoes-titulo">Selecione um mapa para análise</span>
+                    <div id="botoes-lista">
+                        <button class="mapa-btn" id="btn-haven"   onclick="selecionarMapa('haven')">  <img src="../assets/Loading_Screen_Haven.webp">   <span>Haven</span>   </button>
+                        <button class="mapa-btn" id="btn-pearl"   onclick="selecionarMapa('pearl')">  <img src="../assets/Loading_Screen_Pearl.webp">   <span>Pearl</span>   </button>
+                        <button class="mapa-btn" id="btn-abyss"   onclick="selecionarMapa('abyss')">  <img src="../assets/Loading_Screen_Abyss.webp">   <span>Abyss</span>   </button>
+                        <button class="mapa-btn" id="btn-split"   onclick="selecionarMapa('split')">  <img src="../assets/Loading_Screen_Split.webp">   <span>Split</span>   </button>
+                        <button class="mapa-btn" id="btn-corrode" onclick="selecionarMapa('corrode')"><img src="../assets/Loading_Screen_Corrode.webp"> <span>Corrode</span> </button>
+                        <button class="mapa-btn" id="btn-breeze"  onclick="selecionarMapa('breeze')"> <img src="../assets/Loading_Screen_Breeze.webp">  <span>Breeze</span>  </button>
+                        <button class="mapa-btn" id="btn-bind"    onclick="selecionarMapa('bind')">   <img src="../assets/Loading_Screen_Bind.webp">    <span>Bind</span>    </button>
+                    </div>
+                </div>
+
+                <div id="kpi-ban">
+                    <span class="kpi-ban-label">Mapa mais banido</span>
+                    <span class="kpi-ban-mapa">SPLIT</span>
+                    <span class="kpi-ban-pct">71%</span>
+                    <span class="kpi-ban-sub">ban rate em todos os torneios</span>
+                </div>
+            </div>
+
+            <div id="mapa-info" style="display:none">
+
+                <div id="mapa-header">
+                    <img id="mapa-img" src="" alt="">
+                    <div id="mapa-textos">
+                        <span id="mapa-nome"></span>
+                        <span id="mapa-desc"></span>
+                    </div>
+                </div>
+
+                <div id="grafico-agentes-box">
+                    <span class="secao-titulo">WIN RATE vs PICK RATE POR FUNÇÃO</span>
+                    <div class="grafico-canvas">
+                        <canvas id="grafico-agentes"></canvas>
+                    </div>
+                </div>
+
+                <div id="composicao">
+                    <span id="composicao-titulo">MELHOR COMPOSIÇÃO | WIN RATE</span>
+                    <div id="agente-slots">
+                        <div class="agente-slot" id="slot-0"></div>
+                        <div class="agente-slot" id="slot-1"></div>
+                        <div class="agente-slot" id="slot-2"></div>
+                        <div class="agente-slot" id="slot-3"></div>
+                        <div class="agente-slot" id="slot-4"></div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+    var mapas = {
+        haven: {
+            nome: 'Haven',
+            img: '../assets/Loading_Screen_Haven.webp',
+            desc: 'Sob um mosteiro esquecido, um clamor surge de Agentes rivais em confronto pelo controle de três locais. Há mais território para controlar, mas os defensores podem usar a área extra para investidas agressivas.',
+            agentes: [
+                { funcao: 'Duelista',    agente: 'Neon',    wr: 58, pr: 72, img: '../assets/Neon_icon.png'    },
+                { funcao: 'Iniciador',   agente: 'Fade',    wr: 56, pr: 68, img: '../assets/Fade_icon.png'    },
+                { funcao: 'Controlador', agente: 'Omen',    wr: 55, pr: 94, img: '../assets/Omen_icon.png'    },
+                { funcao: 'Sentinela',   agente: 'Chamber', wr: 54, pr: 65, img: '../assets/Chamber_icon.png' },
+                { funcao: 'Flex',        agente: 'Skye',    wr: 50, pr: 71, img: '../assets/Skye_icon.png'    },
+            ]
+        },
+        pearl: {
+            nome: 'Pearl',
+            img: '../assets/Loading_Screen_Pearl.webp',
+            desc: 'Neste mapa de dois locais, ambientado em uma vibrante cidade subaquática, os atacantes avançam contra os defensores. Leve a luta para o meio do mapa ou para as alas de longo alcance.',
+            agentes: [
+                { funcao: 'Duelista',    agente: 'Chamber', wr: 55, pr: 72, img: '../assets/Chamber_icon.png' },
+                { funcao: 'Iniciador',   agente: 'Sova',    wr: 54, pr: 85, img: '../assets/Sova_icon.png'    },
+                { funcao: 'Controlador', agente: 'Viper',   wr: 56, pr: 91, img: '../assets/Viper_icon.png'   },
+                { funcao: 'Sentinela',   agente: 'Cypher',  wr: 53, pr: 79, img: '../assets/Cypher_icon.png'  },
+                { funcao: 'Flex',        agente: 'Fade',    wr: 50, pr: 66, img: '../assets/Fade_icon.png'    },
+            ]
+        },
+        abyss: {
+            nome: 'Abyss',
+            img: '../assets/Loading_Screen_Abyss.webp',
+            desc: 'Contemple o Abismo, uma base clandestina enterrada nas profundezas de um desfiladeiro impenetrável e sem fim. Utilize quedas da morte para jogadas inteligentes.',
+            agentes: [
+                { funcao: 'Duelista',    agente: 'Jett',    wr: 61, pr: 89, img: '../assets/Jett_icon.png'    },
+                { funcao: 'Iniciador',   agente: 'Fade',    wr: 58, pr: 75, img: '../assets/Fade_icon.png'    },
+                { funcao: 'Controlador', agente: 'Omen',    wr: 55, pr: 82, img: '../assets/Omen_icon.png'    },
+                { funcao: 'Sentinela',   agente: 'Killjoy', wr: 54, pr: 70, img: '../assets/Killjoy_icon.png' },
+                { funcao: 'Flex',        agente: 'Skye',    wr: 52, pr: 63, img: '../assets/Skye_icon.png'    },
+            ]
+        },
+        split: {
+            nome: 'Split',
+            img: '../assets/Loading_Screen_Split.webp',
+            desc: 'Se você quiser ir longe, terá que subir. Dois pontos de ancoragem separados por um centro elevado permitem movimentação rápida com o uso de dois ascensores de corda.',
+            agentes: [
+                { funcao: 'Duelista',    agente: 'Raze',   wr: 59, pr: 92, img: '../assets/Raze_icon.png'   },
+                { funcao: 'Iniciador',   agente: 'Breach', wr: 57, pr: 74, img: '../assets/Breach_icon.png' },
+                { funcao: 'Controlador', agente: 'Omen',   wr: 54, pr: 85, img: '../assets/Omen_icon.png'   },
+                { funcao: 'Sentinela',   agente: 'Cypher', wr: 55, pr: 80, img: '../assets/Cypher_icon.png' },
+                { funcao: 'Flex',        agente: 'Skye',   wr: 51, pr: 68, img: '../assets/Skye_icon.png'   },
+            ]
+        },
+        corrode: {
+            nome: 'Corrode',
+            img: '../assets/Loading_Screen_Corrode.webp',
+            desc: 'Uma cidade castelo francesa transformada em uma instalação de mineração de sal radianita. Abra caminho pelas ruas medievais neste mapa tradicional de três corredores.',
+            agentes: [
+                { funcao: 'Duelista',    agente: 'Jett',    wr: 57, pr: 82, img: '../assets/Jett_icon.png'    },
+                { funcao: 'Iniciador',   agente: 'Sova',    wr: 55, pr: 76, img: '../assets/Sova_icon.png'    },
+                { funcao: 'Controlador', agente: 'Viper',   wr: 56, pr: 88, img: '../assets/Viper_icon.png'   },
+                { funcao: 'Sentinela',   agente: 'Killjoy', wr: 54, pr: 70, img: '../assets/Killjoy_icon.png' },
+                { funcao: 'Flex',        agente: 'Breach',  wr: 51, pr: 65, img: '../assets/Breach_icon.png'  },
+            ]
+        },
+        breeze: {
+            nome: 'Breeze',
+            img: '../assets/Loading_Screen_Breeze.webp',
+            desc: 'Admire as ruínas históricas ou as cavernas à beira-mar neste paraíso tropical. Fique atento aos seus flancos e será moleza.',
+            agentes: [
+                { funcao: 'Duelista',    agente: 'Jett',   wr: 60, pr: 90, img: '../assets/Jett_icon.png'   },
+                { funcao: 'Iniciador',   agente: 'Sova',   wr: 57, pr: 80, img: '../assets/Sova_icon.png'   },
+                { funcao: 'Controlador', agente: 'Viper',  wr: 59, pr: 87, img: '../assets/Viper_icon.png'  },
+                { funcao: 'Sentinela',   agente: 'Cypher', wr: 53, pr: 72, img: '../assets/Cypher_icon.png' },
+                { funcao: 'Flex',        agente: 'Fade',   wr: 51, pr: 65, img: '../assets/Fade_icon.png'   },
+            ]
+        },
+        bind: {
+            nome: 'Bind',
+            img: '../assets/Loading_Screen_Bind.webp',
+            desc: 'Dois locais. Sem meio termo. Tem que escolher entre esquerda e direita. Um par de teletransportadores unidirecionais facilita o flanqueamento.',
+            agentes: [
+                { funcao: 'Duelista',    agente: 'Raze',   wr: 60, pr: 88, img: '../assets/Raze_icon.png'   },
+                { funcao: 'Iniciador',   agente: 'Skye',   wr: 55, pr: 75, img: '../assets/Skye_icon.png'   },
+                { funcao: 'Controlador', agente: 'Viper',  wr: 57, pr: 82, img: '../assets/Viper_icon.png'  },
+                { funcao: 'Sentinela',   agente: 'Cypher', wr: 53, pr: 70, img: '../assets/Cypher_icon.png' },
+                { funcao: 'Flex',        agente: 'Sova',   wr: 50, pr: 65, img: '../assets/Sova_icon.png'   },
+            ]
+        },
+    }
+
+    var chartAgentes = null
+
+    function selecionarMapa(id) {
+        var m = mapas[id]
+
+        document.getElementById('mapa-info').style.display = 'flex'
+        document.getElementById('mapa-img').src            = m.img
+        document.getElementById('mapa-nome').innerHTML     = m.nome
+        document.getElementById('mapa-desc').innerHTML     = m.desc
+
+        for (var i = 0; i < 5; i++) {
+            var a = m.agentes[i]
+            document.getElementById('slot-' + i).innerHTML =
+                '<img src="' + a.img + '" alt="' + a.agente + '">' +
+                '<div><span class="slot-funcao">' + a.funcao + '</span>' +
+                '<span class="slot-nome">'        + a.agente + '</span></div>'
+        }
+
+        var btns = document.querySelectorAll('.mapa-btn')
+        for (var b = 0; b < btns.length; b++) {
+            btns[b].style.opacity = '0.5'
+        }
+        document.getElementById('btn-' + id).style.opacity = '1'
+
+        if (chartAgentes) chartAgentes.destroy()
+
+        var labels = m.agentes.map(function(a) { return a.agente + '\n(' + a.funcao + ')' })
+        var wrs    = m.agentes.map(function(a) { return a.wr })
+        var prs    = m.agentes.map(function(a) { return a.pr })
+
+        chartAgentes = new Chart(document.getElementById('grafico-agentes'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Win Rate %',
+                        data: wrs,
+                        backgroundColor: 'rgba(106,214,238,0.2)',
+                        borderColor: '#6AD6EE',
+                        borderWidth: 1,
+                        borderRadius: 2
+                    },
+                    {
+                        label: 'Pick Rate %',
+                        data: prs,
+                        backgroundColor: 'rgba(184,115,51,0.2)',
+                        borderColor: '#B87333',
+                        borderWidth: 1,
+                        borderRadius: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#D9D9D9',
+                            font: { size: 9, family: 'Unbounded' },
+                            boxWidth: 10
+                        }
+                    },
+                    tooltip: { callbacks: { label: function(ctx) { return ' ' + ctx.dataset.label + ': ' + ctx.parsed.y + '%' } } }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#D9D9D9', font: { size: 9, family: 'Unbounded' } },
+                        border: { color: '#6ad6ee20' }
+                    },
+                    y: {
+                        min: 0, max: 100,
+                        grid: { color: 'rgba(106,214,238,0.07)' },
+                        ticks: { color: '#838690', font: { size: 8, family: 'Unbounded' }, callback: function(v) { return v + '%' } },
+                        border: { color: '#6ad6ee20' }
+                    }
+                }
+            }
+        })
+    }
+
+</script>
 </html>
