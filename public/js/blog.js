@@ -106,9 +106,35 @@ function carregarComentarios(postId) {
     const list = document.querySelector(".comment-list");
     if (!list) return;
     list.innerHTML = "";
-    (comentarios[postId] || []).forEach(c => {
-        list.innerHTML += `<p><strong>${c.nome}:</strong> ${c.texto}</p>`;
+    (comentarios[postId] || []).forEach((c, index) => {
+        list.innerHTML += `
+            <div class="comment-item">
+                <div class="comment-text">
+                    <strong>${c.nome}:</strong> <span>${c.texto}</span>
+                </div>
+                <div class="comment-actions">
+                    <button onclick="editarComentario(${index})" class="btn-comment-edit" title="Editar">✎</button>
+                    <button onclick="excluirComentario(${index})" class="btn-comment-delete" title="Excluir">🗑</button>
+                </div>
+            </div>`;
     });
+}
+
+function excluirComentario(index) {
+    if (confirm("Deseja excluir este comentário?")) {
+        comentarios[currentId].splice(index, 1);
+        localStorage.setItem("comentarios", JSON.stringify(comentarios));
+        carregarComentarios(currentId);
+    }
+}
+
+function editarComentario(index) {
+    const novoTexto = prompt("Edite seu comentário:", comentarios[currentId][index].texto);
+    if (novoTexto !== null && novoTexto.trim() !== "") {
+        comentarios[currentId][index].texto = novoTexto;
+        localStorage.setItem("comentarios", JSON.stringify(comentarios));
+        carregarComentarios(currentId);
+    }
 }
 
 const commentForm = document.querySelector(".comment-form");
@@ -175,12 +201,11 @@ if (formAddPost) {
         const autor = document.getElementById('autor').value;
         const mapa = document.getElementById('mapa').value;
         const selectsAgentes = document.querySelectorAll('.agente-select');
-        
         const agentesSelecionados = Array.from(selectsAgentes).map(s => s.value);
 
         const agentesUnicos = new Set(agentesSelecionados);
         if (agentesUnicos.size !== agentesSelecionados.length) {
-            alert("Erro: Você selecionou agentes repetidos. Cada composição deve ter 5 agentes diferentes!");
+            alert("Erro: Você selecionou agentes repetidos!");
             return;
         }
 
