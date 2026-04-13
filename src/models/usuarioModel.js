@@ -9,26 +9,31 @@ function autenticar(email, senha) {
     return database.executar(instrucaoSql);
 }
 
-// Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
-function cadastrar(nome, email, senha, fkEmpresa) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, email, senha, fkEmpresa);
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
+function cadastrar(usuario, email, senha, funcao, codigo) {
     var instrucaoSql = `
-        INSERT INTO usuario (nome, email, senha, fk_empresa) VALUES ('${nome}', '${email}', '${senha}', '${fkEmpresa}');
+        INSERT INTO usuarios (nickname, email, senha, funcao, idorganizacao) 
+        SELECT '${usuario}', '${email}', '${senha}', '${funcao}', idorganizacao 
+        FROM organizacao 
+        WHERE codAtivacao = '${codigo}';
     `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+
+    console.log("Executando a instrução SQL (Concatenação direta)");
     return database.executar(instrucaoSql);
 }
 
 function listarUsuarios() {
-  var instrucaoSql = `SELECT nickname FROM usuarios;`;
-  return database.executar(instrucaoSql);
+    var instrucaoSql = `SELECT nickname FROM usuarios;`;
+    return database.executar(instrucaoSql);
+}
+
+function listarCodigos() {
+    var instrucaoSql = `SELECT codAtivacao FROM organizacao;`;
+    return database.executar(instrucaoSql);
 }
 
 module.exports = {
     autenticar,
     cadastrar,
-    listarUsuarios
+    listarUsuarios,
+    listarCodigos
 };

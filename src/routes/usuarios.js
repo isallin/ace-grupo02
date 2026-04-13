@@ -3,9 +3,9 @@ var router = express.Router();
 
 var usuarioController = require("../controllers/usuarioController");
 
-// router.post("/cadastrar", function (req, res) {
-//     usuarioController.cadastrar(req, res);
-// })
+router.post("/cadastrar", function (req, res) {
+    usuarioController.cadastrar(req, res);
+})
 
 // router.post("/autenticar", function (req, res) {
 //     usuarioController.autenticar(req, res);
@@ -13,6 +13,10 @@ var usuarioController = require("../controllers/usuarioController");
 
 router.get("/listarUsuarios", function (req, res) {
     usuarioController.listarUsuarios(req, res);
+});
+
+router.get("/listarCodigos", function (req, res) {
+    usuarioController.listarCodigos(req, res);
 });
 
 module.exports = router;
