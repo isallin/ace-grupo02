@@ -101,13 +101,89 @@ body {
   overflow: hidden;
 }
 
-/* ── TOPO ── */
+/* ── FILTRO ANO ── */
 
-#topo {
+#filtro-ano {
   display: flex;
-  align-items: flex-end;
-  gap: 20px;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  align-self: flex-start;
 }
+
+#filtro-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--frente1);
+  letter-spacing: 0.14em;
+}
+
+#filtro-select {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background-color: #131319;
+  border: 1px solid #6ad6ee50;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+#filtro-select:hover {
+  border-color: var(--destaque);
+}
+
+#filtro-valor {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--destaque);
+  letter-spacing: 0.08em;
+}
+
+#filtro-seta {
+  font-size: 8px;
+  color: var(--frente1);
+}
+
+#filtro-opcoes {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 60px;
+  background-color: #131319;
+  border: 1px solid #6ad6ee50;
+  border-top: none;
+  z-index: 10;
+  min-width: 80px;
+}
+
+.filtro-opcao {
+  padding: 8px 14px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--frente1);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: 0.15s;
+  border-bottom: 1px solid #6ad6ee15;
+}
+
+.filtro-opcao:last-child {
+  border-bottom: none;
+}
+
+.filtro-opcao:hover {
+  color: var(--branco);
+  background-color: #172739;
+}
+
+.filtro-opcao.ativa {
+  color: var(--destaque);
+  background-color: #172739;
+}
+
+/* ── BOTÕES DE MAPA ── */
 
 #mapa-botoes {
   display: flex;
@@ -155,52 +231,6 @@ body {
   letter-spacing: 0.08em;
 }
 
-/* ── KPI BAN ── */
-
-#kpi-ban {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  background-color: #172739;
-  border: 1px solid #6ad6ee35;
-  padding: 14px 24px;
-  margin-left: auto;
-  white-space: nowrap;
-  transition: border-color 0.2s;
-}
-
-#kpi-ban:hover {
-  border-color: var(--destaque);
-}
-
-.kpi-ban-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--frente1);
-  letter-spacing: 0.1em;
-}
-
-.kpi-ban-mapa {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--destaque);
-  filter: drop-shadow(0px 1px 10px rgba(75, 255, 234, 0.4));
-}
-
-.kpi-ban-pct {
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: #EE6A6A;
-  filter: drop-shadow(0px 1px 14px rgba(238, 106, 106, 0.5));
-}
-
-.kpi-ban-sub {
-  font-size: 8px;
-  font-weight: 400;
-  color: var(--frente1);
-}
-
 /* ── MAPA INFO ── */
 
 #mapa-info {
@@ -242,7 +272,42 @@ body {
   color: var(--frente1);
   font-weight: 400;
   line-height: 1.8;
-  max-width: 560px;
+  max-width: 480px;
+}
+
+#mapa-banrate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background-color: #172739;
+  border: 1px solid #6ad6ee35;
+  padding: 10px 20px;
+  margin-left: auto;
+  white-space: nowrap;
+  transition: border-color 0.2s;
+}
+
+#mapa-banrate:hover { border-color: var(--destaque); }
+
+.ban-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--frente1);
+  letter-spacing: 0.12em;
+}
+
+.ban-pct {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #EE6A6A;
+  filter: drop-shadow(0px 1px 14px rgba(238, 106, 106, 0.5));
+}
+
+.ban-sub {
+  font-size: 8px;
+  font-weight: 400;
+  color: var(--frente1);
 }
 
 /* ── GRÁFICO AGENTES ── */
