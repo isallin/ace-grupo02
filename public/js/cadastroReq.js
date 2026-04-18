@@ -27,53 +27,62 @@ function cadastroMob() {
 }
 
 async function validacao() {
-    const listaWeb = obterDadosCadastro();
-    const listaValor = Object.values(listaWeb);
+    const dadosCadastro = obterDadosCadastro();
+    const dadosLista = Object.values(dadosCadastro);
 
     // 1. Verificação de campos vazios
-    if (listaValor.some(valor => valor.trim() === "")) {
-        console.log("Preencha todos os campos.");
+    if (dadosLista.some(valor => valor.trim() === "")) {
+        notificacao("Erro", "Preencha todos os campos", "c3423f");
         return false;
     }
 
     //Verificando o tamanho do nome
-    if (listaWeb.nome.length <= 3) {
-        console.log("Nome inválido")
+    if (dadosCadastro.nome.length <= 3) {
+        notificacao("Erro", "Nome inválido!", "c3423f");
         return false;
     }
 
     //Verificando se o user já existe no banco de dados
     const listaUsuarios = await listarUsuarios();
-    usuario = listaWeb.nome;
+    usuario = dadosCadastro.usuario;
     for (let i = 0; i < listaUsuarios.length; i++) {
         const user = listaUsuarios[i].nickname;
         if (user == usuario) {
-            console.log("Usuário já existe!")
+            notificacao("Erro", "Usuário já existe!", "c3423f");
             return false;
         }
     }
 
     //Verificando email
-    if (listaWeb.email.includes("@") == false) {
-        console.log("Email inválido")
+    if (dadosCadastro.email.includes("@") == false) {
+        notificacao("Erro", "Email inválido!", "c3423f");
         return false;
+    }
+    const listaEmail = await listarEmail();
+    email = dadosCadastro.email;
+    for (let i = 0; i < listaEmail.length; i++) {
+        const user = listaEmail[i].email;
+        if (user == email) {
+            notificacao("Erro", "Email já existe!", "c3423f");
+            return false;
+        }
     }
 
     //Verificando se o código existe no banco de dados
     const listaCodigos = await listarCodigos();
-    const prefixoCodigo = listaWeb.codigo.slice(0, -1);
+    const prefixoCodigo = dadosCadastro.codigo.slice(0, -1);
     const codigoValido = listaCodigos.some(c => c.codAtivacao === prefixoCodigo);
     if (!codigoValido) {
-        console.log("Código não encontrado!");
+        notificacao("Erro", "Código inválido!", "c3423f");
         return false;
     }
 
     //Verificando senha
-    if (listaWeb.senha.length < 8) {
-        console.log("Senha inválida")
+    if (dadosCadastro.senha.length < 8) {
+        notificacao("Erro", "Senha inválido!", "c3423f");
         return false;
     }
-    return listaWeb
+    return dadosCadastro
 }
 
 // Função para cadastrar depois de validar
@@ -105,22 +114,35 @@ async function cadastrar() {
         });
 
         if (resposta.ok) {
-            console.log("Cadastrado com sucesso!")
+            notificacao("Sucesso!", "Cadastrado com sucesso!", "7EC94C")
             setTimeout(() => window.location = "login.html", 2000);
         } else {
+            notificacao("Erro", "Erro ao cadastrar!", "c3423f");
             throw new Error("Erro ao realizar o cadastro");
         }
     } catch (erro) {
+        notificacao("Erro", "Erro ao cadastrar!", "c3423f");
         console.error(`ERRO: ${erro}`);
     }
 }
 
-//Função para verificar se o @user que a
-//pessoa inseriu já existe no banco de dados
+//Função para verificar se o @user já existe
 async function listarUsuarios() {
     try {
         const resp = await fetch("/usuarios/listarUsuarios");
         if (!resp.ok) throw new Error("Erro ao listar usuários");
+        return await resp.json();
+    } catch (error) {
+        console.error("ERRO:", error);
+        return [];
+    }
+}
+
+//Função para verificar se o email já existe
+async function listarEmail() {
+    try {
+        const resp = await fetch("/usuarios/listarEmail");
+        if (!resp.ok) throw new Error("Erro ao listar emails");
         return await resp.json();
     } catch (error) {
         console.error("ERRO:", error);
