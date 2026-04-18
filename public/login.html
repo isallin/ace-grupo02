@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACE Login</title>
+    <script src="./js/loginReq.js"></script>
+    <script src="./js/notificacao.js"></script>
     <link rel="stylesheet" href="./css/home.css">
     <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="./css/notificacao.css">
 </head>
 
 <body>
@@ -25,15 +28,16 @@
         </nav>
     </header>
 
+    <div id="notification-container"></div>
     <main class="container">
         <section class="login">
             <div>
                 <h2>Login</h2>
                 <p>E-mail</p>
-                <input type="email" placeholder="email@teste.com">
+                <input id="web_email" type="email" placeholder="email@teste.com">
                 <p>Senha</p>
-                <input type="password" placeholder="********">
-                <button>Entrar</button>
+                <input id="web_senha" type="password" placeholder="********">
+                <button onclick="login()">Entrar</button>
                 <a href="./cadastro.html" class="cadastro-link">Não tem conta? Cadastre-se</a>
             </div>
             <div>
@@ -67,10 +71,10 @@
 
         <div class="form-mobile">
             <p>E-mail</p>
-            <input type="email" placeholder="email@teste.com">
+            <input id="mob_email" type="email" placeholder="email@teste.com">
             <p>Senha</p>
-            <input type="password" placeholder="********">
-            <button>Entrar</button>
+            <input id="mob_senha" type="password" placeholder="********">
+            <button onclick="login()">Entrar</button>
             <a href="./cadastro.html" class="cadastro-link">Não tem conta? Cadastre-se</a>
         </div>
 
@@ -78,8 +82,7 @@
     </div>
 </body>
 
-<script>
-
-</script>
+<script src="./js/loginReq.js"></script>
+<script src="./js/notificacao.js"></script>
 
 </html>

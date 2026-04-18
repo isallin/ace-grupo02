@@ -9,15 +9,15 @@ function autenticar(req, res) {
     } else if (senha == undefined) {
         res.status(400).send("Sua senha está indefinida!");
     } else {
-
         usuarioModel.autenticar(email, senha)
             .then(
                 function (resultadoAutenticar) {
                     console.log(`\nResultados encontrados: ${resultadoAutenticar.length}`);
-                    console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`); // transforma JSON em String
+                    console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`);
 
                     if (resultadoAutenticar.length == 1) {
                         console.log(resultadoAutenticar);
+                        res.json(resultadoAutenticar[0]);
                     } else if (resultadoAutenticar.length == 0) {
                         res.status(403).send("Email e/ou senha inválido(s)");
                     } else {
@@ -79,6 +79,12 @@ function listarUsuarios(req, res) {
     });
 }
 
+function listarEmail(req, res) {
+    usuarioModel.listarEmail().then((resultado) => {
+        res.status(200).json(resultado);
+    });
+}
+
 function listarCodigos(req, res) {
     usuarioModel.listarCodigos().then((resultado) => {
         res.status(200).json(resultado);
@@ -89,5 +95,6 @@ module.exports = {
     autenticar,
     cadastrar,
     listarUsuarios,
-    listarCodigos
+    listarCodigos,
+    listarEmail
 }
