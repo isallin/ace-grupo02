@@ -28,11 +28,11 @@
 
             <div id="filtro-ano">
                 <span id="filtro-label">ANO VCT</span>
-                <div id="filtro-select" onclick="toggleDropdown()">
+                <div id="filtro-select" onclick="abrirFecharDropdown()">
                     <span id="filtro-valor">2021</span>
                     <span id="filtro-seta">▼</span>
                 </div>
-                <div id="filtro-opcoes">
+                <div id="filtro-opcoes" style="display:none">
                     <div class="filtro-opcao ativa" onclick="selecionarAno(this, 2021)">2021</div>
                     <div class="filtro-opcao" onclick="selecionarAno(this, 2022)">2022</div>
                     <div class="filtro-opcao" onclick="selecionarAno(this, 2023)">2023</div>
@@ -71,14 +71,14 @@
                 </div>
 
                 <div id="grafico-agentes-box">
-                    <span class="secao-titulo">MAIOR WIN RATE vs MAIOR PICK RATE POR FUNÇÃO</span>
+                    <span class="secao-titulo">MAIOR TAXA DE VITÓRIA vs MAIS ESCOLHIDO POR FUNÇÃO</span>
                     <div class="grafico-canvas">
                         <canvas id="grafico-agentes"></canvas>
                     </div>
                 </div>
 
                 <div id="composicao">
-                    <span id="composicao-titulo">MELHOR COMPOSIÇÃO | WIN RATE</span>
+                    <span id="composicao-titulo">MELHOR COMPOSIÇÃO | TAXA DE VITÓRIA</span>
                     <div id="agente-slots">
                         <div class="agente-slot" id="slot-0"></div>
                         <div class="agente-slot" id="slot-1"></div>
@@ -96,30 +96,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
-    // Estrutura por função: melhor_wr { agente, valor } e melhor_pr { agente, valor }
-    // Composicao: agentes com maior win rate (podem ser diferentes dos do gráfico)
-
     var dados = {
         2021: {
-            split: {
-                ban: '71%', bansub: '61 de 86 drafts',
-                funcoes: [
-                    { funcao: 'Duelista',    wr: { agente: 'Raze',   valor: 63 }, pr: { agente: 'Jett',    valor: 91 } },
-                    { funcao: 'Iniciador',   wr: { agente: 'Skye',   valor: 54 }, pr: { agente: 'Breach',  valor: 80 } },
-                    { funcao: 'Controlador', wr: { agente: 'Viper',  valor: 58 }, pr: { agente: 'Omen',    valor: 92 } },
-                    { funcao: 'Sentinela',   wr: { agente: 'Cypher', valor: 55 }, pr: { agente: 'Killjoy', valor: 78 } },
-                    { funcao: 'Flex',        wr: { agente: 'Sova',   valor: 52 }, pr: { agente: 'Skye',    valor: 74 } },
-                ],
-                composicao: [
-                    { funcao: 'Duelista',    agente: 'Raze',   img: '../assets/Raze_icon.png'   },
-                    { funcao: 'Iniciador',   agente: 'Skye',   img: '../assets/Skye_icon.png'   },
-                    { funcao: 'Controlador', agente: 'Viper',  img: '../assets/Viper_icon.png'  },
-                    { funcao: 'Sentinela',   agente: 'Cypher', img: '../assets/Cypher_icon.png' },
-                    { funcao: 'Flex',        agente: 'Sova',   img: '../assets/Sova_icon.png'   },
-                ]
-            },
             haven: {
-                ban: '44%', bansub: '38 de 86 drafts',
+                nome: 'Haven', ban: '44%', bansub: '38 de 86 drafts',
+                desc: 'Sob um mosteiro esquecido, um clamor surge de Agentes rivais em confronto pelo controle de três locais. Há mais território para controlar, mas os defensores podem usar a área extra para investidas agressivas.',
                 funcoes: [
                     { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 60 }, pr: { agente: 'Jett',    valor: 88 } },
                     { funcao: 'Iniciador',   wr: { agente: 'Skye',    valor: 56 }, pr: { agente: 'Sova',    valor: 80 } },
@@ -135,15 +116,173 @@
                     { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
                 ]
             },
-            pearl:   { ban: '—', bansub: 'Não estava no pool', funcoes: [ { funcao:'Duelista', wr:{agente:'Chamber',valor:58}, pr:{agente:'Jett',valor:85}    }, { funcao:'Iniciador',   wr:{agente:'Sova',valor:55},   pr:{agente:'Fade',valor:74}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:57},  pr:{agente:'Omen',valor:88}   }, { funcao:'Sentinela', wr:{agente:'Killjoy',valor:52}, pr:{agente:'Cypher',valor:70} }, { funcao:'Flex', wr:{agente:'Breach',valor:49}, pr:{agente:'Skye',valor:65} } ], composicao: [ {funcao:'Duelista',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Iniciador',agente:'Sova',img:'../assets/Sova_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Killjoy',img:'../assets/Killjoy_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            abyss:   { ban: '—', bansub: 'Não estava no pool', funcoes: [ { funcao:'Duelista', wr:{agente:'Raze',valor:60},    pr:{agente:'Jett',valor:92}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:56},   pr:{agente:'Sova',valor:78}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:55},  pr:{agente:'Omen',valor:82}   }, { funcao:'Sentinela', wr:{agente:'Cypher',valor:53},  pr:{agente:'Killjoy',valor:68} }, { funcao:'Flex', wr:{agente:'Breach',valor:50}, pr:{agente:'Skye',valor:62} } ], composicao: [ {funcao:'Duelista',agente:'Raze',img:'../assets/Raze_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Cypher',img:'../assets/Cypher_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            corrode: { ban: '—', bansub: 'Não estava no pool', funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:59},    pr:{agente:'Jett',valor:88}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:54},   pr:{agente:'Sova',valor:80}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:58},  pr:{agente:'Brim',valor:75}   }, { funcao:'Sentinela', wr:{agente:'Chamber',valor:53}, pr:{agente:'Killjoy',valor:66} }, { funcao:'Flex', wr:{agente:'Breach',valor:50}, pr:{agente:'Fade',valor:58} } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            breeze:  { ban: '38%', bansub: '33 de 86 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Chamber',valor:62}, pr:{agente:'Jett',valor:95}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:55},   pr:{agente:'Sova',valor:84}   }, { funcao:'Controlador', wr:{agente:'Astra',valor:59},  pr:{agente:'Viper',valor:88}  }, { funcao:'Sentinela', wr:{agente:'Cypher',valor:51},  pr:{agente:'Killjoy',valor:60} }, { funcao:'Flex', wr:{agente:'Breach',valor:49}, pr:{agente:'Fade',valor:58} } ], composicao: [ {funcao:'Duelista',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Cypher',img:'../assets/Cypher_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            bind:    { ban: '52%', bansub: '45 de 86 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:62},    pr:{agente:'Raze',valor:84}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:55},   pr:{agente:'Breach',valor:76} }, { funcao:'Controlador', wr:{agente:'Astra',valor:57},  pr:{agente:'Brim',valor:82}   }, { funcao:'Sentinela', wr:{agente:'Killjoy',valor:54}, pr:{agente:'Cypher',valor:75} }, { funcao:'Flex', wr:{agente:'Sova',valor:49},   pr:{agente:'Fade',valor:55}  } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Killjoy',img:'../assets/Killjoy_icon.png'}, {funcao:'Flex',agente:'Sova',img:'../assets/Sova_icon.png'} ] },
+            pearl: {
+                nome: 'Pearl', ban: '—', bansub: 'Não estava no pool',
+                desc: 'Neste mapa de dois locais, ambientado em uma vibrante cidade subaquática, os atacantes avançam contra os defensores. Leve a luta para o meio do mapa ou para as alas de longo alcance.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Chamber', valor: 58 }, pr: { agente: 'Jett',    valor: 85 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Sova',    valor: 55 }, pr: { agente: 'Fade',    valor: 74 } },
+                    { funcao: 'Controlador', wr: { agente: 'Viper',   valor: 57 }, pr: { agente: 'Omen',    valor: 88 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Killjoy', valor: 52 }, pr: { agente: 'Cypher',  valor: 70 } },
+                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 49 }, pr: { agente: 'Skye',    valor: 65 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Chamber', img: '../assets/Chamber_icon.png' },
+                    { funcao: 'Iniciador',   agente: 'Sova',    img: '../assets/Sova_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Viper',   img: '../assets/Viper_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Killjoy', img: '../assets/Killjoy_icon.png' },
+                    { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
+                ]
+            },
+            abyss: {
+                nome: 'Abyss', ban: '—', bansub: 'Não estava no pool',
+                desc: 'Contemple o Abismo, uma base clandestina enterrada nas profundezas de um desfiladeiro impenetrável e sem fim. Utilize quedas da morte para jogadas inteligentes.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Raze',    valor: 60 }, pr: { agente: 'Jett',    valor: 92 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Skye',    valor: 56 }, pr: { agente: 'Sova',    valor: 78 } },
+                    { funcao: 'Controlador', wr: { agente: 'Viper',   valor: 55 }, pr: { agente: 'Omen',    valor: 82 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Cypher',  valor: 53 }, pr: { agente: 'Killjoy', valor: 68 } },
+                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 50 }, pr: { agente: 'Skye',    valor: 62 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Raze',   img: '../assets/Raze_icon.png'   },
+                    { funcao: 'Iniciador',   agente: 'Skye',   img: '../assets/Skye_icon.png'   },
+                    { funcao: 'Controlador', agente: 'Viper',  img: '../assets/Viper_icon.png'  },
+                    { funcao: 'Sentinela',   agente: 'Cypher', img: '../assets/Cypher_icon.png' },
+                    { funcao: 'Flex',        agente: 'Breach', img: '../assets/Breach_icon.png' },
+                ]
+            },
+            split: {
+                nome: 'Split', ban: '71%', bansub: '61 de 86 drafts',
+                desc: 'Se você quiser ir longe, terá que subir. Dois pontos de ancoragem separados por um centro elevado permitem movimentação rápida com o uso de dois ascensores de corda.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Raze',   valor: 63 }, pr: { agente: 'Jett',    valor: 91 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Skye',   valor: 54 }, pr: { agente: 'Breach',  valor: 80 } },
+                    { funcao: 'Controlador', wr: { agente: 'Viper',  valor: 58 }, pr: { agente: 'Omen',    valor: 92 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Cypher', valor: 55 }, pr: { agente: 'Killjoy', valor: 78 } },
+                    { funcao: 'Flex',        wr: { agente: 'Sova',   valor: 52 }, pr: { agente: 'Skye',    valor: 74 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Raze',   img: '../assets/Raze_icon.png'   },
+                    { funcao: 'Iniciador',   agente: 'Skye',   img: '../assets/Skye_icon.png'   },
+                    { funcao: 'Controlador', agente: 'Viper',  img: '../assets/Viper_icon.png'  },
+                    { funcao: 'Sentinela',   agente: 'Cypher', img: '../assets/Cypher_icon.png' },
+                    { funcao: 'Flex',        agente: 'Sova',   img: '../assets/Sova_icon.png'   },
+                ]
+            },
+            corrode: {
+                nome: 'Corrode', ban: '—', bansub: 'Não estava no pool',
+                desc: 'Uma cidade castelo francesa transformada em uma instalação de mineração de sal radianita. Abra caminho pelas ruas medievais neste mapa tradicional de três corredores.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 59 }, pr: { agente: 'Jett',    valor: 88 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Skye',    valor: 54 }, pr: { agente: 'Sova',    valor: 80 } },
+                    { funcao: 'Controlador', wr: { agente: 'Viper',   valor: 58 }, pr: { agente: 'Brim',    valor: 75 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Chamber', valor: 53 }, pr: { agente: 'Killjoy', valor: 66 } },
+                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 50 }, pr: { agente: 'Fade',    valor: 58 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Neon',    img: '../assets/Neon_icon.png'    },
+                    { funcao: 'Iniciador',   agente: 'Skye',    img: '../assets/Skye_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Viper',   img: '../assets/Viper_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Chamber', img: '../assets/Chamber_icon.png' },
+                    { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
+                ]
+            },
+            breeze: {
+                nome: 'Breeze', ban: '38%', bansub: '33 de 86 drafts',
+                desc: 'Admire as ruínas históricas ou as cavernas à beira-mar neste paraíso tropical. Fique atento aos seus flancos e será moleza.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Chamber', valor: 62 }, pr: { agente: 'Jett',    valor: 95 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Skye',    valor: 55 }, pr: { agente: 'Sova',    valor: 84 } },
+                    { funcao: 'Controlador', wr: { agente: 'Astra',   valor: 59 }, pr: { agente: 'Viper',   valor: 88 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Cypher',  valor: 51 }, pr: { agente: 'Killjoy', valor: 60 } },
+                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 49 }, pr: { agente: 'Fade',    valor: 58 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Chamber', img: '../assets/Chamber_icon.png' },
+                    { funcao: 'Iniciador',   agente: 'Skye',    img: '../assets/Skye_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Astra',   img: '../assets/Astra_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Cypher',  img: '../assets/Cypher_icon.png'  },
+                    { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
+                ]
+            },
+            bind: {
+                nome: 'Bind', ban: '52%', bansub: '45 de 86 drafts',
+                desc: 'Dois locais. Sem meio termo. Tem que escolher entre esquerda e direita. Um par de teletransportadores unidirecionais facilita o flanqueamento.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 62 }, pr: { agente: 'Raze',    valor: 84 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Skye',    valor: 55 }, pr: { agente: 'Breach',  valor: 76 } },
+                    { funcao: 'Controlador', wr: { agente: 'Astra',   valor: 57 }, pr: { agente: 'Brim',    valor: 82 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Killjoy', valor: 54 }, pr: { agente: 'Cypher',  valor: 75 } },
+                    { funcao: 'Flex',        wr: { agente: 'Sova',    valor: 49 }, pr: { agente: 'Fade',    valor: 55 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Neon',    img: '../assets/Neon_icon.png'    },
+                    { funcao: 'Iniciador',   agente: 'Skye',    img: '../assets/Skye_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Astra',   img: '../assets/Astra_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Killjoy', img: '../assets/Killjoy_icon.png' },
+                    { funcao: 'Flex',        agente: 'Sova',    img: '../assets/Sova_icon.png'    },
+                ]
+            },
         },
         2025: {
+            haven: {
+                nome: 'Haven', ban: '58%', bansub: '120 de 207 drafts',
+                desc: 'Sob um mosteiro esquecido, um clamor surge de Agentes rivais em confronto pelo controle de três locais. Há mais território para controlar, mas os defensores podem usar a área extra para investidas agressivas.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 63 }, pr: { agente: 'Jett',    valor: 82 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Fade',    valor: 59 }, pr: { agente: 'Skye',    valor: 74 } },
+                    { funcao: 'Controlador', wr: { agente: 'Viper',   valor: 56 }, pr: { agente: 'Omen',    valor: 96 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Chamber', valor: 55 }, pr: { agente: 'Killjoy', valor: 70 } },
+                    { funcao: 'Flex',        wr: { agente: 'Sova',    valor: 51 }, pr: { agente: 'Gekko',   valor: 62 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Neon',    img: '../assets/Neon_icon.png'    },
+                    { funcao: 'Iniciador',   agente: 'Fade',    img: '../assets/Fade_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Viper',   img: '../assets/Viper_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Chamber', img: '../assets/Chamber_icon.png' },
+                    { funcao: 'Flex',        agente: 'Sova',    img: '../assets/Sova_icon.png'    },
+                ]
+            },
+            pearl: {
+                nome: 'Pearl', ban: '41%', bansub: '85 de 207 drafts',
+                desc: 'Neste mapa de dois locais, ambientado em uma vibrante cidade subaquática, os atacantes avançam contra os defensores. Leve a luta para o meio do mapa ou para as alas de longo alcance.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Chamber', valor: 57 }, pr: { agente: 'Jett',    valor: 80 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Sova',    valor: 58 }, pr: { agente: 'Fade',    valor: 84 } },
+                    { funcao: 'Controlador', wr: { agente: 'Astra',   valor: 59 }, pr: { agente: 'Viper',   valor: 94 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Cypher',  valor: 54 }, pr: { agente: 'Killjoy', valor: 72 } },
+                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 52 }, pr: { agente: 'Skye',    valor: 66 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Chamber', img: '../assets/Chamber_icon.png' },
+                    { funcao: 'Iniciador',   agente: 'Sova',    img: '../assets/Sova_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Astra',   img: '../assets/Astra_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Cypher',  img: '../assets/Cypher_icon.png'  },
+                    { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
+                ]
+            },
+            abyss: {
+                nome: 'Abyss', ban: '49%', bansub: '101 de 207 drafts',
+                desc: 'Contemple o Abismo, uma base clandestina enterrada nas profundezas de um desfiladeiro impenetrável e sem fim. Utilize quedas da morte para jogadas inteligentes.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 65 }, pr: { agente: 'Jett',    valor: 91 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Gekko',   valor: 57 }, pr: { agente: 'Fade',    valor: 72 } },
+                    { funcao: 'Controlador', wr: { agente: 'Viper',   valor: 58 }, pr: { agente: 'Omen',    valor: 85 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Killjoy', valor: 59 }, pr: { agente: 'Cypher',  valor: 74 } },
+                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 51 }, pr: { agente: 'Skye',    valor: 60 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Neon',    img: '../assets/Neon_icon.png'    },
+                    { funcao: 'Iniciador',   agente: 'Gekko',   img: '../assets/Gekko_icon.png'   },
+                    { funcao: 'Controlador', agente: 'Viper',   img: '../assets/Viper_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Killjoy', img: '../assets/Killjoy_icon.png' },
+                    { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
+                ]
+            },
             split: {
-                ban: '74%', bansub: '153 de 207 drafts',
+                nome: 'Split', ban: '74%', bansub: '153 de 207 drafts',
+                desc: 'Se você quiser ir longe, terá que subir. Dois pontos de ancoragem separados por um centro elevado permitem movimentação rápida com o uso de dois ascensores de corda.',
                 funcoes: [
                     { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 64 }, pr: { agente: 'Raze',    valor: 94 } },
                     { funcao: 'Iniciador',   wr: { agente: 'Gekko',   valor: 58 }, pr: { agente: 'Breach',  valor: 71 } },
@@ -159,12 +298,60 @@
                     { funcao: 'Flex',        agente: 'Sova',    img: '../assets/Sova_icon.png'    },
                 ]
             },
-            haven:   { ban: '58%', bansub: '120 de 207 drafts', funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:63},    pr:{agente:'Jett',valor:82}    }, { funcao:'Iniciador',   wr:{agente:'Fade',valor:59},    pr:{agente:'Skye',valor:74}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:56},  pr:{agente:'Omen',valor:96}   }, { funcao:'Sentinela', wr:{agente:'Chamber',valor:55}, pr:{agente:'Killjoy',valor:70}}, { funcao:'Flex', wr:{agente:'Sova',valor:51},   pr:{agente:'Gekko',valor:62} } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Fade',img:'../assets/Fade_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Flex',agente:'Sova',img:'../assets/Sova_icon.png'} ] },
-            pearl:   { ban: '41%', bansub: '85 de 207 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Chamber',valor:57}, pr:{agente:'Jett',valor:80}    }, { funcao:'Iniciador',   wr:{agente:'Sova',valor:58},    pr:{agente:'Fade',valor:84}   }, { funcao:'Controlador', wr:{agente:'Astra',valor:59},  pr:{agente:'Viper',valor:94}  }, { funcao:'Sentinela', wr:{agente:'Cypher',valor:54},  pr:{agente:'Killjoy',valor:72}}, { funcao:'Flex', wr:{agente:'Breach',valor:52}, pr:{agente:'Skye',valor:66}  } ], composicao: [ {funcao:'Duelista',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Iniciador',agente:'Sova',img:'../assets/Sova_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Cypher',img:'../assets/Cypher_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            abyss:   { ban: '49%', bansub: '101 de 207 drafts', funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:65},    pr:{agente:'Jett',valor:91}    }, { funcao:'Iniciador',   wr:{agente:'Gekko',valor:57},   pr:{agente:'Fade',valor:72}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:58},  pr:{agente:'Omen',valor:85}   }, { funcao:'Sentinela', wr:{agente:'Killjoy',valor:59}, pr:{agente:'Cypher',valor:74} }, { funcao:'Flex', wr:{agente:'Breach',valor:51}, pr:{agente:'Skye',valor:60}  } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Gekko',img:'../assets/Gekko_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Killjoy',img:'../assets/Killjoy_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            corrode: { ban: '35%', bansub: '72 de 207 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:61},    pr:{agente:'Jett',valor:80}    }, { funcao:'Iniciador',   wr:{agente:'Sova',valor:56},    pr:{agente:'Fade',valor:74}   }, { funcao:'Controlador', wr:{agente:'Astra',valor:60},  pr:{agente:'Viper',valor:90}  }, { funcao:'Sentinela', wr:{agente:'Chamber',valor:56}, pr:{agente:'Killjoy',valor:72}}, { funcao:'Flex', wr:{agente:'Breach',valor:51}, pr:{agente:'Gekko',valor:61} } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Sova',img:'../assets/Sova_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            breeze:  { ban: '47%', bansub: '97 de 207 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Chamber',valor:63}, pr:{agente:'Jett',valor:92}    }, { funcao:'Iniciador',   wr:{agente:'Sova',valor:58},    pr:{agente:'Fade',valor:78}   }, { funcao:'Controlador', wr:{agente:'Astra',valor:61},  pr:{agente:'Viper',valor:89}  }, { funcao:'Sentinela', wr:{agente:'Cypher',valor:54},  pr:{agente:'Killjoy',valor:68} }, { funcao:'Flex', wr:{agente:'Breach',valor:52}, pr:{agente:'Skye',valor:65}  } ], composicao: [ {funcao:'Duelista',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Iniciador',agente:'Sova',img:'../assets/Sova_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Cypher',img:'../assets/Cypher_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            bind:    { ban: '62%', bansub: '128 de 207 drafts', funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:65},    pr:{agente:'Raze',valor:90}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:57},    pr:{agente:'Breach',valor:74} }, { funcao:'Controlador', wr:{agente:'Astra',valor:60},  pr:{agente:'Viper',valor:86}  }, { funcao:'Sentinela', wr:{agente:'Killjoy',valor:56}, pr:{agente:'Cypher',valor:69} }, { funcao:'Flex', wr:{agente:'Sova',valor:51},   pr:{agente:'Fade',valor:63}  } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Killjoy',img:'../assets/Killjoy_icon.png'}, {funcao:'Flex',agente:'Sova',img:'../assets/Sova_icon.png'} ] },
+            corrode: {
+                nome: 'Corrode', ban: '35%', bansub: '72 de 207 drafts',
+                desc: 'Uma cidade castelo francesa transformada em uma instalação de mineração de sal radianita. Abra caminho pelas ruas medievais neste mapa tradicional de três corredores.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 61 }, pr: { agente: 'Jett',    valor: 80 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Sova',    valor: 56 }, pr: { agente: 'Fade',    valor: 74 } },
+                    { funcao: 'Controlador', wr: { agente: 'Astra',   valor: 60 }, pr: { agente: 'Viper',   valor: 90 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Chamber', valor: 56 }, pr: { agente: 'Killjoy', valor: 72 } },
+                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 51 }, pr: { agente: 'Gekko',   valor: 61 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Neon',    img: '../assets/Neon_icon.png'    },
+                    { funcao: 'Iniciador',   agente: 'Sova',    img: '../assets/Sova_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Astra',   img: '../assets/Astra_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Chamber', img: '../assets/Chamber_icon.png' },
+                    { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
+                ]
+            },
+            breeze: {
+                nome: 'Breeze', ban: '47%', bansub: '97 de 207 drafts',
+                desc: 'Admire as ruínas históricas ou as cavernas à beira-mar neste paraíso tropical. Fique atento aos seus flancos e será moleza.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Chamber', valor: 63 }, pr: { agente: 'Jett',    valor: 92 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Sova',    valor: 58 }, pr: { agente: 'Fade',    valor: 78 } },
+                    { funcao: 'Controlador', wr: { agente: 'Astra',   valor: 61 }, pr: { agente: 'Viper',   valor: 89 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Cypher',  valor: 54 }, pr: { agente: 'Killjoy', valor: 68 } },
+                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 52 }, pr: { agente: 'Skye',    valor: 65 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Chamber', img: '../assets/Chamber_icon.png' },
+                    { funcao: 'Iniciador',   agente: 'Sova',    img: '../assets/Sova_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Astra',   img: '../assets/Astra_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Cypher',  img: '../assets/Cypher_icon.png'  },
+                    { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
+                ]
+            },
+            bind: {
+                nome: 'Bind', ban: '62%', bansub: '128 de 207 drafts',
+                desc: 'Dois locais. Sem meio termo. Tem que escolher entre esquerda e direita. Um par de teletransportadores unidirecionais facilita o flanqueamento.',
+                funcoes: [
+                    { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 65 }, pr: { agente: 'Raze',    valor: 90 } },
+                    { funcao: 'Iniciador',   wr: { agente: 'Skye',    valor: 57 }, pr: { agente: 'Breach',  valor: 74 } },
+                    { funcao: 'Controlador', wr: { agente: 'Astra',   valor: 60 }, pr: { agente: 'Viper',   valor: 86 } },
+                    { funcao: 'Sentinela',   wr: { agente: 'Killjoy', valor: 56 }, pr: { agente: 'Cypher',  valor: 69 } },
+                    { funcao: 'Flex',        wr: { agente: 'Sova',    valor: 51 }, pr: { agente: 'Fade',    valor: 63 } },
+                ],
+                composicao: [
+                    { funcao: 'Duelista',    agente: 'Neon',    img: '../assets/Neon_icon.png'    },
+                    { funcao: 'Iniciador',   agente: 'Skye',    img: '../assets/Skye_icon.png'    },
+                    { funcao: 'Controlador', agente: 'Astra',   img: '../assets/Astra_icon.png'   },
+                    { funcao: 'Sentinela',   agente: 'Killjoy', img: '../assets/Killjoy_icon.png' },
+                    { funcao: 'Flex',        agente: 'Sova',    img: '../assets/Sova_icon.png'    },
+                ]
+            },
         }
     }
 
@@ -173,37 +360,29 @@
     dados[2024] = dados[2025]
     dados[2026] = dados[2025]
 
-    var anoAtual    = 2021
-    var mapaAtual   = null
-    var chartAgentes = null
+    var anoAtual  = 2021
+    var mapaAtual = null
 
-    var descs = {
-        haven:   'Sob um mosteiro esquecido, um clamor surge de Agentes rivais em confronto pelo controle de três locais. Há mais território para controlar, mas os defensores podem usar a área extra para investidas agressivas.',
-        pearl:   'Neste mapa de dois locais, ambientado em uma vibrante cidade subaquática, os atacantes avançam contra os defensores. Leve a luta para o meio do mapa ou para as alas de longo alcance.',
-        abyss:   'Contemple o Abismo, uma base clandestina enterrada nas profundezas de um desfiladeiro impenetrável e sem fim. Utilize quedas da morte para jogadas inteligentes.',
-        split:   'Se você quiser ir longe, terá que subir. Dois pontos de ancoragem separados por um centro elevado permitem movimentação rápida com o uso de dois ascensores de corda.',
-        corrode: 'Uma cidade castelo francesa transformada em uma instalação de mineração de sal radianita. Abra caminho pelas ruas medievais neste mapa tradicional de três corredores.',
-        breeze:  'Admire as ruínas históricas ou as cavernas à beira-mar neste paraíso tropical. Fique atento aos seus flancos e será moleza.',
-        bind:    'Dois locais. Sem meio termo. Tem que escolher entre esquerda e direita. Um par de teletransportadores unidirecionais facilita o flanqueamento.',
-    }
-
-    function toggleDropdown() {
+    function abrirFecharDropdown() {
         var opcoes = document.getElementById('filtro-opcoes')
-        opcoes.style.display = opcoes.style.display === 'flex' ? 'none' : 'flex'
-    }
-
-    document.addEventListener('click', function(e) {
-        if (!document.getElementById('filtro-ano').contains(e.target)) {
-            document.getElementById('filtro-opcoes').style.display = 'none'
+        if (opcoes.style.display === 'none') {
+            opcoes.style.display = 'flex'
+        } else {
+            opcoes.style.display = 'none'
         }
-    })
+    }
 
     function selecionarAno(el, ano) {
         anoAtual = ano
         document.getElementById('filtro-valor').innerHTML = ano
-        document.querySelectorAll('.filtro-opcao').forEach(function(o) { o.classList.remove('ativa') })
-        el.classList.add('ativa')
         document.getElementById('filtro-opcoes').style.display = 'none'
+
+        var opcoes = document.getElementById('filtro-opcoes').children
+        for (var i = 0; i < opcoes.length; i++) {
+            opcoes[i].className = 'filtro-opcao'
+        }
+        el.className = 'filtro-opcao ativa'
+
         if (mapaAtual) selecionarMapa(mapaAtual)
     }
 
@@ -212,9 +391,9 @@
         var m = dados[anoAtual][id]
 
         document.getElementById('mapa-info').style.display = 'flex'
-        document.getElementById('mapa-img').src            = '../assets/Loading_Screen_' + id.charAt(0).toUpperCase() + id.slice(1) + '.webp'
-        document.getElementById('mapa-nome').innerHTML     = id.charAt(0).toUpperCase() + id.slice(1)
-        document.getElementById('mapa-desc').innerHTML     = descs[id]
+        document.getElementById('mapa-img').src            = m.img || '../assets/Loading_Screen_' + id.charAt(0).toUpperCase() + id.slice(1) + '.webp'
+        document.getElementById('mapa-nome').innerHTML     = m.nome
+        document.getElementById('mapa-desc').innerHTML     = m.desc
         document.getElementById('ban-pct').innerHTML       = m.ban
         document.getElementById('ban-sub').innerHTML       = m.bansub
 
@@ -226,25 +405,31 @@
                 '<span class="slot-nome">'        + a.agente + '</span></div>'
         }
 
-        var btns = document.querySelectorAll('.mapa-btn')
-        for (var b = 0; b < btns.length; b++) btns[b].style.opacity = '0.5'
+        var btns = document.getElementById('botoes-lista').children
+        for (var b = 0; b < btns.length; b++) {
+            btns[b].style.opacity = '0.5'
+        }
         document.getElementById('btn-' + id).style.opacity = '1'
 
-        if (chartAgentes) chartAgentes.destroy()
+        var labels = []
+        var wrVals = []
+        var prVals = []
+        for (var f = 0; f < m.funcoes.length; f++) {
+            labels.push(m.funcoes[f].funcao)
+            wrVals.push(m.funcoes[f].wr.valor)
+            prVals.push(m.funcoes[f].pr.valor)
+        }
 
-        var labels   = m.funcoes.map(function(f) { return f.funcao })
-        var wrLabels = m.funcoes.map(function(f) { return f.wr.agente })
-        var prLabels = m.funcoes.map(function(f) { return f.pr.agente })
-        var wrVals   = m.funcoes.map(function(f) { return f.wr.valor })
-        var prVals   = m.funcoes.map(function(f) { return f.pr.valor })
+        var canvas = document.getElementById('grafico-agentes')
+        canvas.outerHTML = '<canvas id="grafico-agentes"></canvas>'
 
-        chartAgentes = new Chart(document.getElementById('grafico-agentes'), {
+        new Chart(document.getElementById('grafico-agentes'), {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [
                     {
-                        label: 'Maior Win Rate',
+                        label: 'Maior Taxa de Vitória',
                         data: wrVals,
                         backgroundColor: 'rgba(106,214,238,0.2)',
                         borderColor: '#6AD6EE',
@@ -252,7 +437,7 @@
                         borderRadius: 2
                     },
                     {
-                        label: 'Maior Pick Rate',
+                        label: 'Mais Escolhido',
                         data: prVals,
                         backgroundColor: 'rgba(184,115,51,0.2)',
                         borderColor: '#B87333',
@@ -277,8 +462,8 @@
                             title: function(ctx) { return ctx[0].label },
                             label: function(ctx) {
                                 var f = m.funcoes[ctx.dataIndex]
-                                if (ctx.datasetIndex === 0) return ' ' + f.wr.agente + ' — Win Rate: ' + f.wr.valor + '%'
-                                return ' ' + f.pr.agente + ' — Pick Rate: ' + f.pr.valor + '%'
+                                if (ctx.datasetIndex === 0) return ' ' + f.wr.agente + ' — Taxa de Vitória: ' + f.wr.valor + '%'
+                                return ' ' + f.pr.agente + ' — Mais Escolhido: ' + f.pr.valor + '%'
                             }
                         }
                     }
