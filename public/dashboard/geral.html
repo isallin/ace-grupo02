@@ -18,7 +18,7 @@
                     <button id="botaoside" style="filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741)); border-color: var(--destaque);">Geral</button>
                     <button id="botaoside" onclick="window.location.href='mapas.html'">Mapas</button>
                     <button id="botaoside">Agentes</button>
-                    <button id="botaoside" onclick="window.location.href='blog.html'">Enviar composição</button>
+                    <button id="botaoside">Enviar composição</button>
                 </div>
                 <div id="userinfo">
                     <img src="../assets/login.png" alt="" id="userphoto">
@@ -64,23 +64,29 @@
                 </div>
 
                 <div class="kpi-card" id="kpi2">
-                    <div class="agent-textos">
-                        <span class="kpi-label" id="kpi2-label"></span>
-                        <span class="kpi-valor" id="kpi2-mapa"></span>
-                    </div>
-                    <div class="kpi2-lados">
-                        <div class="kpi2-lado">
-                            <span class="kpi2-label">ATAQUE</span>
-                            <span class="kpi2-sublabel">Taxa de Vitória</span>
-                            <span class="kpi2-valor atk" id="kpi2-atk"></span>
+                    <button class="kpi2-seta" onclick="passarKpi2(-1)">&#8249;</button>
+
+                    <div id="kpi2-conteudo">
+                        <div class="agent-textos">
+                            <span class="kpi-label" id="kpi2-label"></span>
+                            <span class="kpi-valor" id="kpi2-mapa"></span>
                         </div>
-                        <div class="kpi2-divider"></div>
-                        <div class="kpi2-lado">
-                            <span class="kpi2-label">DEFESA</span>
-                            <span class="kpi2-sublabel">Taxa de Vitória</span>
-                            <span class="kpi2-valor def" id="kpi2-def"></span>
+                        <div class="kpi2-lados">
+                            <div class="kpi2-lado">
+                                <span class="kpi2-label">ATAQUE</span>
+                                <span class="kpi2-sublabel">Taxa de Vitória</span>
+                                <span class="kpi2-valor atk" id="kpi2-atk"></span>
+                            </div>
+                            <div class="kpi2-divider"></div>
+                            <div class="kpi2-lado">
+                                <span class="kpi2-label">DEFESA</span>
+                                <span class="kpi2-sublabel">Taxa de Vitória</span>
+                                <span class="kpi2-valor def" id="kpi2-def"></span>
+                            </div>
                         </div>
                     </div>
+
+                    <button class="kpi2-seta" onclick="passarKpi2(1)">&#8250;</button>
                 </div>
             </div>
 
@@ -212,7 +218,6 @@
 
     var anoAtual  = 2021
     var kpi2atual = 0
-    var timer     = null
     var chart1    = null
     var chart2    = null
 
@@ -237,7 +242,6 @@
         document.getElementById('opcao-' + ano).className = 'filtro-opcao ativa'
 
         kpi2atual = 0
-        if (timer) clearInterval(timer)
         carregarDados()
     }
 
@@ -248,7 +252,14 @@
         document.getElementById('kpi2-mapa').innerHTML  = k.mapa
         document.getElementById('kpi2-atk').innerHTML   = k.atk
         document.getElementById('kpi2-def').innerHTML   = k.def
-        kpi2atual = (kpi2atual + 1) % d.kpi2.length
+    }
+
+    function passarKpi2(direcao) {
+        var total = dados[anoAtual].kpi2.length
+        kpi2atual = kpi2atual + direcao
+        if (kpi2atual < 0)     kpi2atual = total - 1
+        if (kpi2atual >= total) kpi2atual = 0
+        trocarKpi2()
     }
 
     function carregarDados() {
@@ -259,7 +270,6 @@
         document.getElementById('kpi1-acs-valor').innerHTML = d.kpi1.acs
 
         trocarKpi2()
-        timer = setInterval(trocarKpi2, 4000)
 
         document.getElementById('titulo-grafico1').innerHTML = 'TAXA DE VITÓRIA ATK vs DEF POR MAPA | VCT ' + anoAtual
 

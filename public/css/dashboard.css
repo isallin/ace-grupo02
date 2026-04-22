@@ -293,7 +293,6 @@ body {
   pointer-events: none;
 }
 
-/* ── TOPO GERAL ── */
 
 #topo-geral {
   display: flex;
@@ -310,7 +309,6 @@ body {
   background-color: #172739;
 }
 
-/* ── FILTRO ANO ── */
 
 #filtro-ano {
   display: flex;
@@ -389,4 +387,29 @@ body {
 .filtro-opcao.ativa {
   color: var(--destaque);
   background-color: #172739;
+}
+
+#kpi2 {
+  justify-content: space-between;
+}
+
+#kpi2-conteudo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kpi2-seta {
+  background: transparent;
+  border: none;
+  color: var(--frente1);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0 6px;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.kpi2-seta:hover {
+  color: var(--destaque);
 }
