@@ -94,20 +94,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 #logo {
   width: 180px;
-}
-
-#bemvindo {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 18px 22px;
-  border: 1px solid #6ad6ee35;
-  background-color: #172739;
 }
 
 #bemvindo-saudacao {
@@ -145,7 +136,7 @@ body {
 }
 
 .kpi-label {
-  font-size: 20px;
+  font-size: 14px;
   color: var(--branco);
   font-weight: 400;
   white-space: nowrap;
@@ -163,21 +154,6 @@ body {
   padding-left: 110px;
 }
 
-.slide-in {
-  animation: slideDown 0.5s ease-out forwards;
-}
-
-@keyframes slideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0px);
-  }
-}
-
 .agent-img {
   position: absolute;
   left: 0;
@@ -187,7 +163,6 @@ body {
   object-fit: cover;
   object-position: top center;
 }
-
 
 .agent-textos {
   display: flex;
@@ -217,10 +192,60 @@ body {
   filter: drop-shadow(0px 1px 18px rgba(75, 255, 234, 0.597));
 }
 
+.kpi2-lados {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.kpi2-lado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.kpi2-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--frente1);
+  letter-spacing: 0.12em;
+}
+
+.kpi2-sublabel {
+  font-size: 8px;
+  font-weight: 400;
+  color: var(--frente1);
+  white-space: nowrap;
+}
+
+.kpi2-valor {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.kpi2-valor.atk {
+  color: #EE6A6A;
+  filter: drop-shadow(0px 1px 18px rgba(238, 106, 106, 0.5));
+}
+
+.kpi2-valor.def {
+  color: #6AEEB8;
+  filter: drop-shadow(0px 1px 18px rgba(106, 238, 184, 0.5));
+}
+
+.kpi2-divider {
+  width: 1px;
+  height: 40px;
+  background-color: #6ad6ee35;
+}
+
 #graficos {
   display: flex;
   gap: 14px;
   height: 100%;
+  min-height: 0;
 }
 
 .grafico-card {
@@ -229,6 +254,7 @@ body {
   gap: 12px;
   padding: 16px 18px;
   height: 100%;
+  min-height: 0;
   background-color: #172739;
   border: 1px solid #6ad6ee35;
   transition: border-color 0.2s;
@@ -255,4 +281,135 @@ body {
 .grafico-canvas {
   position: relative;
   height: 100%;
+  min-height: 0;
+}
+
+#agente-fotos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+
+#topo-geral {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#bemvindo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 22px;
+  border: 1px solid #6ad6ee35;
+  background-color: #172739;
+}
+
+
+#filtro-ano {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+#filtro-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--frente1);
+  letter-spacing: 0.14em;
+}
+
+#filtro-select {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background-color: #131319;
+  border: 1px solid #6ad6ee50;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+#filtro-select:hover {
+  border-color: var(--destaque);
+}
+
+#filtro-valor {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--destaque);
+  letter-spacing: 0.08em;
+}
+
+#filtro-seta {
+  font-size: 8px;
+  color: var(--frente1);
+}
+
+#filtro-opcoes {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #131319;
+  border: 1px solid #6ad6ee50;
+  border-top: none;
+  z-index: 10;
+  min-width: 80px;
+}
+
+.filtro-opcao {
+  padding: 8px 14px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--frente1);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: 0.15s;
+  border-bottom: 1px solid #6ad6ee15;
+}
+
+.filtro-opcao:last-child {
+  border-bottom: none;
+}
+
+.filtro-opcao:hover {
+  color: var(--branco);
+  background-color: #172739;
+}
+
+.filtro-opcao.ativa {
+  color: var(--destaque);
+  background-color: #172739;
+}
+
+#kpi2 {
+  justify-content: space-between;
+}
+
+#kpi2-conteudo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kpi2-seta {
+  background: transparent;
+  border: none;
+  color: var(--frente1);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0 6px;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.kpi2-seta:hover {
+  color: var(--destaque);
 }
