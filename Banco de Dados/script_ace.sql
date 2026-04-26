@@ -18,7 +18,7 @@ CREATE TABLE organizacao (
 -- Table usuarios
 -- -----------------------------------------------------
 CREATE TABLE usuarios (
-    idusuarios INT PRIMARY KEY AUTO_INCREMENT,
+    idusuario INT PRIMARY KEY AUTO_INCREMENT,
     nome_completo VARCHAR(45),
     nickname VARCHAR(45),
     email VARCHAR(100),
@@ -61,7 +61,7 @@ CREATE TABLE agente (
 
     CONSTRAINT fk_agente_post
         FOREIGN KEY (postfk)
-        REFERENCES post(idpost)
+        REFERENCES posts(id)
 );
 
 -- -----------------------------------------------------
@@ -75,7 +75,7 @@ CREATE TABLE mapa (
 
     CONSTRAINT fk_mapa_post
         FOREIGN KEY (postfk)
-        REFERENCES post(idpost)
+        REFERENCES posts(id)
 );
 
 -- -----------------------------------------------------
@@ -85,6 +85,7 @@ CREATE TABLE time (
     idtime INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45) UNIQUE
 );
+
 
 -- -----------------------------------------------------
 -- Table partida
@@ -109,6 +110,7 @@ CREATE TABLE partida (
         FOREIGN KEY (vencedorFk)
         REFERENCES time(idtime)
 );
+
 
 -- -----------------------------------------------------
 -- Table desempenho
@@ -316,4 +318,3 @@ JOIN mapa m
 
 ORDER BY ec.win_rate DESC,
          ec.pick_rate DESC;
-
