@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/agentes.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
+    <title>Agentes</title>
+</head>
+
+<body>
+    <div id="central">
+        <div id="sidebar">
+            <div id="sidebaritems">
+                <img src="../assets/logo.png" alt="" id="logo">
+                <div id="botoes">
+                    <button id="botaoside" onclick="window.location.href='geral.html'">Geral</button>
+                    <button id="botaoside" onclick="window.location.href='mapas.html'">Mapas</button>
+                    <button id="botaoside" onclick="window.location.href='agentes.html'"
+                        style="filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741)); border-color: var(--destaque);">Agentes</button>
+                    <button id="botaoside" onclick="window.location.href='blog.html'">Enviar composição</button>
+                </div>
+                <div id="userinfo">
+                    <img src="../assets/login.png" alt="" id="userphoto">
+                    <button>Sair</button>
+                </div>
+            </div>
+        </div>
+        <div id="conteudo">
+            <div class="agente-dashboard">
+                <div class="agente-divisao">
+                    <div class="agente-perfil">
+                        <div class="agente-info">
+                            <img id="foto-agente" src="../assets/Astra_icon.png">
+                            <p id="nome-agente">Astra</p>
+                        </div>
+                        <div id="filtro-ano">
+                            <span id="filtro-label">ANO VCT</span>
+                            <div id="filtro-select" onclick="toggleDropdown()">
+                                <span id="filtro-valor">2021</span>
+                                <span id="filtro-seta">▼</span>
+                                <div id="filtro-opcoes">
+                                    <div class="filtro-opcao ativa" id="opcao-2021" onclick="selecionarAno(2021)">2021
+                                    </div>
+                                    <div class="filtro-opcao" id="opcao-2022" onclick="selecionarAno(2022)">2022</div>
+                                    <div class="filtro-opcao" id="opcao-2023" onclick="selecionarAno(2023)">2023</div>
+                                    <div class="filtro-opcao" id="opcao-2024" onclick="selecionarAno(2024)">2024</div>
+                                    <div class="filtro-opcao" id="opcao-2025" onclick="selecionarAno(2025)">2025</div>
+                                    <div class="filtro-opcao" id="opcao-2026" onclick="selecionarAno(2026)">2026</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="agente-painel">
+                        <div class="lista-agentes" id="lista-agentes">
+                        </div>
+                        <div class="agente-stats">
+                        </div>
+                    </div>
+                </div>
+                <div class="agente-divisao agente-imagem-container">
+                    <img id="fullbody-agente" src="../assets/Astra_fullbody.png">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.onload = (event) => {
+        renderPersonagens();
+    };
+    function selecionarAno(ano) {
+        anoAtual = ano
+        document.getElementById('filtro-valor').innerHTML = ano
+        document.getElementById('filtro-opcoes').style.display = 'none'
+
+        var opcoes = document.getElementById('filtro-opcoes').children
+        for (var i = 0; i < opcoes.length; i++) {
+            opcoes[i].className = 'filtro-opcao'
+        }
+        document.getElementById('opcao-' + ano).className = 'filtro-opcao ativa'
+
+        if (agenteAtual) selecionarMapa(agenteAtual)
+    }
+
+    function toggleDropdown() {
+        var opcoes = document.getElementById('filtro-opcoes')
+        opcoes.style.display = opcoes.style.display === 'flex' ? 'none' : 'flex'
+    }
+
+    function renderPersonagens() {
+        personagens = ["Astra", "Breach", "Brimstone", "Chamber", "Clove", "Cypher", "Deadlock",
+            "Fade", "Gekko", "Harbor", "Iso", "Jett", "Killjoy", "Miks", "Neon", "Omen",
+            "Phoenix", "Raze", "Reyna", "Sage", "Skye", "Sova", "Tejo", "Veto", "Viper",
+            "Vyse", "Waylay", "Yoru"];
+
+        const agentes = document.getElementById('lista-agentes')
+        agentes.innerHTML = "<p>Agentes</p>";
+
+        for (let i = 0; i < personagens.length; i++) {
+            agentes.innerHTML += `
+            <button class="agente-opcao" id="${personagens[i]}-click" onclick="trocarAgente('${personagens[i]}')">
+                <img src="../assets/${personagens[i]}_icon.png"> ${personagens[i]}
+                </button>
+                `
+        }
+    }
+
+    function trocarAgente(agente) {
+        const foto = document.getElementById('foto-agente')
+        const nome = document.getElementById('nome-agente')
+        const fullbody = document.getElementById('fullbody-agente')
+
+        foto.src=`../assets/${agente}_icon.png`
+        nome.innerHTML=`${agente}`
+        fullbody.src=`../assets/${agente}_fullbody.png`
+    }
+</script>
+
+</html>
