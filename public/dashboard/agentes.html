@@ -56,7 +56,30 @@
                     <div class="agente-painel">
                         <div class="lista-agentes" id="lista-agentes">
                         </div>
-                        <div class="agente-stats">
+                        <div class="agente-highlight">
+                            <h3 class="titulos">Estatísticas de Performance</h3>
+                            <div class="agente-kpis">
+                                <div>
+                                    <span class="subtitulos">Win Rate</span>
+                                    <p class="dados-kpi">48.7%</p>
+                                </div>
+                                <div>
+                                    <span class="subtitulos">Pick Rate</span>
+                                    <p class="dados-kpi">0.9%</p>
+                                </div>
+                                <div>
+                                    <span class="subtitulos">Mapa mais jogado</span>
+                                    <p class="dados-kpi">Ascent</p>
+                                </div>
+                                <div>
+                                    <span class="subtitulos">KPI extra</span>
+                                    <p class="dados-kpi">?</p>
+                                </div>
+                            </div>
+                            <h3 class="titulos">Pick Rate x Win Rate durante os anos</h3>
+                            <div class="agente-stats">
+                                <canvas id="astraChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +121,7 @@
             "Vyse", "Waylay", "Yoru"];
 
         const agentes = document.getElementById('lista-agentes')
-        agentes.innerHTML = "<p>Agentes</p>";
+        agentes.innerHTML = "<p class='titulos'>Agentes</p>";
 
         for (let i = 0; i < personagens.length; i++) {
             agentes.innerHTML += `
@@ -114,10 +137,64 @@
         const nome = document.getElementById('nome-agente')
         const fullbody = document.getElementById('fullbody-agente')
 
-        foto.src=`../assets/${agente}_icon.png`
-        nome.innerHTML=`${agente}`
-        fullbody.src=`../assets/${agente}_fullbody.png`
+        foto.src = `../assets/${agente}_icon.png`
+        nome.innerHTML = `${agente}`
+        fullbody.src = `../assets/${agente}_fullbody.png`
     }
+
+    const ctx = document.getElementById('astraChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['2021', '2022', '2023', '2024', '2025', '2026'],
+            datasets: [{
+                label: 'Pick Rate (%)',
+                data: [6.8, 4.2, 2.5, 1.8, 1.3, 1.1],
+                borderColor: '#6ad6ee',
+                backgroundColor: 'rgba(106, 214, 238, 0.2)',
+                borderWidth: 2,
+                tension: 0.3,
+                yAxisID: 'y',
+            }, {
+                label: 'Win Rate (%)',
+                data: [49.5, 48.2, 47.8, 48.5, 48.0, 48.0],
+                borderColor: '#ff4655',
+                backgroundColor: 'rgba(255, 70, 85, 0.2)',
+                borderWidth: 2,
+                tension: 0.3,
+                yAxisID: 'y1',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#fff' } }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                    ticks: { color: '#6ad6ee' },
+                    title: { display: true, text: 'Pick Rate %', color: '#6ad6ee' }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    grid: { drawOnChartArea: false },
+                    ticks: { color: '#ff4655' },
+                    title: { display: true, text: 'Win Rate %', color: '#ff4655' }
+                },
+                x: {
+                    ticks: { color: '#fff' }
+                }
+            }
+        }
+    });
 </script>
 
 </html>
