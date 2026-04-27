@@ -39,5 +39,8 @@ public class Main {
         dao.montarEstatisticas();
 
         dao.log("ETL Finalizado.");
+
+        GatilhoAutomate.enviarSinal("Arquivo overview.xlsx e scores.xlsx " +
+                "lidos com sucesso!");
     }
 }
