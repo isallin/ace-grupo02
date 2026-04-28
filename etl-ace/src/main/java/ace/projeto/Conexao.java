@@ -14,7 +14,7 @@ public class Conexao {
                 "com.mysql.cj.jdbc.Driver");
 
         dataSource.setUrl(
-                "jdbc:mysql://ace-db:3306/projetoAce");
+                "jdbc:mysql://ace-db:3306/projetoace");
 
         dataSource.setUsername("dbace");
         dataSource.setPassword("Urubu100");
