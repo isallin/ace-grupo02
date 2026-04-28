@@ -14,71 +14,51 @@
 </head>
 
 <body>
-
   <header class="topbar">
     <div class="logo"><img src="./assets/logo.png" alt=""></div>
-
     <nav>
-      <a href="">SISTEMA A.C.E</a>
-      <a href="">AGENTES</a>
-      <a href="">MAPAS</a>
-    </nav>
-
-    <nav>
-      <a href="login.html">LOGIN</a>
-      <a href="cadastro.html">CADASTRO</a>
+      <a href="../index.html">SISTEMA A.C.E</a>
+      <a href="./login.html">LOGIN</a>
+      <a href="./cadastro.html">CADASTRO</a>
     </nav>
   </header>
 
   <main class="container">
     <section class="hero-ace">
       <div class="hero-container">
-
         <h1 class="hero-title">
           MONTE A COMPOSIÇÃO PERFEITA <br>
           PARA QUALQUER MAPA DE VALORANT
         </h1>
-
         <p class="hero-description">
           O <strong>ACE (Agent Composition Engine)</strong> analisa mapas,
           sinergia entre agentes e estatísticas competitivas para ajudar
           coaches e equipes a escolherem os melhores agentes para cada partida.
         </p>
-
       </div>
     </section>
 
-
-    <section class="news">
+    <section class="news hero-ace">
       <h2>NOTÍCIAS RECENTES</h2>
       <div class="swiper">
         <div class="swiper-wrapper">
           <div class="swiper-slide">
             <div class="noticia"
-              style="background-image: url(./assets/noticias/3.png); background-repeat: no-repeat; background-size: cover;">
+              style="background-image: url(./assets/loud.jpg); background-repeat: no-repeat; background-size: cover;">
               <div id="main">
                 <h1>LOUD VENCE VCT AMERICA!</h1>
-                <p>Loud vence o VCT America e faz menção honrosa ao sistema ACE "Ter uma boa composição com certeza nos
-                  ajudou a trazer a vitoria para casa!" - Diz coach da Loud</p>
+                <p>Após a vitória, LOUD faz menção honrosa ao sistema ACE "Ter uma boa composição com certeza nos
+                  ajudou a trazer a vitoria para casa!" - Diz coach da LOUD</p>
               </div>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="noticia"
-              style="background-image: url(./assets/noticias/2.png); background-repeat: no-repeat; background-size: cover;">
+              style="background-image: url(./assets/vct.jpg); background-repeat: no-repeat; background-size: cover;">
               <div id="main">
-                <h1>NOVA AGENTE ANUNCIADA!</h1>
-                <p>Nova agente tem seu visual revelado, vazamentos indicam que seu nome será Isabel Lin, agente com
-                  origem Taiwanesa!</p>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="noticia"
-              style="background-image: url(./assets/noticias/3.png); background-repeat: no-repeat; background-size: cover;">
-              <div id="main">
-                <h1>SAGE! RAINHA DOS PRATAS!</h1>
-                <p>A Winrate da sage se encontra maior no prata em relação ao imortal em 10 pontos percentuais</p>
+                <h1>Prêmio de US$ 5 milhões no VCT</h1>
+                <p>O VCT 2027 redefine o VALORANT com prêmios milionários. Use o sistema ACE para garantir a vitória!
+                </p>
               </div>
             </div>
           </div>
@@ -86,39 +66,65 @@
       </div>
     </section>
 
-    <section class="cards">
+    <section class="cards hero-ace">
       <h2>SISTEMA ACE</h2>
       <div class="cardContainer">
         <div class="card">
-          <h2>RECOMENDAÇÃO DE AGENTES</h2>
+          <h3>RECOMENDAÇÃO DE AGENTES</h3>
           <p>O sistema A.C.E recomenda os melhores agentes para sua composição baseado no mapa selecionado, para assim
             obter os melhores resultados em seus campeonatos!</p>
           <img src="./assets/iconesSVG/cyber-cage.svg" alt="">
         </div>
         <div class="card">
-          <h2>ACOMPANHAMENTO DO CENARIO</h2>
+          <h3>ACOMPANHAMENTO DO CENARIO</h3>
           <p>Receba em primeira mão as noticias mais atualizadas do cenario competitivo do Valorant e atualizações sobre
             o META gaming!</p>
           <img src="./assets/iconesSVG/neural-theft.svg" alt="">
-        </div>  
+        </div>
         <div class="card">
-          <h2>VANTAGEM COMPETITIVA</h2>
+          <h3>VANTAGEM COMPETITIVA</h3>
           <p>Obtenha dados, analises e graficos precisos baseados em partidas profissionais do competitivo para melhorar
             o desempenho da sua equipe!</p>
           <img src="./assets/iconesSVG/recon-bolt.svg" alt="">
         </div>
-
       </div>
-
     </section>
-
   </main>
 
   <footer class="footer">
     <h3>ACE - SPTech &copy; 2026</h3>
   </footer>
 
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav class="nav-mobile" id="mobileNav">
+    <a href="../index.html">SISTEMA A.C.E</a>
+    <a href="">AGENTES</a>
+    <a href="">MAPAS</a>
+    <a href="./login.html">LOGIN</a>
+    <a href="./cadastro.html">CADASTRO</a>
+  </nav>
+
 </body>
+<script>
+  var hamburger = document.getElementById('hamburger');
+  var mobileNav = document.getElementById('mobileNav');
+  var menuAberto = false;
+
+  hamburger.onclick = function () {
+    if (menuAberto) {
+      mobileNav.style.display = 'none';
+      menuAberto = false;
+    } else {
+      mobileNav.style.display = 'flex';
+      menuAberto = true;
+    }
+  };
+</script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 <script src="/js/slide.js"></script>
 

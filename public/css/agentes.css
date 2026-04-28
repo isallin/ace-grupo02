@@ -312,18 +312,22 @@ body {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    gap: 5px;
-    height: 20%;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .agente-kpis>div {
     display: flex;
-    flex: 1;
+    flex: 1 1 150px;
+    min-width: 120px;
     text-align: center;
     background-color: #274161;
-    padding: 10px;
+    padding: 15px 10px;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
+    border-radius: 4px;
+    border: 1px solid #6ad6ee15;
+    align-items: center;
 }
 
 .agente-linha {
@@ -366,20 +370,22 @@ body {
 .subtitulos {
     font-weight: 600;
     color: var(--frente1);
-    margin: 10px;
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    margin-bottom: 5px;
 }
 
 .dados-kpi {
     font-weight: 800;
-    font-size: 2em;
-    margin: 10px;
+    font-size: clamp(1.2rem, 2vw, 2rem);
+    margin: 5px;
     color: var(--destaque);
     filter: drop-shadow(0px 1px 10px rgba(75, 255, 234, 0.4));
 }
 
 .agente-stats {
     width: 100%;
-    height: 300px;
+    flex: 1;
+    min-height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -388,4 +394,45 @@ body {
 canvas {
     width: 100% !important;
     height: 100% !important;
+}
+
+@media (max-width: 1200px) {
+    .agente-dashboard {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .agente-divisao:first-child,
+    .agente-divisao:last-child {
+        flex: 1 0 auto;
+    }
+
+    .agente-imagem-container img {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .agente-painel {
+        flex-direction: column;
+    }
+
+    .lista-agentes {
+        width: 100%;
+        height: 150px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .agente-highlight {
+        width: 100%;
+    }
+
+    .agente-opcao {
+        width: auto;
+        border-bottom: none;
+        border-right: 2px solid #6ad6ee35;
+        padding: 5px 15px;
+    }
 }

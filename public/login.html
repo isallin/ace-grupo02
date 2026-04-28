@@ -4,25 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACE Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
     <script src="./js/loginReq.js"></script>
     <script src="./js/notificacao.js"></script>
     <link rel="stylesheet" href="./css/home.css">
     <link rel="stylesheet" href="./css/login.css">
     <link rel="stylesheet" href="./css/notificacao.css">
+    <title>ACE Login</title>
 </head>
 
 <body>
     <header class="topbar">
         <div class="logo"><img src="./assets/logo.png"></div>
-
         <nav>
             <a href="../index.html">SISTEMA A.C.E</a>
-            <a href="">AGENTES</a>
-            <a href="">MAPAS</a>
-        </nav>
-
-        <nav>
             <a href="./login.html">LOGIN</a>
             <a href="./cadastro.html">CADASTRO</a>
         </nav>
@@ -50,7 +45,6 @@
     </footer>
 
     <div class="login-mobile">
-
         <div class="topbar-mobile">
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -81,7 +75,21 @@
         <span class="footer-mobile">ACE - SPTech &copy; 2026</span>
     </div>
 </body>
+<script>
+    var hamburger = document.getElementById('hamburger');
+    var mobileNav = document.getElementById('mobileNav');
+    var menuAberto = false;
 
+    hamburger.onclick = function () {
+        if (menuAberto) {
+            mobileNav.style.display = 'none';
+            menuAberto = false;
+        } else {
+            mobileNav.style.display = 'flex';
+            menuAberto = true;
+        }
+    };
+</script>
 <script src="./js/loginReq.js"></script>
 <script src="./js/notificacao.js"></script>
 
