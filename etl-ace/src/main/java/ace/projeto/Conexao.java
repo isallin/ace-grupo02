@@ -14,10 +14,10 @@ public class Conexao {
                 "com.mysql.cj.jdbc.Driver");
 
         dataSource.setUrl(
-                "jdbc:mysql://localhost:3306/projetoAce");
+                "jdbc:mysql://ace-db:3306/projetoAce");
 
-        dataSource.setUsername("root");
-        dataSource.setPassword("Nana1502@");
+        dataSource.setUsername("dbace");
+        dataSource.setPassword("Urubu100");
 
         return new JdbcTemplate(dataSource);
     }

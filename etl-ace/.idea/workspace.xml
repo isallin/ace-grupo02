@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c919544a-281f-4b1c-9d2f-a5ebbbaa7a12" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ace/projeto/GatilhoAutomate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ace/projeto/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ace/projeto/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ace/projeto/ValorantDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ace/projeto/ValorantDAO.class" afterDir="false" />
-    </list>
+    <list default="true" id="c919544a-281f-4b1c-9d2f-a5ebbbaa7a12" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,12 +39,13 @@
     "Application.TestJavax.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "feat/simbiose__powerAutomate",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Gabriel/Desktop/SP Tech/2 Semestre/Pesquisa e Inovação/ace-grupo02/etl-ace"
+    "last_opened_file_path": "C:/Users/Windows/Downloads/2sprint/ace-grupo02/etl-ace"
   }
 }]]></component>
   <component name="SharedIndexes">

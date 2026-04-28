@@ -3,6 +3,8 @@ package ace.projeto;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -17,10 +19,18 @@ public class LeitorScores {
 
         try {
 
+            S3Client client = S3Provider.getS3Client();
+
+            GetObjectRequest request =
+                    GetObjectRequest.builder()
+                            .bucket("ace-database-078431182573-us-east-1-an")
+                            .key(arquivo)
+                            .build();
+
             XSSFWorkbook workbook =
                     new XSSFWorkbook(
-                            new FileInputStream(arquivo));
-
+                            client.getObject(request)
+                    );
             Sheet sheet =
                     workbook.getSheetAt(0);
 
