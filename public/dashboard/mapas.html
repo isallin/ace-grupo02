@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/mapas.css">
+    <script src="../js/sessao.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
     <title>Mapas</title>
 </head>
@@ -20,7 +21,7 @@
                 </div>
                 <div id="userinfo">
                     <img src="../assets/login.png" alt="" id="userphoto">
-                    <button>Sair</button>
+                    <button onclick="limparSessao()">Sair</button>
                 </div>
             </div>
         </div>
@@ -95,7 +96,6 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
     var dados = {
         2021: {
             split: {

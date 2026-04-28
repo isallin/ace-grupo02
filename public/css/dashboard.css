@@ -101,13 +101,13 @@ body {
   width: 180px;
 }
 
-#bemvindo-saudacao {
+.bemvindo-saudacao {
   font-size: 13px;
   color: var(--frente1);
   font-weight: 400;
 }
 
-#bemvindo-usuario {
+.bemvindo-usuario {
   font-size: 22px;
   color: var(--destaque);
   font-weight: 700;

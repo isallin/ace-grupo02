@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="../js/sessao.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
     <title>Painel Geral</title>
 </head>
 
-<body>
+<body onload="validarSessao()">
     <div id="central">
         <div id="sidebar">
             <div id="sidebaritems">
@@ -22,7 +23,7 @@
                 </div>
                 <div id="userinfo">
                     <img src="../assets/login.png" alt="" id="userphoto">
-                    <button>Sair</button>
+                    <button onclick="limparSessao()">Sair</button>
                 </div>
             </div>
         </div>
@@ -30,8 +31,8 @@
 
             <div id="topo-geral">
                 <div id="bemvindo">
-                    <span id="bemvindo-saudacao">Bem-vindo,</span>
-                    <span id="bemvindo-usuario">Usuário</span>
+                    <span class="bemvindo-saudacao">Bem-vindo,</span>
+                    <span id="b_usuario" class="bemvindo-usuario">Usuário</span>
                 </div>
                 <div id="filtro-ano">
                     <span id="filtro-label">ANO VCT</span>
@@ -110,7 +111,7 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
+    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
     var dados = {
         2021: {
             kpi1: { nome: 'Jett', acs: 301, img: '../assets/Jett_icon.png' },
