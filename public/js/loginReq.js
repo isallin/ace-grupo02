@@ -47,6 +47,7 @@ async function login() {
             sessionStorage.EMAIL_USUARIO = json.email;
             sessionStorage.NOME_USUARIO = json.nickname;
             sessionStorage.ID_USUARIO = json.idusuario;
+            sessionStorage.FUNCAO_USUARIO = json.funcao;
 
             console.log("Session Storage armazenado com sucesso")
             setTimeout(() => {
