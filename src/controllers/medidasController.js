@@ -80,8 +80,8 @@ function buscarDadosGerais(req, res) {
         res.status(200).json(dadosDestaque);
 
     }).catch(function (erro) {
-        console.log("Erro ao buscar os dados do dashboard: ", erro.sqlMessage);
-        res.status(500).json(erro.sqlMessage);
+        console.error("Erro ao buscar os dados do dashboard: ", erro);
+        res.status(500).json({ mensagem: "Erro interno ao buscar os dados", detalhes: erro.sqlMessage || erro.message || erro });
     });
 }
 
