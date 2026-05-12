@@ -144,7 +144,13 @@
     }
 
     function trocarKpi2() {
-        if (!dadosDashboard || !dadosDashboard.kpi2 || dadosDashboard.kpi2.length === 0) return;
+        if (!dadosDashboard || !dadosDashboard.kpi2 || dadosDashboard.kpi2.length === 0) {
+            document.getElementById('kpi2-label').innerHTML = "Sem Dados";
+            document.getElementById('kpi2-mapa').innerHTML  = "--";
+            document.getElementById('kpi2-atk').innerHTML   = "--";
+            document.getElementById('kpi2-def').innerHTML   = "--";
+            return;
+        }
         var k = dadosDashboard.kpi2[kpi2atual];
         document.getElementById('kpi2-label').innerHTML = k.label
         document.getElementById('kpi2-mapa').innerHTML  = k.mapa

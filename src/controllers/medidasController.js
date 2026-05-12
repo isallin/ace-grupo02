@@ -18,113 +18,11 @@ function buscarDadosGerais(req, res) {
         var resMapas = resultados[1];
         var resClasses = resultados[2];
 
-        // Se o banco de dados retornou vazio para o ano selecionado, carregamos dados mockados de fallback
-        if (resKpi1.length === 0) {
-            var fallbacksKpi1 = {
-                2021: [{ nome: "Jett", img: "../assets/Jett_icon.png", acs: 235 }],
-                2022: [{ nome: "Chamber", img: "../assets/Chamber_icon.png", acs: 258 }],
-                2023: [{ nome: "Raze", img: "../assets/Raze_icon.png", acs: 241 }],
-                2024: [{ nome: "Jett", img: "../assets/Jett_icon.png", acs: 245 }],
-                2025: [{ nome: "Neon", img: "../assets/Neon_icon.png", acs: 252 }]
-            };
-            resKpi1 = fallbacksKpi1[ano] || [{ nome: "Jett", img: "../assets/Jett_icon.png", acs: 230 }];
-        }
-
-        if (resMapas.length === 0) {
-            var fallbacksMapas = {
-                2021: [
-                    { nome: "Haven", atk: 48, def: 52 },
-                    { nome: "Split", atk: 46, def: 54 },
-                    { nome: "Bind", atk: 52, def: 48 },
-                    { nome: "Breeze", atk: 54, def: 46 },
-                    { nome: "Ascent", atk: 49, def: 51 }
-                ],
-                2022: [
-                    { nome: "Haven", atk: 47, def: 53 },
-                    { nome: "Pearl", atk: 51, def: 49 },
-                    { nome: "Split", atk: 45, def: 55 },
-                    { nome: "Bind", atk: 53, def: 47 },
-                    { nome: "Fracture", atk: 52, def: 48 }
-                ],
-                2023: [
-                    { nome: "Lotus", atk: 53, def: 47 },
-                    { nome: "Pearl", atk: 50, def: 50 },
-                    { nome: "Split", atk: 46, def: 54 },
-                    { nome: "Bind", atk: 51, def: 49 },
-                    { nome: "Haven", atk: 48, def: 52 }
-                ],
-                2024: [
-                    { nome: "Sunset", atk: 51, def: 49 },
-                    { nome: "Lotus", atk: 52, def: 48 },
-                    { nome: "Split", atk: 47, def: 53 },
-                    { nome: "Bind", atk: 50, def: 50 },
-                    { nome: "Icebox", atk: 48, def: 52 }
-                ],
-                2025: [
-                    { nome: "Abyss", atk: 52, def: 48 },
-                    { nome: "Sunset", atk: 50, def: 50 },
-                    { nome: "Lotus", atk: 53, def: 47 },
-                    { nome: "Bind", atk: 49, def: 51 },
-                    { nome: "Haven", atk: 47, def: 53 }
-                ]
-            };
-            resMapas = fallbacksMapas[ano] || [
-                { nome: "Haven", atk: 49, def: 51 },
-                { nome: "Split", atk: 47, def: 53 },
-                { nome: "Bind", atk: 51, def: 49 }
-            ];
-        }
-
-        if (resClasses.length === 0) {
-            var fallbacksClasses = {
-                2021: [
-                    { agente: "Jett", classe: "Duelista", wr: 58 },
-                    { agente: "Viper", classe: "Controlador", wr: 56 },
-                    { agente: "Sova", classe: "Iniciador", wr: 54 },
-                    { agente: "Cypher", classe: "Sentinela", wr: 53 },
-                    { agente: "Sage", classe: "Sentinela", wr: 51 }
-                ],
-                2022: [
-                    { agente: "Chamber", classe: "Sentinela", wr: 62 },
-                    { agente: "Fade", classe: "Iniciador", wr: 58 },
-                    { agente: "Viper", classe: "Controlador", wr: 57 },
-                    { agente: "Jett", classe: "Duelista", wr: 55 },
-                    { agente: "Raze", classe: "Duelista", wr: 53 }
-                ],
-                2023: [
-                    { agente: "Raze", classe: "Duelista", wr: 59 },
-                    { agente: "Viper", classe: "Controlador", wr: 57 },
-                    { agente: "Skye", classe: "Iniciador", wr: 56 },
-                    { agente: "Killjoy", classe: "Sentinela", wr: 55 },
-                    { agente: "Jett", classe: "Duelista", wr: 54 }
-                ],
-                2024: [
-                    { agente: "Jett", classe: "Duelista", wr: 58 },
-                    { agente: "Omen", classe: "Controlador", wr: 56 },
-                    { agente: "Gekko", classe: "Iniciador", wr: 55 },
-                    { agente: "Cypher", classe: "Sentinela", wr: 54 },
-                    { agente: "Viper", classe: "Controlador", wr: 53 }
-                ],
-                2025: [
-                    { agente: "Neon", classe: "Duelista", wr: 61 },
-                    { agente: "Gekko", classe: "Iniciador", wr: 58 },
-                    { agente: "Omen", classe: "Controlador", wr: 56 },
-                    { agente: "Cypher", classe: "Sentinela", wr: 55 },
-                    { agente: "Sova", classe: "Iniciador", wr: 53 }
-                ]
-            };
-            resClasses = fallbacksClasses[ano] || [
-                { agente: "Jett", classe: "Duelista", wr: 57 },
-                { agente: "Omen", classe: "Controlador", wr: 55 },
-                { agente: "Sova", classe: "Iniciador", wr: 53 }
-            ];
-        }
-
         // Montando o objeto no formato que o dashboard espera
         var dadosDestaque = {
             kpi1: {
-                nome: resKpi1.length > 0 ? resKpi1[0].nome : "N/D",
-                acs: resKpi1.length > 0 ? resKpi1[0].acs : 0,
+                nome: resKpi1.length > 0 ? resKpi1[0].nome : "--",
+                acs: resKpi1.length > 0 ? resKpi1[0].acs : "--",
                 img: resKpi1.length > 0 ? resKpi1[0].img : ""
             },
             kpi2: [],
@@ -158,16 +56,16 @@ function buscarDadosGerais(req, res) {
 
             dadosDestaque.kpi2.push({
                 label: 'Mapa mais defensivo',
-                mapa: mapaMaisDefensivo.nome.toUpperCase(),
-                atk: mapaMaisDefensivo.atk + '%',
-                def: mapaMaisDefensivo.def + '%'
+                mapa: mapaMaisDefensivo.nome ? mapaMaisDefensivo.nome.toUpperCase() : "--",
+                atk: mapaMaisDefensivo.atk ? mapaMaisDefensivo.atk + '%' : "--",
+                def: mapaMaisDefensivo.def ? mapaMaisDefensivo.def + '%' : "--"
             });
 
             dadosDestaque.kpi2.push({
                 label: 'Mapa mais ofensivo',
-                mapa: mapaMaisOfensivo.nome.toUpperCase(),
-                atk: mapaMaisOfensivo.atk + '%',
-                def: mapaMaisOfensivo.def + '%'
+                mapa: mapaMaisOfensivo.nome ? mapaMaisOfensivo.nome.toUpperCase() : "--",
+                atk: mapaMaisOfensivo.atk ? mapaMaisOfensivo.atk + '%' : "--",
+                def: mapaMaisOfensivo.def ? mapaMaisOfensivo.def + '%' : "--"
             });
         }
 
@@ -203,12 +101,6 @@ function buscarDadosAgente(req, res) {
         var resDados = resultados[0] && resultados[0][0]; // Objeto único
         var resHist = resultados[1] && resultados[1][0]; // Objeto único
 
-        // Gerar hash determinístico para fallbacks consistentes por agente
-        var hash = 0;
-        for (var i = 0; i < agente.length; i++) {
-            hash += agente.charCodeAt(i);
-        }
-
         // Mapeamento dos anos de lançamento dos agentes para evitar exibir dados de antes de existirem
         var anoLancamentoAgente = {
             "Sage": 2021, "Phoenix": 2021, "Jett": 2021, "Omen": 2021, "Brimstone": 2021, 
@@ -225,16 +117,16 @@ function buscarDadosAgente(req, res) {
         // --- KPIS ---
         var winRateVal, pickRateVal, mapaVal, acsVal;
 
-        if (anoInt < lancamento) {
+        if (anoInt < lancamento || !resDados || resDados.win_rate === null || resDados.win_rate === undefined) {
             winRateVal = "--";
             pickRateVal = "--";
             mapaVal = "--";
             acsVal = "--";
         } else {
-            winRateVal = ((resDados && resDados.win_rate !== null) ? resDados.win_rate : (48 + (hash % 12))) + "%";
-            pickRateVal = ((resDados && resDados.pick_rate !== null) ? resDados.pick_rate : (1.2 + (hash % 18) / 10)) + "%";
-            mapaVal = (resDados && resDados.mapa_mais_jogado) ? resDados.mapa_mais_jogado : ["Haven", "Pearl", "Abyss", "Split", "Ascent", "Breeze", "Bind"][hash % 7];
-            acsVal = (resDados && resDados.acs !== null) ? resDados.acs : (190 + (hash % 65));
+            winRateVal = resDados.win_rate + "%";
+            pickRateVal = resDados.pick_rate + "%";
+            mapaVal = resDados.mapa_mais_jogado || "--";
+            acsVal = resDados.acs !== null ? resDados.acs : "--";
         }
 
         // --- HISTORICO ---
@@ -252,22 +144,13 @@ function buscarDadosAgente(req, res) {
                 histWR.push(null);
                 histPR.push(null);
             } else {
-                // Se for 2026, tenta usar do banco de dados se tiver dados reais
-                if (yearStr === "2026" && resHist && resHist[wrKey] !== null && resHist[wrKey] !== undefined) {
+                // Tenta buscar o valor real correspondente a este ano
+                if (resHist && resHist[wrKey] !== null && resHist[wrKey] !== undefined) {
                     histWR.push(resHist[wrKey]);
                     histPR.push(resHist[prKey]);
                 } else {
-                    // Fallback determinístico
-                    var baseWR = 46 + (hash % 10);
-                    var basePR = 1.0 + (hash % 45) / 10;
-                    
-                    // Adiciona um ruído suave ao longo dos anos
-                    var yearOffset = y - 3; // de -3 a 2
-                    var simulatedWR = Math.min(65, Math.max(35, baseWR + (yearOffset * 0.5) + (Math.sin(hash + y) * 1.5)));
-                    var simulatedPR = Math.min(15, Math.max(0.5, basePR - (yearOffset * 0.2) + (Math.cos(hash * y) * 0.4)));
-
-                    histWR.push(Number(simulatedWR.toFixed(1)));
-                    histPR.push(Number(simulatedPR.toFixed(1)));
+                    histWR.push(null);
+                    histPR.push(null);
                 }
             }
         }
