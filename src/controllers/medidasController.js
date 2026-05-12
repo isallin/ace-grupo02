@@ -209,11 +209,33 @@ function buscarDadosAgente(req, res) {
             hash += agente.charCodeAt(i);
         }
 
+        // Mapeamento dos anos de lançamento dos agentes para evitar exibir dados de antes de existirem
+        var anoLancamentoAgente = {
+            "Sage": 2021, "Phoenix": 2021, "Jett": 2021, "Omen": 2021, "Brimstone": 2021, 
+            "Sova": 2021, "Breach": 2021, "Cypher": 2021, "Raze": 2021, "Viper": 2021, 
+            "Reyna": 2021, "Killjoy": 2021, "Skye": 2021, "Yoru": 2021, "Astra": 2021, 
+            "Chamber": 2021, "Neon": 2022, "Fade": 2022, "Harbor": 2022, "Gekko": 2023, 
+            "Deadlock": 2023, "Iso": 2023, "Clove": 2024, "Vyse": 2024, "Miks": 2025, 
+            "Tejo": 2025, "Veto": 2025, "Waylay": 2025
+        };
+
+        var lancamento = anoLancamentoAgente[agente] || 2021;
+        var anoInt = parseInt(ano);
+
         // --- KPIS ---
-        var winRateVal = (resDados && resDados.win_rate !== null) ? resDados.win_rate : (48 + (hash % 12));
-        var pickRateVal = (resDados && resDados.pick_rate !== null) ? resDados.pick_rate : (1.2 + (hash % 18) / 10);
-        var mapaVal = (resDados && resDados.mapa_mais_jogado) ? resDados.mapa_mais_jogado : ["Haven", "Pearl", "Abyss", "Split", "Ascent", "Breeze", "Bind"][hash % 7];
-        var acsVal = (resDados && resDados.acs !== null) ? resDados.acs : (190 + (hash % 65));
+        var winRateVal, pickRateVal, mapaVal, acsVal;
+
+        if (anoInt < lancamento) {
+            winRateVal = "--";
+            pickRateVal = "--";
+            mapaVal = "--";
+            acsVal = "--";
+        } else {
+            winRateVal = ((resDados && resDados.win_rate !== null) ? resDados.win_rate : (48 + (hash % 12))) + "%";
+            pickRateVal = ((resDados && resDados.pick_rate !== null) ? resDados.pick_rate : (1.2 + (hash % 18) / 10)) + "%";
+            mapaVal = (resDados && resDados.mapa_mais_jogado) ? resDados.mapa_mais_jogado : ["Haven", "Pearl", "Abyss", "Split", "Ascent", "Breeze", "Bind"][hash % 7];
+            acsVal = (resDados && resDados.acs !== null) ? resDados.acs : (190 + (hash % 65));
+        }
 
         // --- HISTORICO ---
         var histYears = ['2021', '2022', '2023', '2024', '2025', '2026'];
@@ -222,32 +244,38 @@ function buscarDadosAgente(req, res) {
 
         for (var y = 0; y < histYears.length; y++) {
             var yearStr = histYears[y];
+            var yearInt = parseInt(yearStr);
             var wrKey = "wr_" + yearStr;
             var prKey = "pr_" + yearStr;
 
-            // Se for 2026, tenta usar do banco de dados se tiver dados reais
-            if (yearStr === "2026" && resHist && resHist[wrKey] !== null && resHist[wrKey] !== undefined) {
-                histWR.push(resHist[wrKey]);
-                histPR.push(resHist[prKey]);
+            if (yearInt < lancamento) {
+                histWR.push(null);
+                histPR.push(null);
             } else {
-                // Fallback determinístico
-                var baseWR = 46 + (hash % 10);
-                var basePR = 1.0 + (hash % 45) / 10;
-                
-                // Adiciona um ruído suave ao longo dos anos
-                var yearOffset = y - 3; // de -3 a 2
-                var simulatedWR = Math.min(65, Math.max(35, baseWR + (yearOffset * 0.5) + (Math.sin(hash + y) * 1.5)));
-                var simulatedPR = Math.min(15, Math.max(0.5, basePR - (yearOffset * 0.2) + (Math.cos(hash * y) * 0.4)));
+                // Se for 2026, tenta usar do banco de dados se tiver dados reais
+                if (yearStr === "2026" && resHist && resHist[wrKey] !== null && resHist[wrKey] !== undefined) {
+                    histWR.push(resHist[wrKey]);
+                    histPR.push(resHist[prKey]);
+                } else {
+                    // Fallback determinístico
+                    var baseWR = 46 + (hash % 10);
+                    var basePR = 1.0 + (hash % 45) / 10;
+                    
+                    // Adiciona um ruído suave ao longo dos anos
+                    var yearOffset = y - 3; // de -3 a 2
+                    var simulatedWR = Math.min(65, Math.max(35, baseWR + (yearOffset * 0.5) + (Math.sin(hash + y) * 1.5)));
+                    var simulatedPR = Math.min(15, Math.max(0.5, basePR - (yearOffset * 0.2) + (Math.cos(hash * y) * 0.4)));
 
-                histWR.push(Number(simulatedWR.toFixed(1)));
-                histPR.push(Number(simulatedPR.toFixed(1)));
+                    histWR.push(Number(simulatedWR.toFixed(1)));
+                    histPR.push(Number(simulatedPR.toFixed(1)));
+                }
             }
         }
 
         var responseData = {
             kpis: {
-                win_rate: winRateVal + "%",
-                pick_rate: pickRateVal + "%",
+                win_rate: winRateVal,
+                pick_rate: pickRateVal,
                 mapa_mais_jogado: mapaVal,
                 acs: acsVal
             },
