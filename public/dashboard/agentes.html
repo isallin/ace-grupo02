@@ -62,24 +62,24 @@
                             <div class="agente-kpis">
                                 <div>
                                     <span class="subtitulos">Win Rate</span>
-                                    <p class="dados-kpi">48.7%</p>
+                                    <p class="dados-kpi" id="kpi-winrate">--%</p>
                                 </div>
                                 <div>
                                     <span class="subtitulos">Pick Rate</span>
-                                    <p class="dados-kpi">0.9%</p>
+                                    <p class="dados-kpi" id="kpi-pickrate">--%</p>
                                 </div>
                                 <div>
                                     <span class="subtitulos">Mapa mais jogado</span>
-                                    <p class="dados-kpi">Ascent</p>
+                                    <p class="dados-kpi" id="kpi-mapa">--</p>
                                 </div>
                                 <div>
-                                    <span class="subtitulos">KPI extra</span>
-                                    <p class="dados-kpi">?</p>
+                                    <span class="subtitulos">Combate (ACS)</span>
+                                    <p class="dados-kpi" id="kpi-acs">--</p>
                                 </div>
                             </div>
                             <h3 class="titulos">Pick Rate x Win Rate durante os anos</h3>
                             <div class="agente-stats">
-                                <canvas id="astraChart"></canvas>
+                                <canvas id="agenteChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -88,14 +88,18 @@
                     <img id="fullbody-agente" src="../assets/Astra_fullbody.png">
                 </div>
             </div>
-        </div>
-    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    var anoAtual = 2026;
+    var agenteAtual = "Astra";
+    var chartAgente = null;
+
     window.onload = (event) => {
         renderPersonagens();
+        carregarDadosAgente();
     };
+
     function selecionarAno(ano) {
         anoAtual = ano
         document.getElementById('filtro-valor').innerHTML = ano
@@ -107,7 +111,7 @@
         }
         document.getElementById('opcao-' + ano).className = 'filtro-opcao ativa'
 
-        if (agenteAtual) selecionarMapa(agenteAtual)
+        carregarDadosAgente();
     }
 
     function toggleDropdown() {
@@ -134,6 +138,8 @@
     }
 
     function trocarAgente(agente) {
+        agenteAtual = agente;
+
         const foto = document.getElementById('foto-agente')
         const nome = document.getElementById('nome-agente')
         const fullbody = document.getElementById('fullbody-agente')
@@ -141,61 +147,89 @@
         foto.src = `../assets/${agente}_icon.png`
         nome.innerHTML = `${agente}`
         fullbody.src = `../assets/${agente}_fullbody.png`
+
+        carregarDadosAgente();
     }
 
-    const ctx = document.getElementById('astraChart').getContext('2d');
+    function carregarDadosAgente() {
+        fetch(`/medidas/agente/${agenteAtual}/${anoAtual}`, { cache: 'no-store' })
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    plotarDadosAgente(resposta);
+                });
+            } else {
+                console.error("Erro ao obter os dados do agente");
+            }
+        })
+        .catch(function (error) {
+            console.error('Erro na obtenção dos dados do agente:', error.message);
+        });
+    }
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['2021', '2022', '2023', '2024', '2025', '2026'],
-            datasets: [{
-                label: 'Pick Rate (%)',
-                data: [6.8, 4.2, 2.5, 1.8, 1.3, 1.1],
-                borderColor: '#6ad6ee',
-                backgroundColor: 'rgba(106, 214, 238, 0.2)',
-                borderWidth: 2,
-                tension: 0.3,
-                yAxisID: 'y',
-            }, {
-                label: 'Win Rate (%)',
-                data: [49.5, 48.2, 47.8, 48.5, 48.0, 48.0],
-                borderColor: '#ff4655',
-                backgroundColor: 'rgba(255, 70, 85, 0.2)',
-                borderWidth: 2,
-                tension: 0.3,
-                yAxisID: 'y1',
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { labels: { color: '#fff' } }
+    function plotarDadosAgente(dados) {
+        document.getElementById('kpi-winrate').innerHTML = dados.kpis.win_rate;
+        document.getElementById('kpi-pickrate').innerHTML = dados.kpis.pick_rate;
+        document.getElementById('kpi-mapa').innerHTML = dados.kpis.mapa_mais_jogado || 'N/D';
+        document.getElementById('kpi-acs').innerHTML = dados.kpis.acs || '0';
+
+        // Destruir gráfico existente se houver para evitar sobreposição
+        var canvasContainer = document.querySelector('.agente-stats');
+        canvasContainer.innerHTML = '<canvas id="agenteChart"></canvas>';
+
+        var ctx = document.getElementById('agenteChart').getContext('2d');
+        chartAgente = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dados.historico.labels,
+                datasets: [{
+                    label: 'Pick Rate (%)',
+                    data: dados.historico.pick_rate,
+                    borderColor: '#6ad6ee',
+                    backgroundColor: 'rgba(106, 214, 238, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    yAxisID: 'y',
+                }, {
+                    label: 'Win Rate (%)',
+                    data: dados.historico.win_rate,
+                    borderColor: '#ff4655',
+                    backgroundColor: 'rgba(255, 70, 85, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    yAxisID: 'y1',
+                }]
             },
-            scales: {
-                y: {
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    grid: { color: 'rgba(255, 255, 255, 0.2)' },
-                    ticks: { color: '#6ad6ee' },
-                    title: { display: true, text: 'Pick Rate %', color: '#6ad6ee' }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#fff', font: { family: 'Unbounded', size: 9 } } }
                 },
-                y1: {
-                    type: 'linear',
-                    display: true,
-                    position: 'right',
-                    grid: { drawOnChartArea: false },
-                    ticks: { color: '#ff4655' },
-                    title: { display: true, text: 'Win Rate %', color: '#ff4655' }
-                },
-                x: {
-                    ticks: { color: '#fff' }
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                        ticks: { color: '#6ad6ee', font: { family: 'Unbounded', size: 8 } },
+                        title: { display: true, text: 'Pick Rate %', color: '#6ad6ee', font: { family: 'Unbounded', size: 9 } }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#ff4655', font: { family: 'Unbounded', size: 8 } },
+                        title: { display: true, text: 'Win Rate %', color: '#ff4655', font: { family: 'Unbounded', size: 9 } }
+                    },
+                    x: {
+                        ticks: { color: '#fff', font: { family: 'Unbounded', size: 9 } },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 </script>
-
 </html>
