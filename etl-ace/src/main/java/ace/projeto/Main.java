@@ -1,46 +1,68 @@
 package ace.projeto;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Conexao conexao =
-                new Conexao();
+        Dotenv dotenv = Dotenv.load();
 
-        JdbcTemplate jdbcTemplate =
-                conexao.getJdbcTemplate();
+        String[] obrigatorias = {
+                "DB_URL", "DB_USER", "DB_PASSWORD",
+                "MAIL_USER", "MAIL_PASSWORD", "MAIL_TO",
+                "S3_BUCKET", "ANOS"
+        };
 
-        ValorantDAO dao =
-                new ValorantDAO(jdbcTemplate);
+        for (String var : obrigatorias) {
+            if (dotenv.get(var) == null || dotenv.get(var).isBlank()) {
+                throw new RuntimeException(
+                        "Variável de ambiente obrigatória não definida: " + var
+                );
+            }
+        }
 
-        dao.log("Lendo overview.xlsx");
+        Conexao conexao = new Conexao();
+        JdbcTemplate jdbcTemplate = conexao.getJdbcTemplate();
+        ValorantDAO dao = new ValorantDAO(jdbcTemplate);
 
-        LeitorExcel leitor =
-                new LeitorExcel();
 
-        List<PartidaValorant> partidaList =
-                leitor.extrair("overview.xlsx");
+        String[] anos = dotenv.get("ANOS").split(",");
 
-        dao.inserirDados(partidaList);
+        for (String ano : anos) {
 
-        dao.log("Lendo scores.xlsx");
+            ano = ano.trim();
 
-        LeitorScores leitorScores =
-                new LeitorScores();
+            String arquivoOverview = ano + "/overview.xlsx";
+            String arquivoScores   = ano + "/scores.xlsx"  ;
 
-        List<ResultadoPartida> resultados =
-                leitorScores.extrair("scores.xlsx");
+            dao.log("Iniciando ETL do ano: " + ano);
 
-        dao.atualizarResultados(resultados);
 
-        dao.montarEstatisticas();
+            dao.log("Lendo " + arquivoOverview);
+            LeitorExcel leitor = new LeitorExcel();
+            List<PartidaValorant> partidaList = leitor.extrair(arquivoOverview);
+            dao.inserirDados(partidaList);
 
-        dao.log("ETL Finalizado.");
 
-        GatilhoAutomate.enviarSinal("Arquivo overview.xlsx e scores.xlsx " +
-                "lidos com sucesso!");
+            dao.log("Lendo " + arquivoScores);
+            LeitorScores leitorScores = new LeitorScores();
+            List<ResultadoPartida> resultados = leitorScores.extrair(arquivoScores);
+            dao.atualizarResultados(resultados);
+
+            dao.montarEstatisticas();
+
+            dao.log("ETL do ano " + ano + " finalizado.");
+        }
+
+        dao.log("ETL completo para todos os anos.");
+
+        GatilhoAutomate.enviarSinal(
+                "ETL finalizado com sucesso para os anos: "
+                        + dotenv.get("ANOS")
+        );
     }
 }

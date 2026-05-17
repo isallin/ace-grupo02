@@ -1,16 +1,18 @@
 package ace.projeto;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LeitorScores {
+
+    private static final Dotenv dotenv = Dotenv.load();
 
     public List<ResultadoPartida> extrair(String arquivo) {
 
@@ -23,7 +25,7 @@ public class LeitorScores {
 
             GetObjectRequest request =
                     GetObjectRequest.builder()
-                            .bucket("ace-database-078431182573-us-east-1-an")
+                            .bucket(dotenv.get("S3_BUCKET"))
                             .key(arquivo)
                             .build();
 
@@ -31,6 +33,7 @@ public class LeitorScores {
                     new XSSFWorkbook(
                             client.getObject(request)
                     );
+
             Sheet sheet =
                     workbook.getSheetAt(0);
 

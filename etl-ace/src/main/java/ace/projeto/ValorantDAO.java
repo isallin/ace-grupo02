@@ -68,7 +68,7 @@ public class ValorantDAO {
         jdbcTemplate.batchUpdate(
                 "insert ignore into mapa(nome) values(?)",
                 lista,
-                700,
+                15000,
                 (ps, p) -> ps.setString(
                         1,
                         p.getMapa().trim()
@@ -78,7 +78,7 @@ public class ValorantDAO {
         jdbcTemplate.batchUpdate(
                 "insert ignore into time(nome) values(?)",
                 lista,
-                700,
+                15000,
                 (ps, p) -> ps.setString(
                         1,
                         p.getTime().trim()
@@ -88,7 +88,7 @@ public class ValorantDAO {
         jdbcTemplate.batchUpdate(
                 "insert ignore into agente(nome) values(?)",
                 lista,
-                700,
+                15000,
                 (ps, p) -> ps.setString(
                         1,
                         p.getAgente().trim()
@@ -104,7 +104,7 @@ public class ValorantDAO {
                             )
                         """,
                 lista,
-                500,
+                15000,
                 (ps, p) -> {
 
                     ps.setString(
@@ -172,7 +172,7 @@ public class ValorantDAO {
                             values (?, ?, ?, ?, ?, ?)
                         """,
                 lista,
-                700,
+                15000,
                 (ps, p) -> {
 
                     ps.setInt(
@@ -254,7 +254,7 @@ public class ValorantDAO {
                             where nome_partida = ?
                         """,
                 lista,
-                300,
+                15000,
                 (ps, p) -> {
 
                     ps.setString(1,
