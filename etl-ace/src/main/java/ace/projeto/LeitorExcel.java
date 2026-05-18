@@ -3,6 +3,7 @@ package ace.projeto;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -15,6 +16,8 @@ public class LeitorExcel {
     private static final Dotenv dotenv = Dotenv.load();
 
     public List<PartidaValorant> extrair(String arquivo) {
+
+        IOUtils.setByteArrayMaxOverride(-1);
 
         List<PartidaValorant> lista =
                 new ArrayList<>();
