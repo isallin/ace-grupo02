@@ -2,8 +2,9 @@ const BASE_URL = '';
 
 function getUsuario() {
     return {
-        id:   sessionStorage.getItem('ID_USUARIO'),
-        nome: sessionStorage.getItem('NOME_USUARIO')
+        id:     sessionStorage.getItem('ID_USUARIO'),
+        nome:   sessionStorage.getItem('NOME_USUARIO'),
+        funcao: sessionStorage.getItem('FUNCAO_USUARIO') 
     };
 }
 
@@ -44,10 +45,16 @@ function formatarData(dataStr) {
     return d.toLocaleDateString('pt-BR');
 }
 
-
+// =====================================================
 // PÁGINA: blog.html
+// =====================================================
 const containerBlog = document.getElementById("lista-posts");
 if (containerBlog) {
+    const btnNovoPost = document.getElementById("btn-novo-post"); 
+    if (btnNovoPost && getUsuario().funcao !== 'coach') {
+        btnNovoPost.style.display = 'none';
+    }
+
     fetch(`${BASE_URL}/blog/posts`)
         .then(r => r.json())
         .then(posts => {
@@ -97,7 +104,6 @@ if (tituloPost && currentId) {
             if (document.querySelector(".autor")) document.querySelector(".autor").innerText = "Recomendado por: " + post.autor_nome;
             if (document.querySelector(".banner")) document.querySelector(".banner").innerHTML = `<img src="../assets/${post.banner}">`;
 
-            // Mostra botões de editar/deletar post apenas para o dono
             const actionsDiv = document.querySelector(".actions");
             if (actionsDiv) {
                 if (String(post.usuario_id) === String(usuario.id)) {
@@ -154,6 +160,8 @@ function carregarComentarios(postId) {
 }
 
 function editarComentario(idComentario, textoAtual) {
+    if (getUsuario().funcao !== 'player') return; 
+
     const novoTexto = prompt("Edite seu comentário:", textoAtual);
     if (novoTexto === null || novoTexto.trim() === "") return;
 
@@ -170,6 +178,8 @@ function editarComentario(idComentario, textoAtual) {
 }
 
 function excluirComentario(idComentario) {
+    if (getUsuario().funcao !== 'player') return; 
+    
     if (!confirm("Deseja excluir este comentário?")) return;
     fetch(`${BASE_URL}/blog/comments/${idComentario}`, { method: 'DELETE' })
         .then(() => carregarComentarios(currentId))
@@ -178,30 +188,41 @@ function excluirComentario(idComentario) {
 
 const commentForm = document.querySelector(".comment-form");
 if (commentForm && currentId) {
-    commentForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const usuario = getUsuario();
-        const texto = commentForm.querySelector('input[placeholder="Comentário..."]').value;
-        fetch(`${BASE_URL}/blog/comments`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                post_id: currentId,
-                usuario_id: usuario.id,
-                texto
+    const usuario = getUsuario();
+    
+    if (usuario.funcao !== 'player') {
+        commentForm.innerHTML = "<p style='color: #aaa; font-style: italic;'>Apenas jogadores podem comentar.</p>";
+    } else {
+        commentForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const texto = commentForm.querySelector('input[placeholder="Comentário..."]').value;
+            fetch(`${BASE_URL}/blog/comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    post_id: currentId,
+                    usuario_id: usuario.id,
+                    texto
+                })
             })
-        })
-        .then(() => { carregarComentarios(currentId); commentForm.reset(); })
-        .catch(() => alert("Erro ao enviar comentário."));
-    });
+            .then(() => { carregarComentarios(currentId); commentForm.reset(); })
+            .catch(() => alert("Erro ao enviar comentário."));
+        });
+    }
 }
 
 function editarPost() {
-    if (currentId) window.location.href = `add-post.html?id=${currentId}`;
+    if (getUsuario().funcao === 'coach' && currentId) {
+        window.location.href = `add-post.html?id=${currentId}`;
+    } else {
+        alert("Ação permitida apenas para coaches.");
+    }
 }
 
 function deletarPost() {
+    if (getUsuario().funcao !== 'coach') return;
     if (!confirm("Tem certeza que deseja deletar este post?")) return;
+    
     fetch(`${BASE_URL}/blog/posts/${currentId}`, { method: 'DELETE' })
         .then(() => window.location.href = "blog.html")
         .catch(() => alert("Erro ao deletar post."));
@@ -212,6 +233,14 @@ function deletarPost() {
 // =====================================================
 const formAddPost = document.getElementById('form-add-post');
 if (formAddPost) {
+    const usuario = getUsuario();
+
+    // BLOQUEIO DE ACESSO: Se não for coach, nem carrega a página
+    if (usuario.funcao !== 'coach') {
+        alert("Acesso restrito a coaches.");
+        window.location.href = "blog.html";
+    }
+
     if (currentId) {
         fetch(`${BASE_URL}/blog/posts`)
             .then(r => r.json())
@@ -237,7 +266,13 @@ if (formAddPost) {
 
     formAddPost.addEventListener('submit', function (e) {
         e.preventDefault();
-        const usuario = getUsuario();
+        
+        // Re-validação no submit
+        if (usuario.funcao !== 'coach') {
+            alert("Erro: Você não tem permissão para postar.");
+            return;
+        }
+
         const titulo = document.getElementById('titulo').value;
         const mapa = document.getElementById('mapa').value;
         const agentesSelecionados = Array.from(document.querySelectorAll('.agente-select')).map(s => s.value);

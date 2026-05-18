@@ -38,16 +38,16 @@
                 <div id="filtro-ano">
                     <span id="filtro-label">ANO VCT</span>
                     <div id="filtro-select" onclick="abrirFecharDropdown()">
-                        <span id="filtro-valor">2021</span>
+                        <span id="filtro-valor">2026</span>
                         <span id="filtro-seta">▼</span>
                     </div>
                     <div id="filtro-opcoes" style="display:none">
-                        <div class="filtro-opcao ativa" id="opcao-2021" onclick="selecionarAno(2021)">2021</div>
+                        <div class="filtro-opcao" id="opcao-2021" onclick="selecionarAno(2021)">2021</div>
                         <div class="filtro-opcao" id="opcao-2022" onclick="selecionarAno(2022)">2022</div>
                         <div class="filtro-opcao" id="opcao-2023" onclick="selecionarAno(2023)">2023</div>
                         <div class="filtro-opcao" id="opcao-2024" onclick="selecionarAno(2024)">2024</div>
                         <div class="filtro-opcao" id="opcao-2025" onclick="selecionarAno(2025)">2025</div>
-                        <div class="filtro-opcao" id="opcao-2026" onclick="selecionarAno(2026)">2026</div>
+                        <div class="filtro-opcao ativa" id="opcao-2026" onclick="selecionarAno(2026)">2026</div>
                     </div>
                 </div>
             </div>
@@ -119,133 +119,13 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const trigger = document.querySelector('.kpi-tooltip-trigger');
-    const tooltip = document.getElementById('custom-tooltip');
+    b_usuario.innerHTML = sessionStorage.NOME_USUARIO || 'Visitante';
 
-    trigger.addEventListener('mouseenter', (e) => {
-        tooltip.textContent = trigger.getAttribute('data-tooltip');
-        tooltip.classList.add('active');
-    });
-
-    trigger.addEventListener('mousemove', (e) => {
-        // Posiciona o tooltip 15px abaixo e à direita do ponteiro do mouse
-        tooltip.style.left = `${e.pageX + 15}px`;
-        tooltip.style.top = `${e.pageY + 15}px`;
-    });
-
-    trigger.addEventListener('mouseleave', () => {
-        tooltip.classList.remove('active');
-    });
-    b_usuario.innerHTML = `${sessionStorage.NOME_USUARIO} (${sessionStorage.FUNCAO_USUARIO})`;
-    var dados = {
-        2021: {
-            kpi1: { nome: 'Jett', acs: 301, img: '../assets/Jett_icon.png' },
-            kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'BIND', atk: '43%', def: '57%' },
-                { label: 'Mapa mais ofensivo', mapa: 'HAVEN', atk: '60%', def: '40%' },
-            ],
-            mapas: {
-                labels: ['Ascent', 'Bind', 'Haven', 'Split', 'Breeze', 'Icebox', 'Fracture'],
-                atk: [51, 43, 60, 42, 55, 48, 53],
-                def: [49, 57, 40, 58, 45, 52, 47]
-            },
-            classes: {
-                agentes: ['Jett', 'Skye', 'Omen', 'Killjoy', 'Sova'],
-                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
-                wrs: [64, 57, 56, 53, 51]
-            }
-        },
-        2022: {
-            kpi1: { nome: 'Chamber', acs: 288, img: '../assets/Chamber_icon.png' },
-            kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'SPLIT', atk: '40%', def: '60%' },
-                { label: 'Mapa mais ofensivo', mapa: 'BREEZE', atk: '62%', def: '38%' },
-            ],
-            mapas: {
-                labels: ['Ascent', 'Bind', 'Haven', 'Split', 'Breeze', 'Icebox', 'Pearl'],
-                atk: [50, 44, 57, 40, 62, 47, 49],
-                def: [50, 56, 43, 60, 38, 53, 51]
-            },
-            classes: {
-                agentes: ['Chamber', 'Fade', 'Omen', 'Killjoy', 'Sova'],
-                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
-                wrs: [62, 59, 55, 54, 50]
-            }
-        },
-        2023: {
-            kpi1: { nome: 'Fade', acs: 276, img: '../assets/Fade_icon.png' },
-            kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'SPLIT', atk: '41%', def: '59%' },
-                { label: 'Mapa mais ofensivo', mapa: 'HAVEN', atk: '58%', def: '42%' },
-            ],
-            mapas: {
-                labels: ['Ascent', 'Bind', 'Haven', 'Lotus', 'Pearl', 'Split', 'Fracture'],
-                atk: [52, 45, 58, 49, 44, 41, 54],
-                def: [48, 55, 42, 51, 56, 59, 46]
-            },
-            classes: {
-                agentes: ['Neon', 'Fade', 'Omen', 'Killjoy', 'Skye'],
-                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
-                wrs: [60, 58, 55, 53, 51]
-            }
-        },
-        2024: {
-            kpi1: { nome: 'Gekko', acs: 269, img: '../assets/Gekko_icon.png' },
-            kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'SPLIT', atk: '42%', def: '58%' },
-                { label: 'Mapa mais ofensivo', mapa: 'ABYSS', atk: '60%', def: '40%' },
-            ],
-            mapas: {
-                labels: ['Ascent', 'Bind', 'Haven', 'Lotus', 'Pearl', 'Split', 'Abyss'],
-                atk: [51, 46, 57, 50, 45, 42, 60],
-                def: [49, 54, 43, 50, 55, 58, 40]
-            },
-            classes: {
-                agentes: ['Neon', 'Gekko', 'Viper', 'Killjoy', 'Fade'],
-                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
-                wrs: [62, 60, 57, 55, 52]
-            }
-        },
-        2025: {
-            kpi1: { nome: 'Jett', acs: 284, img: '../assets/Jett_icon.png' },
-            kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'SPLIT', atk: '41%', def: '59%' },
-                { label: 'Mapa mais ofensivo', mapa: 'ABYSS', atk: '61%', def: '39%' },
-            ],
-            mapas: {
-                labels: ['Ascent', 'Bind', 'Haven', 'Lotus', 'Pearl', 'Split', 'Abyss'],
-                atk: [52, 45, 58, 49, 44, 41, 61],
-                def: [48, 55, 42, 51, 56, 59, 39]
-            },
-            classes: {
-                agentes: ['Jett', 'Fade', 'Omen', 'Killjoy', 'Skye'],
-                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
-                wrs: [61, 58, 55, 54, 52]
-            }
-        },
-        2026: {
-            kpi1: { nome: 'Neon', acs: 291, img: '../assets/Neon_icon.png' },
-            kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'CORRODE', atk: '40%', def: '60%' },
-                { label: 'Mapa mais ofensivo', mapa: 'ABYSS', atk: '63%', def: '37%' },
-            ],
-            mapas: {
-                labels: ['Haven', 'Bind', 'Pearl', 'Split', 'Corrode', 'Breeze', 'Abyss'],
-                atk: [55, 46, 47, 40, 40, 52, 63],
-                def: [45, 54, 53, 60, 60, 48, 37]
-            },
-            classes: {
-                agentes: ['Neon', 'Gekko', 'Viper', 'Cypher', 'Sova'],
-                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
-                wrs: [63, 59, 58, 54, 51]
-            }
-        }
-    }
-
-    var anoAtual = 2021
-    var kpi2atual = 0
-    var chart1 = null
-    var chart2 = null
+    var anoAtual  = 2026;
+    var kpi2atual = 0;
+    var chart1    = null;
+    var chart2    = null;
+    var dadosDashboard = null;
 
     function abrirFecharDropdown() {
         var opcoes = document.getElementById('filtro-opcoes')
@@ -272,8 +152,14 @@
     }
 
     function trocarKpi2() {
-        var d = dados[anoAtual]
-        var k = d.kpi2[kpi2atual]
+        if (!dadosDashboard || !dadosDashboard.kpi2 || dadosDashboard.kpi2.length === 0) {
+            document.getElementById('kpi2-label').innerHTML = "Sem Dados";
+            document.getElementById('kpi2-mapa').innerHTML  = "--";
+            document.getElementById('kpi2-atk').innerHTML   = "--";
+            document.getElementById('kpi2-def').innerHTML   = "--";
+            return;
+        }
+        var k = dadosDashboard.kpi2[kpi2atual];
         document.getElementById('kpi2-label').innerHTML = k.label
         document.getElementById('kpi2-mapa').innerHTML = k.mapa
         document.getElementById('kpi2-atk').innerHTML = k.atk
@@ -281,7 +167,9 @@
     }
 
     function passarKpi2(direcao) {
-        var total = dados[anoAtual].kpi2.length
+        if (!dadosDashboard || !dadosDashboard.kpi2) return;
+        var total = dadosDashboard.kpi2.length;
+        if(total === 0) return;
         kpi2atual = kpi2atual + direcao
         if (kpi2atual < 0) kpi2atual = total - 1
         if (kpi2atual >= total) kpi2atual = 0
@@ -289,114 +177,136 @@
     }
 
     function carregarDados() {
-        var d = dados[anoAtual]
-
-        document.getElementById('kpi1-img').src = d.kpi1.img
-        document.getElementById('kpi1-nome').innerHTML = d.kpi1.nome
-        document.getElementById('kpi1-acs-valor').innerHTML = d.kpi1.acs
-
-        trocarKpi2()
-
-        document.getElementById('titulo-grafico1').innerHTML = 'TAXA DE VITÓRIA ATK vs DEF POR MAPA | VCT ' + anoAtual
-
-        var canvas1 = document.getElementById('grafico1')
-        canvas1.outerHTML = '<canvas id="grafico1"></canvas>'
-
-        chart1 = new Chart(document.getElementById('grafico1'), {
-            type: 'bar',
-            data: {
-                labels: d.mapas.labels,
-                datasets: [
-                    {
-                        label: 'Ataque',
-                        data: d.mapas.atk,
-                        backgroundColor: 'rgba(238,106,106,0.3)',
-                        borderColor: '#EE6A6A',
-                        borderWidth: 1,
-                        borderRadius: 2
-                    },
-                    {
-                        label: 'Defesa',
-                        data: d.mapas.def,
-                        backgroundColor: 'rgba(106,238,184,0.3)',
-                        borderColor: '#6AEEB8',
-                        borderWidth: 1,
-                        borderRadius: 2
-                    }
-                ]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#D9D9D9',
-                            font: { size: 10, family: 'Unbounded' },
-                            boxWidth: 10
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        min: 30, max: 70,
-                        grid: { color: 'rgba(106,214,238,0.07)' },
-                        ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function (v) { return v + '%' } },
-                        border: { color: '#6ad6ee20' }
-                    },
-                    y: {
-                        grid: { display: false },
-                        ticks: { color: '#D9D9D9', font: { size: 10, family: 'Unbounded' }, padding: 8 },
-                        border: { color: '#6ad6ee20' }
-                    }
-                },
-                layout: { padding: { left: 8 } }
+        fetch('/medidas/geral/' + anoAtual, { cache: 'no-store' })
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    dadosDashboard = resposta;
+                    plotarPainel();
+                });
+            } else {
+                console.error("Nenhum dado encontrado ou erro na API");
             }
         })
+        .catch(function (error) {
+            console.error('Erro na obtenção dos dados p/ gráfico:', error.message);
+        });
+    }
 
-        var canvas2 = document.getElementById('grafico2')
-        canvas2.outerHTML = '<canvas id="grafico2"></canvas>'
+    function plotarPainel() {
+        if (!dadosDashboard) return;
+        var d = dadosDashboard;
+        
+        document.getElementById('kpi1-img').src             = d.kpi1.img || '';
+        document.getElementById('kpi1-nome').innerHTML      = d.kpi1.nome || 'N/D';
+        document.getElementById('kpi1-acs-valor').innerHTML = d.kpi1.acs || 0;
 
-        var labels2 = []
-        for (var i = 0; i < d.classes.agentes.length; i++) {
-            labels2.push([d.classes.agentes[i], '(' + d.classes.classes[i] + ')'])
+        trocarKpi2();
+
+        document.getElementById('titulo-grafico1').innerHTML = 'TAXA DE VITÓRIA ATK vs DEF POR MAPA | VCT ' + anoAtual;
+
+        var canvas1 = document.getElementById('grafico1');
+        canvas1.outerHTML = '<canvas id="grafico1"></canvas>';
+
+        if (d.mapas && d.mapas.labels.length > 0) {
+            chart1 = new Chart(document.getElementById('grafico1'), {
+                type: 'bar',
+                data: {
+                    labels: d.mapas.labels,
+                    datasets: [
+                        {
+                            label: 'Ataque',
+                            data: d.mapas.atk,
+                            backgroundColor: 'rgba(238,106,106,0.3)',
+                            borderColor: '#EE6A6A',
+                            borderWidth: 1,
+                            borderRadius: 2
+                        },
+                        {
+                            label: 'Defesa',
+                            data: d.mapas.def,
+                            backgroundColor: 'rgba(106,238,184,0.3)',
+                            borderColor: '#6AEEB8',
+                            borderWidth: 1,
+                            borderRadius: 2
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#D9D9D9',
+                                font: { size: 10, family: 'Unbounded' },
+                                boxWidth: 10
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            min: 30, max: 70,
+                            grid: { color: 'rgba(106,214,238,0.07)' },
+                            ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function(v) { return v + '%' } },
+                            border: { color: '#6ad6ee20' }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: '#D9D9D9', font: { size: 10, family: 'Unbounded' }, padding: 8 },
+                            border: { color: '#6ad6ee20' }
+                        }
+                    },
+                    layout: { padding: { left: 8 } }
+                }
+            });
         }
 
-        chart2 = new Chart(document.getElementById('grafico2'), {
-            type: 'bar',
-            data: {
-                labels: labels2,
-                datasets: [{
-                    label: 'Taxa de Vitória %',
-                    data: d.classes.wrs,
-                    backgroundColor: 'rgba(106,214,238,0.15)',
-                    borderColor: '#6AD6EE',
-                    borderWidth: 1,
-                    borderRadius: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
+        var canvas2 = document.getElementById('grafico2');
+        canvas2.outerHTML = '<canvas id="grafico2"></canvas>';
+
+        if (d.classes && d.classes.agentes.length > 0) {
+            var labels2 = [];
+            for (var i = 0; i < d.classes.agentes.length; i++) {
+                labels2.push([d.classes.agentes[i], '(' + d.classes.classes[i] + ')']);
+            }
+
+            chart2 = new Chart(document.getElementById('grafico2'), {
+                type: 'bar',
+                data: {
+                    labels: labels2,
+                    datasets: [{
+                        label: 'Taxa de Vitória %',
+                        data: d.classes.wrs,
+                        backgroundColor: 'rgba(106,214,238,0.15)',
+                        borderColor: '#6AD6EE',
+                        borderWidth: 1,
+                        borderRadius: 2
+                    }]
                 },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#D9D9D9', font: { size: 9, family: 'Unbounded', weight: '700' } },
-                        border: { color: '#6ad6ee20' }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
                     },
-                    y: {
-                        min: 40, max: 70,
-                        grid: { color: 'rgba(106,214,238,0.07)' },
-                        ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function (v) { return v + '%' } },
-                        border: { color: '#6ad6ee20' }
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#D9D9D9', font: { size: 9, family: 'Unbounded', weight: '700' } },
+                            border: { color: '#6ad6ee20' }
+                        },
+                        y: {
+                            min: 40, max: 70,
+                            grid: { color: 'rgba(106,214,238,0.07)' },
+                            ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function(v) { return v + '%' } },
+                            border: { color: '#6ad6ee20' }
+                        }
                     }
                 }
-            }
-        })
+            });
+        }
     }
 
     carregarDados()
