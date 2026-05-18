@@ -413,3 +413,32 @@ body {
 .kpi2-seta:hover {
   color: var(--destaque);
 }
+
+/* Estilos do gatilho */
+.kpi-tooltip-trigger {
+    font-size: 1rem;
+    cursor: help;
+    border-bottom: 1px dotted #ccc; /* Linha pontilhada opcional para indicar interatividade */
+}
+
+/* Estilo do Tooltip Customizado */
+.custom-tooltip {
+    position: absolute;
+    background-color: rgba(20, 20, 25, 0.95);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    max-width: 220px;
+    line-height: 1.4;
+    border: 1px solid var(--destaque); /* Cor vermelha temática do Valorant */
+    pointer-events: none; /* Evita que o tooltip atrapalhe o mouse */
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+    z-index: 9999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.custom-tooltip.active {
+    opacity: 1;
+}

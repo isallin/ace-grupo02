@@ -103,14 +103,6 @@ body {
     overflow: hidden;
 }
 
-/* <div id="filtro-opcoes">
-    <div class="filtro-opcao ativa" id="opcao-2021" onclick="selecionarAno(2021)">2021</div>
-    <div class="filtro-opcao" id="opcao-2022" onclick="selecionarAno(2022)">2022</div>
-    <div class="filtro-opcao" id="opcao-2023" onclick="selecionarAno(2023)">2023</div>
-    <div class="filtro-opcao" id="opcao-2024" onclick="selecionarAno(2024)">2024</div>
-    <div class="filtro-opcao" id="opcao-2025" onclick="selecionarAno(2025)">2025</div>
-    <div class="filtro-opcao" id="opcao-2026" onclick="selecionarAno(2026)">2026</div>
-</div> */
 
 /* ── FILTRO ANO ── */
 
