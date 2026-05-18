@@ -65,21 +65,21 @@
                         <span id="mapa-desc"></span>
                     </div>
                     <div id="mapa-banrate">
-                        <span class="ban-label">BAN RATE</span>
+                        <span class="ban-label">TAXA DE BANIMENTO DO MAPA</span>
                         <span class="ban-pct" id="ban-pct"></span>
-                        <span class="ban-sub" id="ban-sub"></span>
+                        <!-- <span class="ban-sub" id="ban-sub"></span> -->
                     </div>
                 </div>
 
                 <div id="grafico-agentes-box">
-                    <span class="secao-titulo">MAIOR WIN RATE vs MAIOR PICK RATE POR FUNÇÃO</span>
+                    <span class="secao-titulo">MAIOR TAXA DE VITÓRIA vs MAIOR TAXA DE SELEÇÃO POR FUNÇÃO</span>
                     <div class="grafico-canvas">
                         <canvas id="grafico-agentes"></canvas>
                     </div>
                 </div>
 
                 <div id="composicao">
-                    <span id="composicao-titulo">MELHOR COMPOSIÇÃO | WIN RATE</span>
+                    <span id="composicao-titulo">COMPOSIÇÃO COM MAIOR TAXA DE VITÓRIA POR CLASSE</span>
                     <div id="agente-slots">
                         <div class="agente-slot" id="slot-0"></div>
                         <div class="agente-slot" id="slot-1"></div>
@@ -218,7 +218,7 @@
         document.getElementById('mapa-nome').innerHTML     = id.charAt(0).toUpperCase() + id.slice(1)
         document.getElementById('mapa-desc').innerHTML     = descs[id]
         document.getElementById('ban-pct').innerHTML       = m.ban
-        document.getElementById('ban-sub').innerHTML       = m.bansub
+        // document.getElementById('ban-sub').innerHTML       = m.bansub
 
         for (var i = 0; i < 5; i++) {
             var a = m.composicao[i]
@@ -246,7 +246,7 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: 'Maior Win Rate',
+                        label: 'Maior Taxa de Vitória',
                         data: wrVals,
                         backgroundColor: 'rgba(106,214,238,0.2)',
                         borderColor: '#6AD6EE',
@@ -254,7 +254,7 @@
                         borderRadius: 2
                     },
                     {
-                        label: 'Maior Pick Rate',
+                        label: 'Maior Taxa de Seleção',
                         data: prVals,
                         backgroundColor: 'rgba(184,115,51,0.2)',
                         borderColor: '#B87333',

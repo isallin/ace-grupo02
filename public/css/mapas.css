@@ -55,7 +55,8 @@ body {
   gap: 20px;
 }
 
-#botoes button, #userinfo button {
+#botoes button,
+#userinfo button {
   padding: 9px;
   background-color: transparent;
   border: 1px solid #6ad6ee35;
@@ -65,7 +66,8 @@ body {
   transition: 0.2s;
 }
 
-#botoes button:hover, #userinfo button:hover {
+#botoes button:hover,
+#userinfo button:hover {
   filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741));
   border-color: var(--destaque);
   cursor: pointer;
@@ -216,7 +218,9 @@ body {
   transition: opacity 0.2s;
 }
 
-.mapa-btn:hover { opacity: 1; }
+.mapa-btn:hover {
+  opacity: 1;
+}
 
 .mapa-btn img {
   width: 110px;
@@ -286,9 +290,12 @@ body {
   margin-left: auto;
   white-space: nowrap;
   transition: border-color 0.2s;
+  justify-content: center;
 }
 
-#mapa-banrate:hover { border-color: var(--destaque); }
+#mapa-banrate:hover {
+  border-color: var(--destaque);
+}
 
 .ban-label {
   font-size: 9px;
@@ -367,7 +374,9 @@ body {
   transition: border-color 0.2s;
 }
 
-.agente-slot:hover { border-color: var(--destaque); }
+.agente-slot:hover {
+  border-color: var(--destaque);
+}
 
 .agente-slot img {
   width: 44px;

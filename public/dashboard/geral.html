@@ -6,20 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/dashboard.css">
     <script src="../js/sessao.js"></script>
+    <script src="../js/switchMenu.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
     <title>Painel Geral</title>
 </head>
 
-<body onload="validarSessao()">
+<body onload="validarSessao(), switchMenu()">
     <div id="central">
         <div id="sidebar">
             <div id="sidebaritems">
                 <img src="../assets/logo.png" alt="" id="logo">
                 <div id="botoes">
-                    <button id="botaoside" style="filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741)); border-color: var(--destaque);">Geral</button>
+                    <button id="botaoside"
+                        style="filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741)); border-color: var(--destaque);">Geral</button>
                     <button id="botaoside" onclick="window.location.href='mapas.html'">Mapas</button>
                     <button id="botaoside" onclick="window.location.href='agentes.html'">Agentes</button>
-                    <button id="botaoside" onclick="window.location.href='blog.html'">Enviar composição</button>
                 </div>
                 <div id="userinfo">
                     <img src="../assets/login.png" alt="" id="userphoto">
@@ -55,14 +56,21 @@
                 <div class="kpi-card agent" id="kpiagent">
                     <img class="agent-img" id="kpi1-img" src="" alt="">
                     <div class="agent-textos">
-                        <span class="kpi-label">Agente mais impactante</span>
-                        <span class="kpi-valor" id="kpi1-nome"></span>
+                        <span class="kpi-label">Agente com maior ACS</span>
+                        <span class="kpi-valor" id="kpi1-nome">Jett</span>
                     </div>
                     <div class="agent-winrate">
-                        <span class="winrate-label" style="font-size:0.55rem">Pontuação Média de Combate</span>
-                        <span class="winrate-valor" id="kpi1-acs-valor"></span>
+                        <!-- O texto do tooltip fica no atributo data-tooltip -->
+                        <span class="winrate-label kpi-tooltip-trigger"
+                            data-tooltip="Average Combat Score (Pontuação Média de Combate). Baseado em dano, abates, assistências e multikills por rodada.">
+                            ACS
+                        </span>
+                        <span class="winrate-valor" id="kpi1-acs-valor">245</span>
                     </div>
                 </div>
+
+                <!-- Elemento global do tooltip -->
+                <div id="custom-tooltip" class="custom-tooltip"></div>
 
                 <div class="kpi-card" id="kpi2">
                     <button class="kpi2-seta" onclick="passarKpi2(-1)">&#8249;</button>
@@ -99,7 +107,7 @@
                     </div>
                 </div>
                 <div class="grafico-card" id="grafico-card-2">
-                    <span class="grafico-titulo">MAIOR TAXA DE VITÓRIA DE AGENTE POR CLASSE</span>
+                    <span class="grafico-titulo">AGENTE COM MAIOR TAXA DE VITÓRIA POR CLASSE</span>
                     <div class="grafico-canvas">
                         <canvas id="grafico2"></canvas>
                     </div>
@@ -111,13 +119,30 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    const trigger = document.querySelector('.kpi-tooltip-trigger');
+    const tooltip = document.getElementById('custom-tooltip');
+
+    trigger.addEventListener('mouseenter', (e) => {
+        tooltip.textContent = trigger.getAttribute('data-tooltip');
+        tooltip.classList.add('active');
+    });
+
+    trigger.addEventListener('mousemove', (e) => {
+        // Posiciona o tooltip 15px abaixo e à direita do ponteiro do mouse
+        tooltip.style.left = `${e.pageX + 15}px`;
+        tooltip.style.top = `${e.pageY + 15}px`;
+    });
+
+    trigger.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('active');
+    });
+    b_usuario.innerHTML = `${sessionStorage.NOME_USUARIO} (${sessionStorage.FUNCAO_USUARIO})`;
     var dados = {
         2021: {
             kpi1: { nome: 'Jett', acs: 301, img: '../assets/Jett_icon.png' },
             kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'BIND',  atk: '43%', def: '57%' },
-                { label: 'Mapa mais ofensivo',  mapa: 'HAVEN', atk: '60%', def: '40%' },
+                { label: 'Mapa mais defensivo', mapa: 'BIND', atk: '43%', def: '57%' },
+                { label: 'Mapa mais ofensivo', mapa: 'HAVEN', atk: '60%', def: '40%' },
             ],
             mapas: {
                 labels: ['Ascent', 'Bind', 'Haven', 'Split', 'Breeze', 'Icebox', 'Fracture'],
@@ -125,16 +150,16 @@
                 def: [49, 57, 40, 58, 45, 52, 47]
             },
             classes: {
-                agentes: ['Jett',    'Skye',      'Omen',        'Killjoy',   'Sova' ],
-                classes: ['Duelista','Iniciador',  'Controlador', 'Sentinela', 'Flex' ],
-                wrs:     [64,         57,           56,            53,          51    ]
+                agentes: ['Jett', 'Skye', 'Omen', 'Killjoy', 'Sova'],
+                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
+                wrs: [64, 57, 56, 53, 51]
             }
         },
         2022: {
             kpi1: { nome: 'Chamber', acs: 288, img: '../assets/Chamber_icon.png' },
             kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'SPLIT',  atk: '40%', def: '60%' },
-                { label: 'Mapa mais ofensivo',  mapa: 'BREEZE', atk: '62%', def: '38%' },
+                { label: 'Mapa mais defensivo', mapa: 'SPLIT', atk: '40%', def: '60%' },
+                { label: 'Mapa mais ofensivo', mapa: 'BREEZE', atk: '62%', def: '38%' },
             ],
             mapas: {
                 labels: ['Ascent', 'Bind', 'Haven', 'Split', 'Breeze', 'Icebox', 'Pearl'],
@@ -142,16 +167,16 @@
                 def: [50, 56, 43, 60, 38, 53, 51]
             },
             classes: {
-                agentes: ['Chamber', 'Fade',      'Omen',        'Killjoy',   'Sova' ],
-                classes: ['Duelista','Iniciador',  'Controlador', 'Sentinela', 'Flex' ],
-                wrs:     [62,         59,           55,            54,          50    ]
+                agentes: ['Chamber', 'Fade', 'Omen', 'Killjoy', 'Sova'],
+                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
+                wrs: [62, 59, 55, 54, 50]
             }
         },
         2023: {
             kpi1: { nome: 'Fade', acs: 276, img: '../assets/Fade_icon.png' },
             kpi2: [
                 { label: 'Mapa mais defensivo', mapa: 'SPLIT', atk: '41%', def: '59%' },
-                { label: 'Mapa mais ofensivo',  mapa: 'HAVEN', atk: '58%', def: '42%' },
+                { label: 'Mapa mais ofensivo', mapa: 'HAVEN', atk: '58%', def: '42%' },
             ],
             mapas: {
                 labels: ['Ascent', 'Bind', 'Haven', 'Lotus', 'Pearl', 'Split', 'Fracture'],
@@ -159,16 +184,16 @@
                 def: [48, 55, 42, 51, 56, 59, 46]
             },
             classes: {
-                agentes: ['Neon',    'Fade',      'Omen',        'Killjoy',   'Skye' ],
-                classes: ['Duelista','Iniciador',  'Controlador', 'Sentinela', 'Flex' ],
-                wrs:     [60,         58,           55,            53,          51    ]
+                agentes: ['Neon', 'Fade', 'Omen', 'Killjoy', 'Skye'],
+                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
+                wrs: [60, 58, 55, 53, 51]
             }
         },
         2024: {
             kpi1: { nome: 'Gekko', acs: 269, img: '../assets/Gekko_icon.png' },
             kpi2: [
-                { label: 'Mapa mais defensivo', mapa: 'SPLIT',  atk: '42%', def: '58%' },
-                { label: 'Mapa mais ofensivo',  mapa: 'ABYSS',  atk: '60%', def: '40%' },
+                { label: 'Mapa mais defensivo', mapa: 'SPLIT', atk: '42%', def: '58%' },
+                { label: 'Mapa mais ofensivo', mapa: 'ABYSS', atk: '60%', def: '40%' },
             ],
             mapas: {
                 labels: ['Ascent', 'Bind', 'Haven', 'Lotus', 'Pearl', 'Split', 'Abyss'],
@@ -176,16 +201,16 @@
                 def: [49, 54, 43, 50, 55, 58, 40]
             },
             classes: {
-                agentes: ['Neon',    'Gekko',     'Viper',       'Killjoy',   'Fade' ],
-                classes: ['Duelista','Iniciador',  'Controlador', 'Sentinela', 'Flex' ],
-                wrs:     [62,         60,           57,            55,          52    ]
+                agentes: ['Neon', 'Gekko', 'Viper', 'Killjoy', 'Fade'],
+                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
+                wrs: [62, 60, 57, 55, 52]
             }
         },
         2025: {
             kpi1: { nome: 'Jett', acs: 284, img: '../assets/Jett_icon.png' },
             kpi2: [
                 { label: 'Mapa mais defensivo', mapa: 'SPLIT', atk: '41%', def: '59%' },
-                { label: 'Mapa mais ofensivo',  mapa: 'ABYSS', atk: '61%', def: '39%' },
+                { label: 'Mapa mais ofensivo', mapa: 'ABYSS', atk: '61%', def: '39%' },
             ],
             mapas: {
                 labels: ['Ascent', 'Bind', 'Haven', 'Lotus', 'Pearl', 'Split', 'Abyss'],
@@ -193,16 +218,16 @@
                 def: [48, 55, 42, 51, 56, 59, 39]
             },
             classes: {
-                agentes: ['Jett',    'Fade',      'Omen',        'Killjoy',   'Skye' ],
-                classes: ['Duelista','Iniciador',  'Controlador', 'Sentinela', 'Flex' ],
-                wrs:     [61,         58,           55,            54,          52    ]
+                agentes: ['Jett', 'Fade', 'Omen', 'Killjoy', 'Skye'],
+                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
+                wrs: [61, 58, 55, 54, 52]
             }
         },
         2026: {
             kpi1: { nome: 'Neon', acs: 291, img: '../assets/Neon_icon.png' },
             kpi2: [
                 { label: 'Mapa mais defensivo', mapa: 'CORRODE', atk: '40%', def: '60%' },
-                { label: 'Mapa mais ofensivo',  mapa: 'ABYSS',   atk: '63%', def: '37%' },
+                { label: 'Mapa mais ofensivo', mapa: 'ABYSS', atk: '63%', def: '37%' },
             ],
             mapas: {
                 labels: ['Haven', 'Bind', 'Pearl', 'Split', 'Corrode', 'Breeze', 'Abyss'],
@@ -210,17 +235,17 @@
                 def: [45, 54, 53, 60, 60, 48, 37]
             },
             classes: {
-                agentes: ['Neon',    'Gekko',     'Viper',       'Cypher',    'Sova' ],
-                classes: ['Duelista','Iniciador',  'Controlador', 'Sentinela', 'Flex' ],
-                wrs:     [63,         59,           58,            54,          51    ]
+                agentes: ['Neon', 'Gekko', 'Viper', 'Cypher', 'Sova'],
+                classes: ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'],
+                wrs: [63, 59, 58, 54, 51]
             }
         }
     }
 
-    var anoAtual  = 2021
+    var anoAtual = 2021
     var kpi2atual = 0
-    var chart1    = null
-    var chart2    = null
+    var chart1 = null
+    var chart2 = null
 
     function abrirFecharDropdown() {
         var opcoes = document.getElementById('filtro-opcoes')
@@ -250,15 +275,15 @@
         var d = dados[anoAtual]
         var k = d.kpi2[kpi2atual]
         document.getElementById('kpi2-label').innerHTML = k.label
-        document.getElementById('kpi2-mapa').innerHTML  = k.mapa
-        document.getElementById('kpi2-atk').innerHTML   = k.atk
-        document.getElementById('kpi2-def').innerHTML   = k.def
+        document.getElementById('kpi2-mapa').innerHTML = k.mapa
+        document.getElementById('kpi2-atk').innerHTML = k.atk
+        document.getElementById('kpi2-def').innerHTML = k.def
     }
 
     function passarKpi2(direcao) {
         var total = dados[anoAtual].kpi2.length
         kpi2atual = kpi2atual + direcao
-        if (kpi2atual < 0)     kpi2atual = total - 1
+        if (kpi2atual < 0) kpi2atual = total - 1
         if (kpi2atual >= total) kpi2atual = 0
         trocarKpi2()
     }
@@ -266,8 +291,8 @@
     function carregarDados() {
         var d = dados[anoAtual]
 
-        document.getElementById('kpi1-img').src             = d.kpi1.img
-        document.getElementById('kpi1-nome').innerHTML      = d.kpi1.nome
+        document.getElementById('kpi1-img').src = d.kpi1.img
+        document.getElementById('kpi1-nome').innerHTML = d.kpi1.nome
         document.getElementById('kpi1-acs-valor').innerHTML = d.kpi1.acs
 
         trocarKpi2()
@@ -317,7 +342,7 @@
                     x: {
                         min: 30, max: 70,
                         grid: { color: 'rgba(106,214,238,0.07)' },
-                        ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function(v) { return v + '%' } },
+                        ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function (v) { return v + '%' } },
                         border: { color: '#6ad6ee20' }
                     },
                     y: {
@@ -366,7 +391,7 @@
                     y: {
                         min: 40, max: 70,
                         grid: { color: 'rgba(106,214,238,0.07)' },
-                        ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function(v) { return v + '%' } },
+                        ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function (v) { return v + '%' } },
                         border: { color: '#6ad6ee20' }
                     }
                 }
@@ -377,4 +402,5 @@
     carregarDados()
 
 </script>
+
 </html>
