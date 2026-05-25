@@ -51,7 +51,7 @@ function formatarData(dataStr) {
 const containerBlog = document.getElementById("lista-posts");
 if (containerBlog) {
     const btnNovoPost = document.getElementById("btn-novo-post"); 
-    if (btnNovoPost && getUsuario().funcao !== 'coach') {
+    if (btnNovoPost && getUsuario().funcao == 'player') {
         btnNovoPost.style.display = 'none';
     }
 
@@ -236,7 +236,7 @@ if (formAddPost) {
     const usuario = getUsuario();
 
     // BLOQUEIO DE ACESSO: Se não for coach, nem carrega a página
-    if (usuario.funcao !== 'coach') {
+    if (usuario.funcao == 'player') {
         alert("Acesso restrito a coaches.");
         window.location.href = "blog.html";
     }

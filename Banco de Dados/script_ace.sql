@@ -27,7 +27,7 @@ CREATE TABLE usuarios (
     organizacaofk INT,
 
     CONSTRAINT chk_funcao
-        CHECK (funcao IN ('player','coach','outros')),
+        CHECK (funcao IN ('player','coach','admin')),
 
     CONSTRAINT fk_usuario_organizacao
         FOREIGN KEY (organizacaofk)
@@ -211,13 +211,26 @@ CREATE TABLE comentarios (
 );
 
 INSERT INTO
-    usuarios (nickname, email, senha)
+    usuarios (nickname, email, senha, funcao)
 VALUES (
         'Administrador',
         'ace@teste',
-        '123'
+        '123',
+        'admin'
     );
 
+-- Inserindo dados na tabela 'organizacao'
+INSERT INTO organizacao (nome, contato, codAtivacao) VALUES
+('LOUD', 'contato@loud.gg', 'LOUD2026VAL'),
+('Sentinels', 'info@sentinels.gg', 'SEN2026WIN'),
+('Fnatic', 'support@fnatic.com', 'FNC2026VLR');
+
+-- Inserindo dados na tabela 'usuarios'
+INSERT INTO usuarios (nome_completo, nickname, email, senha, funcao, organizacaofk) VALUES
+('Erick Santos', 'aspas', 'aspas@loud.gg', 'loud123', 'player', 1),
+('Matias Delipetro', 'Saadhak', 'saadhak@loud.gg', 'coach99', 'coach', 1),
+('Tyson Ngo', 'TenZ', 'tenz@sentinels.gg', 'sen2026', 'player', 2),
+('Jake Howlett', 'Boaster', 'boaster@fnatic.com', 'fnc789', 'player', 3);
 
 -- -----------------------------------------------------
 -- Table log
