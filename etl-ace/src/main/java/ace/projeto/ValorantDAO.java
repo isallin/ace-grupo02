@@ -92,6 +92,13 @@ public class ValorantDAO {
 
     public void carregarIds() {
 
+        nomesTime.clear();
+        idsTime.clear();
+        nomesAgente.clear();
+        idsAgente.clear();
+        nomesPartida.clear();
+        idsPartida.clear();
+
         jdbcTemplate.query(
                 "select idtime, nome from time",
                 rs -> {
