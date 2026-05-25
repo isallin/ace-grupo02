@@ -29,40 +29,53 @@ public class Main {
         JdbcTemplate jdbcTemplate = conexao.getJdbcTemplate();
         ValorantDAO dao = new ValorantDAO(jdbcTemplate);
 
-
         String[] anos = dotenv.get("ANOS").split(",");
 
+
         for (String ano : anos) {
-
             ano = ano.trim();
-
-            String arquivoOverview = ano + "/overview.xlsx";
-            String arquivoScores   = ano + "/scores.xlsx"  ;
 
             dao.log("Iniciando ETL do ano: " + ano);
 
-
-            dao.log("Lendo " + arquivoOverview);
+            dao.log("Lendo " + ano + "/overview.xlsx");
             LeitorExcel leitor = new LeitorExcel();
-            List<PartidaValorant> partidaList = leitor.extrair(arquivoOverview);
-            dao.inserirDados(partidaList);
+            List<PartidaValorant> partidaList = leitor.extrair(ano + "/overview.xlsx");
 
+            dao.log("Inserindo tabelas base " + ano + "...");
+            dao.inserirBase(partidaList);
 
-            dao.log("Lendo " + arquivoScores);
+            dao.log("Lendo " + ano + "/scores.xlsx");
             LeitorScores leitorScores = new LeitorScores();
-            List<ResultadoPartida> resultados = leitorScores.extrair(arquivoScores);
-            dao.atualizarResultados(resultados);
+            List<ResultadoPartida> resultados = leitorScores.extrair(ano + "/scores.xlsx");
 
-            dao.montarEstatisticas();
+            dao.atualizarResultados(resultados);
 
             dao.log("ETL do ano " + ano + " finalizado.");
         }
 
+        dao.log("Carregando IDs...");
+        dao.carregarIds();
+
+
+        for (String ano : anos) {
+            ano = ano.trim();
+
+            dao.log("Inserindo desempenho " + ano + "...");
+            LeitorExcel leitor = new LeitorExcel();
+            List<PartidaValorant> partidaList = leitor.extrair(ano + "/overview.xlsx");
+            dao.inserirDesempenho(partidaList);
+        }
+
+        dao.log("Montando composições...");
+        dao.montarComposicoes();
+
+        dao.log("Montando estatísticas...");
+        dao.montarEstatisticas();
+
         dao.log("ETL completo para todos os anos.");
 
         GatilhoAutomate.enviarSinal(
-                "ETL finalizado com sucesso para os anos: "
-                        + dotenv.get("ANOS")
+                "ETL finalizado com sucesso para os anos: " + dotenv.get("ANOS")
         );
     }
 }

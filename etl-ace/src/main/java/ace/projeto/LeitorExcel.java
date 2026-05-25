@@ -11,6 +11,10 @@ public class LeitorExcel extends Leitor {
 
     public List<PartidaValorant> extrair(String arquivo) {
 
+
+        String ano = arquivo.split("/")[0];
+        String filtro = "Valorant Champions " + ano;
+
         List<PartidaValorant> lista = new ArrayList<>();
 
         try {
@@ -28,11 +32,15 @@ public class LeitorExcel extends Leitor {
                 if (mapa.equalsIgnoreCase("All Maps"))
                     continue;
 
+                String nomePartida = getTexto(row, 3);
+                if (!nomePartida.equalsIgnoreCase(filtro))
+                    continue;
+
                 PartidaValorant p =
                         new PartidaValorant(
                                 getTexto(row, 0),
                                 getTexto(row, 1),
-                                getTexto(row, 3),
+                                nomePartida,
                                 mapa,
                                 getTexto(row, 6),
                                 getTexto(row, 7),

@@ -2,6 +2,7 @@ package ace.projeto;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,108 +29,68 @@ public class ValorantDAO {
 
         String hora =
                 LocalDateTime.now()
-                        .format(
-                                DateTimeFormatter
-                                        .ofPattern("dd/MM/yyyy HH:mm:ss")
-                        );
+                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
-        System.out.println(
-                hora + " - " + mensagem + " - INFO"
-        );
+        System.out.println(hora + " - " + mensagem + " - INFO");
 
         jdbcTemplate.update(
-                """
-                        insert into log_etl (mensagem)
-                        values (?)
-                        """,
+                "insert into log_etl (mensagem) values (?)",
                 mensagem
         );
     }
 
-    public void inserirDados(List<PartidaValorant> lista) {
 
-        log("Inserindo tabelas base...");
-        inserirBase(lista);
+    public void inserirBase(List<PartidaValorant> lista) {
 
-        log("Carregando IDs...");
-        carregarIds();
+        jdbcTemplate.execute((Connection conn) -> {
+            conn.setAutoCommit(false);
 
-        log("Inserindo desempenho...");
-        inserirDesempenhoBatch(lista);
+            try {
+                jdbcTemplate.batchUpdate(
+                        "insert ignore into mapa(nome) values(?)",
+                        lista, 5000,
+                        (ps, p) -> ps.setString(1, p.getMapa().trim())
+                );
 
-        log("Montando Composições...");
-        montarComposicoes();
+                jdbcTemplate.batchUpdate(
+                        "insert ignore into time(nome) values(?)",
+                        lista, 5000,
+                        (ps, p) -> ps.setString(1, p.getTime().trim())
+                );
 
-        log("Carga finalizada.");
+                jdbcTemplate.batchUpdate(
+                        "insert ignore into agente(nome) values(?)",
+                        lista, 5000,
+                        (ps, p) -> ps.setString(1, p.getAgente().trim())
+                );
+
+                jdbcTemplate.batchUpdate("""
+                                insert ignore into partida
+                                (nome_partida, campeonato, etapa, mapaFk)
+                                values(?, ?, ?,
+                                (select idmapa from mapa where nome=?))
+                                """,
+                        lista, 5000,
+                        (ps, p) -> {
+                            ps.setString(1, p.getNomePartida().trim());
+                            ps.setString(2, p.getCampeonato().trim());
+                            ps.setString(3, p.getEtapa().trim());
+                            ps.setString(4, p.getMapa().trim());
+                        });
+
+                conn.commit();
+
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            }
+
+            return null;
+        });
     }
 
-    private void inserirBase(List<PartidaValorant> lista) {
 
-        jdbcTemplate.batchUpdate(
-                "insert ignore into mapa(nome) values(?)",
-                lista,
-                15000,
-                (ps, p) -> ps.setString(
-                        1,
-                        p.getMapa().trim()
-                )
-        );
-
-        jdbcTemplate.batchUpdate(
-                "insert ignore into time(nome) values(?)",
-                lista,
-                15000,
-                (ps, p) -> ps.setString(
-                        1,
-                        p.getTime().trim()
-                )
-        );
-
-        jdbcTemplate.batchUpdate(
-                "insert ignore into agente(nome) values(?)",
-                lista,
-                15000,
-                (ps, p) -> ps.setString(
-                        1,
-                        p.getAgente().trim()
-                )
-        );
-
-        jdbcTemplate.batchUpdate("""
-                            insert ignore into partida
-                            (nome_partida, campeonato, etapa, mapaFk)
-                            values(
-                            ?, ?, ?,
-                            (select idmapa from mapa where nome=?)
-                            )
-                        """,
-                lista,
-                15000,
-                (ps, p) -> {
-
-                    ps.setString(
-                            1,
-                            p.getNomePartida().trim()
-                    );
-
-                    ps.setString(
-                            2,
-                            p.getCampeonato().trim()
-                    );
-
-                    ps.setString(
-                            3,
-                            p.getEtapa().trim()
-                    );
-
-                    ps.setString(
-                            4,
-                            p.getMapa().trim()
-                    );
-                });
-    }
-
-    private void carregarIds() {
+    public void carregarIds() {
 
         jdbcTemplate.query(
                 "select idtime, nome from time",
@@ -156,155 +117,133 @@ public class ValorantDAO {
         );
     }
 
-    private void inserirDesempenhoBatch(
-            List<PartidaValorant> lista) {
 
-        jdbcTemplate.batchUpdate("""
-                            insert into desempenho
-                            (
-                            partidaFk,
-                            timeFk,
-                            agenteFk,
-                            kills,
-                            deaths,
-                            assists
-                            )
-                            values (?, ?, ?, ?, ?, ?)
-                        """,
-                lista,
-                15000,
-                (ps, p) -> {
+    public void inserirDesempenho(List<PartidaValorant> lista) {
 
-                    ps.setInt(
-                            1,
-                            buscarIdLista(
-                                    nomesPartida,
-                                    idsPartida,
-                                    p.getNomePartida().trim()
-                            )
-                    );
+        jdbcTemplate.execute((Connection conn) -> {
+            conn.setAutoCommit(false);
 
-                    ps.setInt(
-                            2,
-                            buscarIdLista(
-                                    nomesTime,
-                                    idsTime,
-                                    p.getTime().trim()
-                            )
-                    );
+            try {
+                jdbcTemplate.batchUpdate("""
+                                insert into desempenho
+                                (partidaFk, timeFk, agenteFk, kills, deaths, assists)
+                                values (?, ?, ?, ?, ?, ?)
+                                """,
+                        lista, 5000,
+                        (ps, p) -> {
+                            ps.setInt(1, buscarIdLista(nomesPartida, idsPartida, p.getNomePartida().trim()));
+                            ps.setInt(2, buscarIdLista(nomesTime, idsTime, p.getTime().trim()));
+                            ps.setInt(3, buscarIdLista(nomesAgente, idsAgente, p.getAgente().trim()));
+                            ps.setInt(4, p.getKills());
+                            ps.setInt(5, p.getDeaths());
+                            ps.setInt(6, p.getAssists());
+                        });
 
-                    ps.setInt(
-                            3,
-                            buscarIdLista(
-                                    nomesAgente,
-                                    idsAgente,
-                                    p.getAgente().trim()
-                            )
-                    );
+                conn.commit();
 
-                    ps.setInt(4, p.getKills());
-                    ps.setInt(5, p.getDeaths());
-                    ps.setInt(6, p.getAssists());
-                });
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            }
+
+            return null;
+        });
     }
 
-    private void montarComposicoes() {
+    public void montarComposicoes() {
 
-        jdbcTemplate.update("""
-                    insert ignore into composicao
-                    (partidaFk, timeFk)
-                
-                    select distinct
-                        partidaFk,
-                        timeFk
-                    from desempenho
-                """);
+        jdbcTemplate.execute((Connection conn) -> {
+            conn.setAutoCommit(false);
 
-        jdbcTemplate.update("""
-                    insert ignore into composicao_agente
-                    (composicaoFk, agenteFk)
-                
-                    select distinct
-                        c.idcomposicao,
-                        d.agenteFk
-                
-                    from desempenho d
-                
-                    join composicao c
-                    on c.partidaFk = d.partidaFk
-                    and c.timeFk = d.timeFk
-                """);
+            try {
+                jdbcTemplate.update("""
+                        insert ignore into composicao
+                        (partidaFk, timeFk)
+                        select distinct partidaFk, timeFk
+                        from desempenho
+                        """);
 
-        log("Composições prontas.");
+                jdbcTemplate.update("""
+                        insert ignore into composicao_agente
+                        (composicaoFk, agenteFk)
+                        select distinct c.idcomposicao, d.agenteFk
+                        from desempenho d
+                        join composicao c
+                        on c.partidaFk = d.partidaFk
+                        and c.timeFk = d.timeFk
+                        """);
+
+                conn.commit();
+                log("Composições prontas.");
+
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            }
+
+            return null;
+        });
     }
 
-    public void atualizarResultados(
-            List<ResultadoPartida> lista) {
+    public void atualizarResultados(List<ResultadoPartida> lista) {
 
-        jdbcTemplate.batchUpdate("""
-                            update partida
-                            set vencedorFk =
-                            (
-                            select idtime
-                            from time
-                            where nome = ?
-                            ),
-                            placarA = ?,
-                            placarB = ?
-                            where nome_partida = ?
-                        """,
-                lista,
-                15000,
-                (ps, p) -> {
+        jdbcTemplate.execute((Connection conn) -> {
+            conn.setAutoCommit(false);
 
-                    ps.setString(1,
-                            p.getVencedor());
+            try {
+                jdbcTemplate.batchUpdate("""
+                                update partida
+                                set vencedorFk = (select idtime from time where nome = ?),
+                                placarA = ?,
+                                placarB = ?
+                                where nome_partida = ?
+                                """,
+                        lista, 5000,
+                        (ps, p) -> {
+                            ps.setString(1, p.getVencedor());
+                            ps.setInt(2, p.getPlacarA());
+                            ps.setInt(3, p.getPlacarB());
+                            ps.setString(4, p.getNomePartida());
+                        });
 
-                    ps.setInt(2,
-                            p.getPlacarA());
+                conn.commit();
 
-                    ps.setInt(3,
-                            p.getPlacarB());
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            }
 
-                    ps.setString(4,
-                            p.getNomePartida());
-                });
+            return null;
+        });
     }
 
     public void montarEstatisticas() {
 
-        jdbcTemplate.update("""
-                    insert ignore into estatistica_composicao
-                    (
-                    win_rate,
-                    pick_rate,
-                    total_partidas,
-                    composicaoFk
-                    )
-                
-                    select
-                        round(
-                            case
-                                when p.vencedorFk = c.timeFk
-                                then 100
-                                else 0
-                            end
-                        ,2),
-                
-                        round(
-                            100.0 /
-                            (select count(*) from composicao),
-                        2),
-                
-                        1,
-                
-                        c.idcomposicao
-                
-                    from composicao c
-                
-                    join partida p
-                    on p.idpartida = c.partidaFk
-                """);
+        jdbcTemplate.execute((Connection conn) -> {
+            conn.setAutoCommit(false);
+
+            try {
+                jdbcTemplate.update("""
+                        insert ignore into estatistica_composicao
+                        (win_rate, pick_rate, total_partidas, composicaoFk)
+                        select
+                            round(case when p.vencedorFk = c.timeFk then 100 else 0 end, 2),
+                            round(100.0 / (select count(*) from composicao), 2),
+                            1,
+                            c.idcomposicao
+                        from composicao c
+                        join partida p on p.idpartida = c.partidaFk
+                        """);
+
+                conn.commit();
+
+            } catch (Exception e) {
+                conn.rollback();
+                throw e;
+            }
+
+            return null;
+        });
     }
 
     private Integer buscarIdLista(List<String> nomes, List<Integer> ids, String valor) {
