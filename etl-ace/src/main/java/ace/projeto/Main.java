@@ -50,20 +50,23 @@ public class Main {
 
             dao.atualizarResultados(resultados);
 
-            dao.log("ETL do ano " + ano + " finalizado.");
+            dao.log("ETL base do ano " + ano + " finalizado.");
         }
-
-        dao.log("Carregando IDs...");
-        dao.carregarIds();
-
 
         for (String ano : anos) {
             ano = ano.trim();
 
-            dao.log("Inserindo desempenho " + ano + "...");
+            dao.log("Carregando IDs para " + ano + "...");
+            dao.carregarIds();
+
+            dao.log("Lendo " + ano + "/overview.xlsx");
             LeitorExcel leitor = new LeitorExcel();
             List<PartidaValorant> partidaList = leitor.extrair(ano + "/overview.xlsx");
+
+            dao.log("Inserindo desempenho " + ano + "...");
             dao.inserirDesempenho(partidaList);
+
+            dao.log("Desempenho do ano " + ano + " finalizado.");
         }
 
         dao.log("Montando composições...");
