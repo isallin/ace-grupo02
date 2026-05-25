@@ -32,7 +32,7 @@ public class LeitorExcel extends Leitor {
                 if (mapa.equalsIgnoreCase("All Maps"))
                     continue;
 
-                String nomePartida = getTexto(row, 3);
+                String nomePartida = getTexto(row, 0);
                 if (!nomePartida.equalsIgnoreCase(filtro))
                     continue;
 

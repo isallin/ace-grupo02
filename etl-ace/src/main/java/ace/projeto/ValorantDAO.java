@@ -48,19 +48,19 @@ public class ValorantDAO {
             try {
                 jdbcTemplate.batchUpdate(
                         "insert ignore into mapa(nome) values(?)",
-                        lista, 5000,
+                        lista, 15000,
                         (ps, p) -> ps.setString(1, p.getMapa().trim())
                 );
 
                 jdbcTemplate.batchUpdate(
                         "insert ignore into time(nome) values(?)",
-                        lista, 5000,
+                        lista, 15000,
                         (ps, p) -> ps.setString(1, p.getTime().trim())
                 );
 
                 jdbcTemplate.batchUpdate(
                         "insert ignore into agente(nome) values(?)",
-                        lista, 5000,
+                        lista, 15000,
                         (ps, p) -> ps.setString(1, p.getAgente().trim())
                 );
 
@@ -70,7 +70,7 @@ public class ValorantDAO {
                                 values(?, ?, ?,
                                 (select idmapa from mapa where nome=?))
                                 """,
-                        lista, 5000,
+                        lista, 15000,
                         (ps, p) -> {
                             ps.setString(1, p.getNomePartida().trim());
                             ps.setString(2, p.getCampeonato().trim());
@@ -129,7 +129,7 @@ public class ValorantDAO {
                                 (partidaFk, timeFk, agenteFk, kills, deaths, assists)
                                 values (?, ?, ?, ?, ?, ?)
                                 """,
-                        lista, 5000,
+                        lista, 15000,
                         (ps, p) -> {
                             ps.setInt(1, buscarIdLista(nomesPartida, idsPartida, p.getNomePartida().trim()));
                             ps.setInt(2, buscarIdLista(nomesTime, idsTime, p.getTime().trim()));
@@ -198,7 +198,7 @@ public class ValorantDAO {
                                 placarB = ?
                                 where nome_partida = ?
                                 """,
-                        lista, 5000,
+                        lista, 15000,
                         (ps, p) -> {
                             ps.setString(1, p.getVencedor());
                             ps.setInt(2, p.getPlacarA());
@@ -249,11 +249,12 @@ public class ValorantDAO {
     private Integer buscarIdLista(List<String> nomes, List<Integer> ids, String valor) {
 
         for (int i = 0; i < nomes.size(); i++) {
-            if (nomes.get(i).equals(valor)) {
+            if (nomes.get(i).trim().equalsIgnoreCase(valor.trim())) {
                 return ids.get(i);
             }
         }
 
+        System.out.println("AVISO: ID não encontrado para: '" + valor + "'");
         return 0;
     }
 }

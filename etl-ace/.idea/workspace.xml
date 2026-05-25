@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c919544a-281f-4b1c-9d2f-a5ebbbaa7a12" name="Changes" comment="" />
+    <list default="true" id="c919544a-281f-4b1c-9d2f-a5ebbbaa7a12" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ace/projeto/LeitorExcel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ace/projeto/LeitorExcel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ace/projeto/ValorantDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ace/projeto/ValorantDAO.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -56,6 +60,7 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Windows\Downloads\2sprint\ace-grupo02\etl-ace" />
+      <recent name="C:\Users\Windows\Downloads\2sprint\ace-grupo02\etl-ace\target" />
     </key>
   </component>
   <component name="SharedIndexes">
