@@ -27,7 +27,43 @@
                 </div>
             </div>
         </div>
-        <div id="conteudo"></div>
+        <div id="conteudo">
+            <div class="estatistica-dash">
+                <div class="user-perfil">
+                    <div class="user-info">
+                        <p id="nome-user" class="titulos">Usuário</p>
+                    </div>
+                </div>
+                <div class="user-painel">
+                    <div class="user-highlight">
+                        <h3 class="titulos">Estatísticas de Performance</h3>
+                        <div class="user-kpis">
+                            <div>
+                                <span class="subtitulos">Win Rate</span>
+                                <p class="dados-kpi" id="kpi-winrate">--%</p>
+                            </div>
+                            <div>
+                                <span class="subtitulos">Pick Rate</span>
+                                <p class="dados-kpi" id="kpi-pickrate">--%</p>
+                            </div>
+                            <div>
+                                <span class="subtitulos">Mapa mais jogado</span>
+                                <p class="dados-kpi" id="kpi-mapa">--</p>
+                            </div>
+                            <div>
+                                <span class="subtitulos">Combate (ACS)</span>
+                                <p class="dados-kpi" id="kpi-acs">--</p>
+                            </div>
+                        </div>
+                        <h3 class="titulos">Pick Rate x Win Rate durante os anos</h3>
+                        <div class="user-stats">
+                            <canvas id="userChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </body>
 
