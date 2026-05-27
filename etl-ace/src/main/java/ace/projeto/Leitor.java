@@ -27,6 +27,7 @@ public abstract class Leitor {
                         .build();
 
         Path tempFile = Files.createTempFile("etl", ".xlsx");
+        Files.delete(tempFile);                              // ← aqui
         client.getObject(request, tempFile);
 
         return new XSSFWorkbook(tempFile.toFile());

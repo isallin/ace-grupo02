@@ -33,14 +33,15 @@ public class LeitorExcel extends Leitor {
                     continue;
 
                 String nomePartida = getTexto(row, 0);
-                if (!nomePartida.equalsIgnoreCase(filtro))
+                if (!nomePartida.equalsIgnoreCase(filtro)){
                     continue;
+                }
 
                 PartidaValorant p =
                         new PartidaValorant(
-                                getTexto(row, 0),
-                                getTexto(row, 1),
                                 nomePartida,
+                                getTexto(row, 1),
+                                getTexto(row, 3),
                                 mapa,
                                 getTexto(row, 6),
                                 getTexto(row, 7),
