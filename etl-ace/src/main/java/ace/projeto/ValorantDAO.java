@@ -65,7 +65,7 @@ public class ValorantDAO {
                 );
 
                 jdbcTemplate.batchUpdate("""
-                                insert ignore into partida
+                                insert into partida
                                 (nome_partida, campeonato, etapa, mapaFk)
                                 values(?, ?, ?,
                                 (select idmapa from mapa where nome=?))
