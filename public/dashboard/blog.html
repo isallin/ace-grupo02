@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Blog</title>
     <link rel="stylesheet" href="../css/home.css">
     <link rel="stylesheet" href="../css/blog.css">
     <script src="../js/sessao.js"></script>
+    <script src="../js/switchMenu.js"></script>
 </head>
-<body>
+
+<body onload="switchNav()">
+    <div id="custom-alert" class="alert-container hidden">
+        <div class="alert-content">
+            <span id="alert-message"></span>
+            <button id="alert-close-btn">&times;</button>
+        </div>
+    </div>
     <header class="topbar">
         <div class="logo">
             <img src="../assets/logo.png" alt="">
         </div>
-        <nav>
-            <a href="geral.html">DASHBOARD</a>
-            <a href="mapas.html">MAPAS</a>
-            <a href="agentes.html">AGENTES</a>
+        <nav id="nav_menu">
+            <a href="geral.html">Geral</a>
+            <a href="mapas.html">Mapas</a>
+            <a href="agentes.html">Agentes</a>
         </nav>
         <nav>
             <a href="../index.html">SAIR</a>
@@ -24,7 +33,7 @@
 
     <div class="container">
         <div class="actions">
-            <button onclick="window.location.href='add-post.html'" class="btn-action">
+            <button onclick="verificarAcesso()" class="btn-action">
                 Nova Recomendação
             </button>
         </div>
@@ -35,6 +44,7 @@
         <p>© 2026 - ACE Grupo 02</p>
     </footer>
 
+    <script src="../js/blog.js"></script>
 </body>
-<script src="../js/blog.js"></script>
+
 </html>
