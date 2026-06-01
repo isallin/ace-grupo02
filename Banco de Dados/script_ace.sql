@@ -224,7 +224,7 @@ CREATE TABLE log_etl (
 -- -----------------------------------------------------
 CREATE TABLE partidas_usuario (
     idpartidausuario INT PRIMARY KEY AUTO_INCREMENT,
-    results TINYINT NOT NULL,
+    score INT NOT NULL,
     acs DECIMAL NOT NULL,
     kills INT NOT NULL,
     deaths INT NOT NULL,

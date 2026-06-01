@@ -4,37 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/estatisticas.css">
+    <link rel="stylesheet" href="../css/notificacao.css">
     <script src="../js/switchMenu.js"></script>
     <script src="../js/sessao.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="../js/notificacao.js"></script>
     <title>Estatísticas do Player</title>
 </head>
 
 <body onload="switchMenu()">
     <div id="modalCadastro" class="modal oculto">
         <div class="modal-conteudo">
-            <h2 class="titulos">Cadastrar Partida</h2>
+            <h2 class="titulos" style="text-align: center;">Cadastrar Partida</h2>
 
             <div class="container">
                 <div class="container-selects">
                     <label for="mapa" class="subtitulos">Mapa:</label>
-                    <select id="mapa" class="mapa-select"></select>
+                    <select id="mapa-ipt" class="mapa-select"></select>
                     <img id="mapaPreview" src="" alt="Preview do Mapa">
                 </div>
                 <div class="container-selects">
                     <label for="agente" class="subtitulos">Agente:</label>
-                    <select id="agente" class="agente-select"></select>
+                    <select id="agente-ipt" class="agente-select"></select>
                     <img id="agentePreview" src="" alt="Preview do Agente">
                 </div>
             </div>
 
-            <label for="placar">Placar:</label>
-            <input type="text" id="placar" placeholder="Ex: 13 - 9">
+            <div class="container">
+                <div class="container-scores">
+                    <label for="aliado" class="subtitulos">Data da partida</label>
+                    <input type="date" id="data-ipt">
+                </div>
+                <div class="container-scores">
+                    <label for="aliado" class="subtitulos">Score Aliado</label>
+                    <input type="number" id="score-ipt" placeholder="Ex: 13 - 9">
+                </div>
+                <div class="container-scores">
+                    <label for="aliado" class="subtitulos">ACS</label>
+                    <input type="number" step="any" id="acs-ipt" placeholder="0.00">
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="container-scores">
+                    <label for="aliado" class="subtitulos">Abates</label>
+                    <input type="number" id="abates-ipt">
+                </div>
+                <div class="container-scores">
+                    <label for="aliado" class="subtitulos">Mortes</label>
+                    <input type="number" id="mortes-ipt">
+                </div>
+                <div class="container-scores">
+                    <label for="aliado" class="subtitulos">Assistências</label>
+                    <input type="number" id="assists-ipt">
+                </div>
+            </div>
 
             <div class="botoes">
-                <button id="btnSalvar">Salvar</button>
                 <button id="btnFechar">Cancelar</button>
+                <button id="btnSalvar">Salvar</button>
             </div>
         </div>
     </div>
@@ -106,5 +135,6 @@
     </div>
 </body>
 <script src="../js/estatisticas.js"></script>
+<script src="../js/estatisticasReq.js"></script>
 
 </html>

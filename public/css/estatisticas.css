@@ -149,7 +149,7 @@ body {
     border-color: var(--destaque);
 }
 
-.user-perfil>button {
+.user-perfil>button,#btnFechar,#btnSalvar {
     height: 100%;
     background-color: #284361;
     padding: 5px;
@@ -230,6 +230,7 @@ body {
     align-items: center;
     transition: opacity 0.3s ease;
     z-index: 1000;
+    color: #fff;
 }
 
 .modal-conteudo {
@@ -237,25 +238,20 @@ body {
     padding: 30px;
     border-radius: 8px;
     border: 1px solid var(--destaque);
-    width: 80%;
-    height: 80%;
+    width: 50%;
+    height: auto;
+    max-height: 90vh;
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-input {
-    padding: 8px;
-    background-color: #333;
-    border: 1px solid #555;
-    color: white;
-    border-radius: 4px;
-}
-
 .botoes {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-top: auto;
+    padding-top: 15px;
 }
 
 #btnFechar {
@@ -268,7 +264,8 @@ input {
 
 .container {
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .container-selects {
@@ -285,12 +282,13 @@ input {
     padding-left: 10px;
 }
 
-.mapa-select, .agente-select {
-    padding: 9px;
+.mapa-select,
+.agente-select {
+    padding: 6px;
     background-color: transparent;
     color: var(--branco);
     font-weight: 600;
-    font-size: 15px;
+    font-size: 13px;
     transition: 0.2s;
     margin-left: 10px;
     border-radius: 5px;
@@ -302,8 +300,40 @@ input {
     cursor: pointer;
 }
 
+#mapaPreview {
+    border-radius: 4px;
+    width: 120px; /* Era 200px */
+    padding-left: 10px;
+}
 #agentePreview {
     border-radius: 4px;
-    width: 130px;
+    width: 80px; /* Era 130px */
     padding-left: 10px;
+}
+
+.container-scores {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    padding: 6px 10px;
+    background-color: var(--fundo1);
+    border: 1px solid var(--branco);
+    color: var(--branco);
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 13px;
+    max-width: 140px;
+}
+
+.container-stats {
+    display: flex;
+    flex-direction: column;
+}
+
+#btnFechar:hover,
+#btnSalvar:hover{
+    border: 1px solid var(--destaque);
+    cursor: pointer;
 }

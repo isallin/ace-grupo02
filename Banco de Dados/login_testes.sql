@@ -1,3 +1,4 @@
+use projetoace;
 -- LOGIN DE ADMINISTRADOR
 INSERT INTO
     usuarios (nickname, email, senha, funcao)
@@ -22,3 +23,15 @@ INSERT INTO usuarios (nome_completo, nickname, email, senha, funcao, organizacao
 ('Jake Howlett', 'Boaster', 'boaster@fnatic.com', 'fnc789', 'player', 3),
 -- COACH
 ('Matias Delipetro', 'Saadhak', 'saadhak@loud.gg', 'coach99', 'coach', 1);
+
+INSERT INTO mapa (nome, link_image, postfk) VALUES
+('Abyss', NULL, NULL),
+('Ascent', NULL, NULL),
+('Bind', NULL, NULL),
+('Breeze', NULL, NULL),
+('Fracture', NULL, NULL),
+('Icebox', NULL, NULL),
+('Lotus', NULL, NULL),
+('Pearl', NULL, NULL),
+('Split', NULL, NULL),
+('Sunset', NULL, NULL);
