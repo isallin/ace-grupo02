@@ -33,8 +33,11 @@ public class LeitorExcel extends Leitor {
                     continue;
 
                 String nomePartida = getTexto(row, 0);
+
+                if (!ano.equalsIgnoreCase("2026")){
                 if (!nomePartida.equalsIgnoreCase(filtro)){
                     continue;
+                }
                 }
 
                 PartidaValorant p =
