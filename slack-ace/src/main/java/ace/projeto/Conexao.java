@@ -17,7 +17,7 @@ public class Conexao {
                 "jdbc:mysql://localhost:3306/projetoAce");
 
         dataSource.setUsername("root");
-        dataSource.setPassword("");
+        dataSource.setPassword("Lucas@3012");
 
         return new JdbcTemplate(dataSource);
     }

@@ -7,41 +7,30 @@ import java.util.Map;
 public class SlackMonitor {
 
     private final JdbcTemplate jdbc;
-    private static final int INTERVALO_MS = 30_000; // 30 segundos
 
     public SlackMonitor(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 
     public void iniciar() {
-        Thread monitor = new Thread(() -> {
-            System.out.println("[SlackMonitor] Iniciado. Verificando a cada 30s...");
-            Slack.notificar("🔍 *SlackMonitor A.C.E. ativo*\n> Monitorando posts e comentários em tempo real.", "#ace-bot");
-
-            while (true) {
-                try {
-                    verificarPendentes();
-                    Thread.sleep(INTERVALO_MS);
-                } catch (InterruptedException e) {
-                    System.out.println("[SlackMonitor] Monitor encerrado.");
-                    break;
-                } catch (Exception e) {
-                    System.err.println("[SlackMonitor] Erro no ciclo: " + e.getMessage());
-                }
-            }
-        });
-
-        monitor.setDaemon(false);
-        monitor.setName("slack-monitor");
-        monitor.start();
+        System.out.println("[SlackMonitor] Verificando pendentes...");
+        Slack.notificar("🔍 *SlackMonitor A.C.E. ativo*\n> Verificando notificações pendentes.", "#ace-bot");
+        verificarPendentes();
+        System.out.println("[SlackMonitor] Verificação concluída.");
     }
 
     private void verificarPendentes() {
         List<Map<String, Object>> pendentes = jdbc.queryForList(
                 "SELECT * FROM slack_integracao WHERE status_envio = 'PENDENTE' ORDER BY data_envio ASC"
         );
-        if (pendentes.isEmpty()) return;
+
+        if (pendentes.isEmpty()) {
+            System.out.println("[SlackMonitor] Nenhum evento pendente.");
+            return;
+        }
+
         System.out.println("[SlackMonitor] " + pendentes.size() + " evento(s) pendente(s).");
+
         for (Map<String, Object> evento : pendentes) {
             processarEvento(evento);
         }
@@ -56,12 +45,14 @@ public class SlackMonitor {
         try {
             String msgFinal = montarMensagem(tipoEvento, mensagem, canal, evento);
             Slack.notificar(msgFinal, canal);
+
             jdbc.update(
                     "UPDATE slack_integracao SET status_envio = 'ENVIADO' WHERE id = ?",
                     id
             );
 
             System.out.println("[SlackMonitor] Evento #" + id + " (" + tipoEvento + ") enviado → " + canal);
+
         } catch (Exception e) {
             jdbc.update(
                     "UPDATE slack_integracao SET status_envio = 'ERRO' WHERE id = ?",
@@ -75,6 +66,7 @@ public class SlackMonitor {
         String dataEnvio = evento.get("data_envio") != null
                 ? evento.get("data_envio").toString()
                 : "agora";
+
         switch (tipoEvento) {
             case "NOVO_POST":
                 return "📝 *Novo post no A.C.E. Blog!*\n"
