@@ -1,12 +1,11 @@
 const modal = document.getElementById('modalCadastro');
 const btnAbrir = document.getElementById('btnAbrir');
 const btnFechar = document.getElementById('btnFechar');
-const btnSalvar = document.getElementById('btnSalvar');
 
-const selectMapa = document.getElementById('mapa');
+const selectMapa = document.getElementById('mapa-ipt');
 const mapaPreview = document.getElementById('mapaPreview');
 
-const selectAgente = document.getElementById('agente');
+const selectAgente = document.getElementById('agente-ipt');
 const agentePreview = document.getElementById('agentePreview');
 
 const mapas = [
@@ -23,16 +22,34 @@ const mapas = [
 ];
 
 const agentes = [
-    { id: "jett", nome: "Jett" },
-    { id: "reyna", nome: "Reyna" },
-    { id: "raze", nome: "Raze" },
-    { id: "omen", nome: "Omen" },
-    { id: "sage", nome: "Sage" },
-    { id: "sova", nome: "Sova" },
+    { id: "astra", nome: "Astra" },
+    { id: "breach", nome: "Breach" },
+    { id: "brimstone", nome: "Brimstone" },
+    { id: "chamber", nome: "Chamber" },
+    { id: "clove", nome: "Clove" },
     { id: "cypher", nome: "Cypher" },
+    { id: "deadlock", nome: "Deadlock" },
+    { id: "fade", nome: "Fade" },
+    { id: "gekko", nome: "Gekko" },
+    { id: "harbor", nome: "Harbor" },
+    { id: "iso", nome: "Iso" },
+    { id: "jett", nome: "Jett" },
     { id: "killjoy", nome: "Killjoy" },
+    { id: "miks", nome: "Miks" },
+    { id: "neon", nome: "Neon" },
+    { id: "omen", nome: "Omen" },
+    { id: "phoenix", nome: "Phoenix" },
+    { id: "raze", nome: "Raze" },
+    { id: "reyna", nome: "Reyna" },
+    { id: "sage", nome: "Sage" },
+    { id: "skye", nome: "Skye" },
+    { id: "sova", nome: "Sova" },
+    { id: "tejo", nome: "Tejo" },
+    { id: "veto", nome: "Veto" },
     { id: "viper", nome: "Viper" },
-    { id: "phoenix", nome: "Phoenix" }
+    { id: "vyse", nome: "Vyse" },
+    { id: "waylay", nome: "Waylay" },
+    { id: "yoru", nome: "Yoru" }
 ];
 
 function renderizarMapas() {
@@ -88,10 +105,5 @@ btnAbrir.addEventListener('click', () => {
 });
 
 btnFechar.addEventListener('click', () => {
-    modal.classList.add('oculto');
-});
-
-btnSalvar.addEventListener('click', () => {
-    alert('Partida salva com sucesso! (Simulação)');
     modal.classList.add('oculto');
 });
