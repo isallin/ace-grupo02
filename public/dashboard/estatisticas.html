@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="../css/estatisticas.css">
     <link rel="stylesheet" href="../css/notificacao.css">
     <script src="../js/switchMenu.js"></script>
+    <script src="../js/estatisticasReq.js"></script>
     <script src="../js/sessao.js"></script>
-    <script src="../js/notificacao.js"></script>
     <title>Estatísticas do Player</title>
 </head>
 
-<body onload="switchMenu()">
+<body onload="switchMenu(),renderKpis()">
+    <div id="notification-container"></div>
     <div id="modalCadastro" class="modal oculto">
         <div class="modal-conteudo">
             <h2 class="titulos" style="text-align: center;">Cadastrar Partida</h2>
@@ -38,7 +39,11 @@
                 </div>
                 <div class="container-scores">
                     <label for="aliado" class="subtitulos">Score Aliado</label>
-                    <input type="number" id="score-ipt" placeholder="Ex: 13 - 9">
+                    <input type="number" id="score-ipt" placeholder="Ex: 13">
+                </div>
+                <div class="container-scores">
+                    <label for="aliado" class="subtitulos">Score Adversário</label>
+                    <input type="number" id="scoreAdv-ipt" placeholder="Ex: 9">
                 </div>
                 <div class="container-scores">
                     <label for="aliado" class="subtitulos">ACS</label>
@@ -93,23 +98,19 @@
                         <h3 class="titulos">Estatísticas de Performance por Partida</h3>
                         <div class="user-kpis">
                             <div>
-                                <span class="subtitulos">Média de vitórias</span>
+                                <span class="subtitulos">KDR (Kill/Death Ratio)</span>
                                 <p class="dados-kpi" id="kpi-winrate">--</p>
                             </div>
                             <div>
-                                <span class="subtitulos">Média de abates</span>
+                                <span class="subtitulos">KDA (Kill/Death/Assist Ratio)</span>
                                 <p class="dados-kpi" id="kpi-pickrate">--</p>
                             </div>
                             <div>
-                                <span class="subtitulos">ACS médio</span>
+                                <span class="subtitulos">Média de ACS (Average Combat Score)</span>
                                 <p class="dados-kpi" id="kpi-pickrate">--</p>
                             </div>
                             <div>
-                                <span class="subtitulos">Média de mortes</span>
-                                <p class="dados-kpi" id="kpi-mapa">--</p>
-                            </div>
-                            <div>
-                                <span class="subtitulos">Assistências médias</span>
+                                <span class="subtitulos">Win Rate Geral (% de Vitória)</span>
                                 <p class="dados-kpi" id="kpi-acs">--</p>
                             </div>
                         </div>
@@ -136,5 +137,6 @@
 </body>
 <script src="../js/estatisticas.js"></script>
 <script src="../js/estatisticasReq.js"></script>
+<script src="../js/notificacao.js"></script>
 
 </html>

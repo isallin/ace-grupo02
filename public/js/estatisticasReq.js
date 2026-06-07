@@ -12,6 +12,7 @@ async function cadastrarPartida(dados) {
                 agenteServer: dados.agente,
                 dataServer: dados.data,
                 scoreServer: Number(dados.score),
+                scoreAdvServer: Number(dados.scoreAdv),
                 acsServer: Number(dados.acs),
                 abatesServer: Number(dados.abates),
                 mortesServer: Number(dados.mortes),
@@ -22,6 +23,7 @@ async function cadastrarPartida(dados) {
         if (resposta.ok) {
             notificacao("Sucesso!", "Cadastrado com sucesso!", "7EC94C")
             modal.classList.add('oculto');
+            obterKpis()
         } else {
             notificacao("Erro", "Erro ao cadastrar!", "c3423f");
             throw new Error("Erro ao realizar o cadastro");
@@ -32,26 +34,61 @@ async function cadastrarPartida(dados) {
     }
 }
 
+async function obterKpis() {
+    const idusuario = sessionStorage.ID_USUARIO;
+    try {
+        const resp = await fetch(`/partida/obterKpis/${idusuario}`);
+        console.log(resp)
+        if (!resp.ok) throw new Error("Erro ao calcular KPIs");
+        return await resp.json();
+    } catch (error) {
+        console.error("ERRO:", error);
+        return [];
+    }
+}
+
+async function renderKpis() {
+    const kpis = await obterKpis();
+    console.log("KPIs recebidas do servidor:", kpis);
+}
+
 btnSalvar.addEventListener('click', async () => {
     const mapa = document.getElementById('mapa-ipt').value;
     const agente = document.getElementById('agente-ipt').value;
     const data = document.getElementById('data-ipt').value;
     const score = document.getElementById('score-ipt').value;
+    const scoreAdv = document.getElementById('scoreAdv-ipt').value;
     const acs = document.getElementById('acs-ipt').value;
     const abates = document.getElementById('abates-ipt').value;
     const mortes = document.getElementById('mortes-ipt').value;
     const assists = document.getElementById('assists-ipt').value;
 
-    if (!mapa || !agente || !data || !score || !acs || !abates || !mortes || !assists) {
-        alert('Por favor, preencha todos os campos obrigatórios.');
+    if (!mapa || !agente || !data || !score || !scoreAdv || !acs || !abates || !mortes || !assists) {
+        notificacao("Erro", "Preencha todos os campos!", "c3423f");
         return;
     }
 
-    if (Number(score) < 0 || Number(acs) < 0 || Number(abates) < 0 || Number(mortes) < 0 || Number(assists) < 0) {
-        alert('Os valores numéricos de score, ACS, abates, mortes e assistências não podem ser negativos.');
+    if (Number(score) < 0 || Number(scoreAdv) < 0 || Number(acs) < 0 || Number(abates) < 0 || Number(mortes) < 0 || Number(assists) < 0) {
+        notificacao("Erro", "Insira valores válidos!", "c3423f");
         return;
     }
 
-    await cadastrarPartida({ mapa, agente, data, score, acs, abates, mortes, assists });
-    modal.classList.add('oculto');
+    try {
+        await cadastrarPartida({ mapa, agente, data, score, scoreAdv, acs, abates, mortes, assists });
+
+        mapa.selectedIndex = 0;
+        agente.selectedIndex = 0;
+        data.value = "";
+        score.value = "";
+        scoreAdv.value = "";
+        acs.value = "";
+        abates.value = "";
+        mortes.value = "";
+        assists.value = "";
+
+        modal.classList.add('oculto');
+
+    } catch (error) {
+        console.error("Erro ao cadastrar:", error);
+    }
 });

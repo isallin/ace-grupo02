@@ -1,12 +1,12 @@
 var partidaModel = require("../models/partidaModel");
 
 function cadastrar(req, res) {
-    // Captura as variáveis enviadas pelo corpo da requisição (body)
     var id = req.body.userServer;
     var mapa = req.body.mapaServer;
     var agente = req.body.agenteServer;
     var data = req.body.dataServer;
     var score = req.body.scoreServer;
+    var scoreAdv = req.body.scoreAdvServer;
     var acs = req.body.acsServer;
     var abates = req.body.abatesServer;
     var mortes = req.body.mortesServer;
@@ -22,6 +22,8 @@ function cadastrar(req, res) {
         res.status(400).send("A data está undefined!");
     } else if (score == undefined) {
         res.status(400).send("O score está undefined!");
+    } else if (scoreAdv == undefined) {
+        res.status(400).send("O scoreAdv está undefined!");
     } else if (acs == undefined) {
         res.status(400).send("O ACS está undefined!");
     } else if (abates == undefined) {
@@ -31,8 +33,7 @@ function cadastrar(req, res) {
     } else if (assists == undefined) {
         res.status(400).send("As assistências estão undefined!");
     } else {
-        // Passa todas as variáveis para a model executar o INSERT
-        partidaModel.cadastrar(id, mapa, agente, data, score, acs, abates, mortes, assists)
+        partidaModel.cadastrar(id, mapa, agente, data, score, scoreAdv, acs, abates, mortes, assists)
             .then(
                 function (resultado) {
                     res.json(resultado);
@@ -50,6 +51,31 @@ function cadastrar(req, res) {
     }
 }
 
+function obterKpis(req, res) {
+    var idusuario = req.params.idusuario;
+
+    if (idusuario == undefined) {
+        res.status(400).send("O id está undefined!");
+    } else {
+        partidaModel.obterKpis(idusuario)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao buscar as KPIs do usuário! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
 module.exports = {
-    cadastrar
+    cadastrar,
+    obterKpis
 }

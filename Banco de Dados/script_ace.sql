@@ -225,6 +225,7 @@ CREATE TABLE log_etl (
 CREATE TABLE partidas_usuario (
     idpartidausuario INT PRIMARY KEY AUTO_INCREMENT,
     score INT NOT NULL,
+    scoreAdv INT NOT NULL,
     acs DECIMAL NOT NULL,
     kills INT NOT NULL,
     deaths INT NOT NULL,
@@ -236,4 +237,4 @@ CREATE TABLE partidas_usuario (
     CONSTRAINT fk_usuario_partida FOREIGN KEY (usuarioFk) REFERENCES usuarios (idusuario),
     CONSTRAINT fk_mapa_partida FOREIGN KEY (mapaFk) REFERENCES mapa(idmapa),
     CONSTRAINT fk_agente_partida FOREIGN KEY (agenteFk) REFERENCES agente(idagente)
-)
+);
