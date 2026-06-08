@@ -1,9 +1,12 @@
 package ace.projeto;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 public class Conexao {
+
+    private static final Dotenv dotenv = Dotenv.load();
 
     public JdbcTemplate getJdbcTemplate() {
 
@@ -14,10 +17,10 @@ public class Conexao {
                 "com.mysql.cj.jdbc.Driver");
 
         dataSource.setUrl(
-                "jdbc:mysql://localhost:3306/projetoAce");
+                dotenv.get("DB_URL"));
 
-        dataSource.setUsername("root");
-        dataSource.setPassword("Nana1502@");
+        dataSource.setUsername(dotenv.get("DB_USER"));
+        dataSource.setPassword(dotenv.get("DB_PASSWORD"));
 
         return new JdbcTemplate(dataSource);
     }

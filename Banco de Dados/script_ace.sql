@@ -92,7 +92,7 @@ CREATE TABLE time (
 -- -----------------------------------------------------
 CREATE TABLE partida (
     idpartida INT PRIMARY KEY AUTO_INCREMENT,
-    nome_partida VARCHAR(100) UNIQUE,
+    nome_partida VARCHAR(100),
     campeonato VARCHAR(60),
     etapa VARCHAR(60),
 
