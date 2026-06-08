@@ -7,13 +7,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/estatisticas.css">
     <link rel="stylesheet" href="../css/notificacao.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/switchMenu.js"></script>
-    <script src="../js/estatisticasReq.js"></script>
     <script src="../js/sessao.js"></script>
     <title>Estatísticas do Player</title>
 </head>
 
-<body onload="switchMenu(),renderKpis()">
+<body>
     <div id="notification-container"></div>
     <div id="modalCadastro" class="modal oculto">
         <div class="modal-conteudo">
@@ -99,33 +99,35 @@
                         <div class="user-kpis">
                             <div>
                                 <span class="subtitulos">KDR (Kill/Death Ratio)</span>
-                                <p class="dados-kpi" id="kpi-winrate">--</p>
+                                <p class="dados-kpi" id="kpi-kdr">--</p>
                             </div>
                             <div>
                                 <span class="subtitulos">KDA (Kill/Death/Assist Ratio)</span>
-                                <p class="dados-kpi" id="kpi-pickrate">--</p>
+                                <p class="dados-kpi" id="kpi-kda">--</p>
                             </div>
                             <div>
                                 <span class="subtitulos">Média de ACS (Average Combat Score)</span>
-                                <p class="dados-kpi" id="kpi-pickrate">--</p>
+                                <p class="dados-kpi" id="kpi-media-acs">--</p>
                             </div>
                             <div>
                                 <span class="subtitulos">Win Rate Geral (% de Vitória)</span>
-                                <p class="dados-kpi" id="kpi-acs">--</p>
+                                <p class="dados-kpi" id="kpi-winrate">--</p>
                             </div>
                         </div>
                         <div class="user-graphs">
                             <div>
-                                <h3 class="titulos">Vitórias x Derrotas</h3>
-                                <canvas id="winrateGraph"></canvas>
                                 <h3 class="titulos">Abates x Mortes x Assistências</h3>
                                 <canvas id="statsChart"></canvas>
                             </div>
-                            <div>
-                                <h3 class="titulos">Funções</h3>
-                                <canvas id="functionGraph"></canvas>
-                                <h3 class="titulos">Mapas</h3>
-                                <canvas id="mapGraph"></canvas>
+                            <div class="coluna-dupla">
+                                <div class="graph-wrapper">
+                                    <h3 class="titulos">Top 3 Agentes (Win Rate)</h3>
+                                    <canvas id="functionGraph"></canvas>
+                                </div>
+                                <div class="graph-wrapper">
+                                    <h3 class="titulos">Top 3 Mapas (Win Rate)</h3>
+                                    <canvas id="mapGraph"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -138,5 +140,14 @@
 <script src="../js/estatisticas.js"></script>
 <script src="../js/estatisticasReq.js"></script>
 <script src="../js/notificacao.js"></script>
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        switchMenu();
+        renderKpis();
+        renderStatChart();
+        renderAgentChart();
+        renderMapChart();
+    });
+</script>
 
 </html>

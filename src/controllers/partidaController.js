@@ -75,7 +75,82 @@ function obterKpis(req, res) {
     }
 }
 
+function obterStatChart(req, res) {
+    var idusuario = req.params.idusuario;
+
+    if (idusuario == undefined) {
+        res.status(400).send("O id está undefined!");
+    } else {
+        partidaModel.obterStatChart(idusuario)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao buscar o gráfico de Stats! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+function obterTopAgent(req, res) {
+    var idusuario = req.params.idusuario;
+
+    if (idusuario == undefined) {
+        res.status(400).send("O id está undefined!");
+    } else {
+        partidaModel.obterTopAgent(idusuario)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao buscar top 3 agentes! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+function obterTopMapa(req, res) {
+    var idusuario = req.params.idusuario;
+
+    if (idusuario == undefined) {
+        res.status(400).send("O id está undefined!");
+    } else {
+        partidaModel.obterTopMapa(idusuario)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao buscar top 3 mapas! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
 module.exports = {
     cadastrar,
-    obterKpis
+    obterKpis,
+    obterStatChart,
+    obterTopAgent,
+    obterTopMapa
 }

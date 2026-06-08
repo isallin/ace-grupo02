@@ -23,7 +23,10 @@ async function cadastrarPartida(dados) {
         if (resposta.ok) {
             notificacao("Sucesso!", "Cadastrado com sucesso!", "7EC94C")
             modal.classList.add('oculto');
-            obterKpis()
+            await renderKpis();
+            await renderStatChart();
+            await renderAgentChart();
+            await renderMapChart();
         } else {
             notificacao("Erro", "Erro ao cadastrar!", "c3423f");
             throw new Error("Erro ao realizar o cadastro");
@@ -32,24 +35,6 @@ async function cadastrarPartida(dados) {
         notificacao("Erro", "Erro de conexão!", "c3423f");
         console.error(`ERRO: ${erro}`);
     }
-}
-
-async function obterKpis() {
-    const idusuario = sessionStorage.ID_USUARIO;
-    try {
-        const resp = await fetch(`/partida/obterKpis/${idusuario}`);
-        console.log(resp)
-        if (!resp.ok) throw new Error("Erro ao calcular KPIs");
-        return await resp.json();
-    } catch (error) {
-        console.error("ERRO:", error);
-        return [];
-    }
-}
-
-async function renderKpis() {
-    const kpis = await obterKpis();
-    console.log("KPIs recebidas do servidor:", kpis);
 }
 
 btnSalvar.addEventListener('click', async () => {
@@ -92,3 +77,219 @@ btnSalvar.addEventListener('click', async () => {
         console.error("Erro ao cadastrar:", error);
     }
 });
+
+async function obterKpis() {
+    const idusuario = sessionStorage.ID_USUARIO;
+    try {
+        const resp = await fetch(`/partida/obterKpis/${idusuario}`);
+        console.log(resp)
+        if (!resp.ok) throw new Error("Erro ao calcular KPIs");
+        return await resp.json();
+    } catch (error) {
+        console.error("ERRO:", error);
+        return [];
+    }
+}
+
+async function obterStatChart() {
+    const idusuario = sessionStorage.ID_USUARIO;
+    try {
+        const resp = await fetch(`/partida/obterStatChart/${idusuario}`);
+        console.log(resp)
+        if (!resp.ok) throw new Error("Erro ao obter gráfico de Stats");
+        return await resp.json();
+    } catch (error) {
+        console.error("ERRO:", error);
+        return [];
+    }
+}
+
+async function obterTopAgent() {
+    const idusuario = sessionStorage.ID_USUARIO;
+    try {
+        const resp = await fetch(`/partida/obterTopAgent/${idusuario}`);
+        console.log(resp)
+        if (!resp.ok) throw new Error("Erro ao obter top agentes");
+        return await resp.json();
+    } catch (error) {
+        console.error("ERRO:", error);
+        return [];
+    }
+}
+
+async function obterTopMapa() {
+    const idusuario = sessionStorage.ID_USUARIO;
+    try {
+        const resp = await fetch(`/partida/obterTopMapa/${idusuario}`);
+        console.log(resp)
+        if (!resp.ok) throw new Error("Erro ao obter top agentes");
+        return await resp.json();
+    } catch (error) {
+        console.error("ERRO:", error);
+        return [];
+    }
+}
+
+async function renderKpis() {
+    const kpis = await obterKpis();
+
+    if (kpis && kpis.length > 0) {
+        const dados = kpis[0];
+
+        document.getElementById("kpi-kdr").innerHTML = dados.kdr;
+        document.getElementById("kpi-kda").innerHTML = dados.kda;
+        document.getElementById("kpi-media-acs").innerHTML = dados.media_acs;
+        document.getElementById("kpi-winrate").innerHTML = dados.winrate;
+    }
+}
+
+async function renderStatChart() {
+    const statChart = await obterStatChart();
+
+    const datas = statChart.map(p => p.data_partida);
+    const abates = statChart.map(p => p.abates);
+    const mortes = statChart.map(p => p.mortes);
+    const assistencias = statChart.map(p => p.assistencias);
+
+    const ctx = document.getElementById('statsChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: datas,
+            datasets: [
+                {
+                    label: 'Abates',
+                    data: abates,
+                    borderColor: '#7EC94C',
+                    tension: 0.2
+                },
+                {
+                    label: 'Mortes',
+                    data: mortes,
+                    borderColor: '#c3423f',
+                    tension: 0.2
+                },
+                {
+                    label: 'Assistências',
+                    data: assistencias,
+                    borderColor: '#ffa500',
+                    tension: 0.2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+
+async function renderAgentChart() {
+    let meuGraficoAgentes = null;
+    const topAgent = await obterTopAgent();
+
+    if (!topAgent || topAgent.length === 0) {
+        console.warn("Nenhum dado encontrado para o gráfico de agentes.");
+        return;
+    }
+
+    const nomesAgentes = topAgent.map(item => item.agente);
+    const winrates = topAgent.map(item => item.winrate);
+
+    const ctx = document.getElementById('functionGraph').getContext('2d');
+
+    if (meuGraficoAgentes) {
+        meuGraficoAgentes.destroy();
+    }
+
+    meuGraficoAgentes = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: nomesAgentes,
+            datasets: [{
+                label: 'Win Rate (%)',
+                data: winrates,
+                backgroundColor: [
+                    'rgba(106, 214, 238, 0.8)',
+                    'rgba(106, 214, 238, 0.6)',
+                    'rgba(106, 214, 238, 0.4)'
+                ],
+                borderColor: '#6AD6EE',
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function (value) { return value + '%'; }
+                    }
+                }
+            }
+        }
+    });
+}
+
+async function renderMapChart() {
+    let mapChart = null;
+    const dadosMapa = await obterTopMapa();
+
+    if (!dadosMapa || dadosMapa.length === 0) {
+        console.warn("Nenhum dado encontrado para o gráfico de mapas.");
+        return;
+    }
+
+    const nomesMapas = dadosMapa.map(item => item.mapa);
+    const winrates = dadosMapa.map(item => item.winrate);
+
+    const ctx = document.getElementById('mapGraph').getContext('2d');
+
+    if (mapChart) {
+        mapChart.destroy();
+    }
+
+    mapChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: nomesMapas,
+            datasets: [{
+                label: 'Win Rate (%)',
+                data: winrates,
+                backgroundColor: [
+                    'rgba(106, 214, 238, 0.8)', 
+                    'rgba(106, 214, 238, 0.6)',
+                    'rgba(106, 214, 238, 0.4)'
+                ],
+                borderColor: '#6AD6EE',
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            indexAxis: 'y', 
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) { return value + '%'; }
+                    }
+                }
+            }
+        }
+    });
+}
