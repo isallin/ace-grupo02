@@ -130,6 +130,19 @@ async function obterTopMapa() {
     }
 }
 
+async function obterPartidasSelect() {
+    const idusuario = sessionStorage.ID_USUARIO;
+    try {
+        const resp = await fetch(`/partida/obterPartidasSelect/${idusuario}`);
+        console.log(resp)
+        if (!resp.ok) throw new Error("Erro ao obter top agentes");
+        return await resp.json();
+    } catch (error) {
+        console.error("ERRO:", error);
+        return [];
+    }
+}
+
 async function renderKpis() {
     const kpis = await obterKpis();
 
@@ -179,6 +192,7 @@ async function renderStatChart() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: { beginAtZero: true }
             }
@@ -224,6 +238,7 @@ async function renderAgentChart() {
         options: {
             indexAxis: 'y',
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: { display: false }
             },
@@ -266,7 +281,7 @@ async function renderMapChart() {
                 label: 'Win Rate (%)',
                 data: winrates,
                 backgroundColor: [
-                    'rgba(106, 214, 238, 0.8)', 
+                    'rgba(106, 214, 238, 0.8)',
                     'rgba(106, 214, 238, 0.6)',
                     'rgba(106, 214, 238, 0.4)'
                 ],
@@ -276,8 +291,9 @@ async function renderMapChart() {
             }]
         },
         options: {
-            indexAxis: 'y', 
+            indexAxis: 'y',
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: { display: false }
             },
@@ -286,10 +302,61 @@ async function renderMapChart() {
                     beginAtZero: true,
                     max: 100,
                     ticks: {
-                        callback: function(value) { return value + '%'; }
+                        callback: function (value) { return value + '%'; }
                     }
                 }
             }
         }
     });
+}
+
+async function renderPartidas() {
+    const dadosPartidas = await obterPartidasSelect();
+    const partidaSelect = document.getElementById('partida-select');
+    const mapaPreview = document.getElementById('mapaPreview');
+    const agentePreview = document.getElementById('agentePreview');
+    partidaSelect.innerHTML = '<option value="">-- Escolha uma partida --</option>';
+
+    dadosPartidas.forEach(partida => {
+        const option = document.createElement('option');
+        option.value = partida.idpartidausuario;
+        option.textContent = `${partida.data_partida} - ${partida.score_aliado} x ${partida.score_adversario} (${partida.mapa})`;
+        option.dataset.info = JSON.stringify(partida);
+        partidaSelect.appendChild(option);
+    });
+    partidaSelect.onchange = async (e) => {
+        const idPartida = e.target.value;
+
+        if (idPartida === "") {
+            camposFormulario.classList.add('oculto');
+            mapaPreview.src = "";
+            agentePreview.src = "";
+            return;
+        }
+
+        try {
+            const resp = await fetch(`/partida/obterInfosPartida/${idPartida}`);
+            if (!resp.ok) throw new Error("Erro ao buscar dados da partida");
+
+            const [partida] = await resp.json();
+
+            document.getElementById('data-ipt').value = partida.data_partida.split('T')[0];
+            document.getElementById('score-ipt').value = partida.score;
+            document.getElementById('scoreAdv-ipt').value = partida.scoreAdv;
+            document.getElementById('acs-ipt').value = partida.acs;
+            document.getElementById('abates-ipt').value = partida.kills;
+            document.getElementById('mortes-ipt').value = partida.deaths;
+            document.getElementById('assists-ipt').value = partida.assists;
+            document.getElementById('mapa-ipt').value = partida.nome_mapa;
+            document.getElementById('agente-ipt').value = partida.nome_agente;
+
+            mapaPreview.src = `../assets/Loading_Screen_${partida.nome_mapa}.webp`;
+            agentePreview.src = `../assets/${partida.nome_agente}_icon.png`;
+
+            camposFormulario.classList.remove('oculto');
+
+        } catch (error) {
+            console.error("Erro ao renderizar dados do banco no modal:", error);
+        }
+    };
 }

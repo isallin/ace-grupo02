@@ -221,7 +221,8 @@ body {
     margin-top: 10px;
 }
 
-.user-graphs > div {
+.user-graphs > div,
+.graph-wrapper{
     display: flex;
     flex-direction: column;
     flex: 1; 
@@ -230,6 +231,9 @@ body {
     border-radius: 6px;
     padding: 15px;
     min-height: 0;
+    position: relative;
+    height: 100%;
+    transition: 0.2s;
 }
 
 .user-graphs > div.coluna-dupla {
@@ -237,17 +241,6 @@ body {
     background-color: transparent;
     border: none;
     padding: 0;
-}
-
-.graph-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    background-color: #27416140;
-    border: 1px solid #6ad6ee15;
-    border-radius: 6px;
-    padding: 10px 15px;
 }
 
 .user-graphs > div:hover,
@@ -262,10 +255,11 @@ body {
 }
 
 .user-graphs canvas {
+    display: block;
     width: 100% !important;
     height: 100% !important;
+    min-height: 0 !important;
     flex: 1;
-    min-height: 0;
 }
 
 /* -------- CADASTRO DE PARTIDAS -------- */
@@ -387,4 +381,8 @@ input {
 #btnSalvar:hover{
     border: 1px solid var(--destaque);
     cursor: pointer;
+}
+
+#container-editar-partida{
+    z-index: 100000;
 }

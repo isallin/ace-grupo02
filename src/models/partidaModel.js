@@ -90,10 +90,47 @@ function obterTopMapa(idusuario) {
     return database.executar(instrucaoSql);
 }
 
+function obterPartidasSelect(idusuario) {
+    var instrucaoSql = `
+    SELECT
+        p.idpartidausuario,
+        p.score AS score_aliado,
+        p.scoreAdv AS score_adversario,
+        DATE_FORMAT(p.data_partida, '%d/%b') AS data_partida,
+        a.nome AS agente,
+        m.nome AS mapa
+    FROM partidas_usuario p
+    INNER JOIN agente a ON p.agenteFk = a.idagente
+    INNER JOIN mapa m ON p.mapaFk = m.idmapa
+    WHERE p.usuarioFk = ${idusuario};
+    `;
+
+    console.log("Executando a instrução SQL (Concatenação direta)");
+    return database.executar(instrucaoSql);
+}
+
+function obterInfosPartida(idPartida) {
+    var instrucaoSql = `
+    SELECT 
+        p.*, 
+        m.nome AS nome_mapa, 
+        a.nome AS nome_agente
+    FROM partidas_usuario p
+    INNER JOIN mapa m ON p.mapaFk = m.idmapa
+    INNER JOIN agente a ON p.agenteFk = a.idagente
+    WHERE p.idpartidausuario = ${idPartida};
+    `;
+
+    console.log("Executando a instrução SQL (Concatenação direta)");
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     cadastrar,
     obterKpis,
     obterStatChart,
     obterTopAgent,
-    obterTopMapa
+    obterTopMapa,
+    obterPartidasSelect,
+    obterInfosPartida
 };
