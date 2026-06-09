@@ -11,4 +11,8 @@ router.get("/agente/:agente/:ano", function (req, res) {
     medidasController.buscarDadosAgente(req, res);
 });
 
+router.get("/mapa/:mapa/:ano", function (req, res) {
+    medidasController.buscarDadosMapa(req, res);
+});
+
 module.exports = router;

@@ -177,7 +177,71 @@ function buscarDadosAgente(req, res) {
     });
 }
 
+function buscarDadosMapa(req, res) {
+    var mapa = req.params.mapa;
+    var ano = req.params.ano;
+
+    if (!mapa || !ano) {
+        res.status(400).send("Mapa ou Ano não especificado!");
+        return;
+    }
+
+    Promise.all([
+        medidasModel.buscarDadosMapa(mapa, ano),
+        medidasModel.buscarComposicaoMapa(mapa, ano)
+    ]).then(function (resultados) {
+        var resDados = resultados[0] && resultados[0][0];
+        var resComp = resultados[1];
+
+        var funcoes = ['Duelista', 'Iniciador', 'Controlador', 'Sentinela', 'Flex'];
+        var funcoesData = [];
+
+        for (var i = 0; i < funcoes.length; i++) {
+            var f = funcoes[i].toLowerCase();
+            var funcaoLower = f;
+            funcoesData.push({
+                funcao: funcoes[i],
+                wr: {
+                    agente: resDados['agente_wr_' + funcaoLower] || '--',
+                    valor: resDados['wr_' + funcaoLower] || 0
+                },
+                pr: {
+                    agente: resDados['agente_pr_' + funcaoLower] || '--',
+                    valor: resDados['pr_' + funcaoLower] || 0
+                }
+            });
+        }
+
+        var composicao = [];
+        var clasesUsadas = {};
+        for (var j = 0; j < resComp.length; j++) {
+            var comp = resComp[j];
+            if (!clasesUsadas[comp.classe]) {
+                clasesUsadas[comp.classe] = true;
+                composicao.push({
+                    funcao: comp.classe,
+                    agente: comp.nome || comp.agente,
+                    img: comp.img || ''
+                });
+            }
+        }
+
+        var responseData = {
+            ban_rate: resDados ? resDados.ban_rate : 0,
+            funcoes: funcoesData,
+            composicao: composicao
+        };
+
+        res.status(200).json(responseData);
+
+    }).catch(function (erro) {
+        console.error("Erro ao buscar dados do mapa: ", erro);
+        res.status(500).json({ mensagem: "Erro interno ao buscar dados do mapa", detalhes: erro.sqlMessage || erro.message || erro });
+    });
+}
+
 module.exports = {
     buscarDadosGerais,
-    buscarDadosAgente
+    buscarDadosAgente,
+    buscarDadosMapa
 };

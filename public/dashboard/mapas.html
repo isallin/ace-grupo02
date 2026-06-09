@@ -16,7 +16,8 @@
                 <img src="../assets/logo.png" alt="" id="logo">
                 <div id="botoes">
                     <button id="botaoside" onclick="window.location.href='geral.html'">Geral</button>
-                    <button id="botaoside" style="filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741)); border-color: var(--destaque);">Mapas</button>
+                    <button id="botaoside" onclick="window.location.href='mapas.html'"
+                        style="filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741)); border-color: var(--destaque);">Mapas</button>
                     <button id="botaoside" onclick="window.location.href='agentes.html'">Agentes</button>
                 </div>
                 <div id="userinfo">
@@ -67,7 +68,6 @@
                     <div id="mapa-banrate">
                         <span class="ban-label">TAXA DE BANIMENTO DO MAPA</span>
                         <span class="ban-pct" id="ban-pct"></span>
-                        <!-- <span class="ban-sub" id="ban-sub"></span> -->
                     </div>
                 </div>
 
@@ -97,80 +97,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../js/switchMenu.js"></script>
 <script>
-    var dados = {
-        2021: {
-            split: {
-                ban: '71%', bansub: '61 de 86 drafts',
-                funcoes: [
-                    { funcao: 'Duelista',    wr: { agente: 'Raze',   valor: 63 }, pr: { agente: 'Jett',    valor: 91 } },
-                    { funcao: 'Iniciador',   wr: { agente: 'Skye',   valor: 54 }, pr: { agente: 'Breach',  valor: 80 } },
-                    { funcao: 'Controlador', wr: { agente: 'Viper',  valor: 58 }, pr: { agente: 'Omen',    valor: 92 } },
-                    { funcao: 'Sentinela',   wr: { agente: 'Cypher', valor: 55 }, pr: { agente: 'Killjoy', valor: 78 } },
-                    { funcao: 'Flex',        wr: { agente: 'Sova',   valor: 52 }, pr: { agente: 'Skye',    valor: 74 } },
-                ],
-                composicao: [
-                    { funcao: 'Duelista',    agente: 'Raze',   img: '../assets/Raze_icon.png'   },
-                    { funcao: 'Iniciador',   agente: 'Skye',   img: '../assets/Skye_icon.png'   },
-                    { funcao: 'Controlador', agente: 'Viper',  img: '../assets/Viper_icon.png'  },
-                    { funcao: 'Sentinela',   agente: 'Cypher', img: '../assets/Cypher_icon.png' },
-                    { funcao: 'Flex',        agente: 'Sova',   img: '../assets/Sova_icon.png'   },
-                ]
-            },
-            haven: {
-                ban: '44%', bansub: '38 de 86 drafts',
-                funcoes: [
-                    { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 60 }, pr: { agente: 'Jett',    valor: 88 } },
-                    { funcao: 'Iniciador',   wr: { agente: 'Skye',    valor: 56 }, pr: { agente: 'Sova',    valor: 80 } },
-                    { funcao: 'Controlador', wr: { agente: 'Viper',   valor: 55 }, pr: { agente: 'Omen',    valor: 90 } },
-                    { funcao: 'Sentinela',   wr: { agente: 'Chamber', valor: 57 }, pr: { agente: 'Cypher',  valor: 72 } },
-                    { funcao: 'Flex',        wr: { agente: 'Breach',  valor: 51 }, pr: { agente: 'Skye',    valor: 68 } },
-                ],
-                composicao: [
-                    { funcao: 'Duelista',    agente: 'Neon',    img: '../assets/Neon_icon.png'    },
-                    { funcao: 'Iniciador',   agente: 'Skye',    img: '../assets/Skye_icon.png'    },
-                    { funcao: 'Controlador', agente: 'Viper',   img: '../assets/Viper_icon.png'   },
-                    { funcao: 'Sentinela',   agente: 'Chamber', img: '../assets/Chamber_icon.png' },
-                    { funcao: 'Flex',        agente: 'Breach',  img: '../assets/Breach_icon.png'  },
-                ]
-            },
-            pearl:   { ban: '—', bansub: 'Não estava no pool', funcoes: [ { funcao:'Duelista', wr:{agente:'Chamber',valor:58}, pr:{agente:'Jett',valor:85}    }, { funcao:'Iniciador',   wr:{agente:'Sova',valor:55},   pr:{agente:'Fade',valor:74}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:57},  pr:{agente:'Omen',valor:88}   }, { funcao:'Sentinela', wr:{agente:'Killjoy',valor:52}, pr:{agente:'Cypher',valor:70} }, { funcao:'Flex', wr:{agente:'Breach',valor:49}, pr:{agente:'Skye',valor:65} } ], composicao: [ {funcao:'Duelista',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Iniciador',agente:'Sova',img:'../assets/Sova_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Killjoy',img:'../assets/Killjoy_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            abyss:   { ban: '—', bansub: 'Não estava no pool', funcoes: [ { funcao:'Duelista', wr:{agente:'Raze',valor:60},    pr:{agente:'Jett',valor:92}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:56},   pr:{agente:'Sova',valor:78}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:55},  pr:{agente:'Omen',valor:82}   }, { funcao:'Sentinela', wr:{agente:'Cypher',valor:53},  pr:{agente:'Killjoy',valor:68} }, { funcao:'Flex', wr:{agente:'Breach',valor:50}, pr:{agente:'Skye',valor:62} } ], composicao: [ {funcao:'Duelista',agente:'Raze',img:'../assets/Raze_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Cypher',img:'../assets/Cypher_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            corrode: { ban: '—', bansub: 'Não estava no pool', funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:59},    pr:{agente:'Jett',valor:88}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:54},   pr:{agente:'Sova',valor:80}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:58},  pr:{agente:'Brim',valor:75}   }, { funcao:'Sentinela', wr:{agente:'Chamber',valor:53}, pr:{agente:'Killjoy',valor:66} }, { funcao:'Flex', wr:{agente:'Breach',valor:50}, pr:{agente:'Fade',valor:58} } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            breeze:  { ban: '38%', bansub: '33 de 86 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Chamber',valor:62}, pr:{agente:'Jett',valor:95}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:55},   pr:{agente:'Sova',valor:84}   }, { funcao:'Controlador', wr:{agente:'Astra',valor:59},  pr:{agente:'Viper',valor:88}  }, { funcao:'Sentinela', wr:{agente:'Cypher',valor:51},  pr:{agente:'Killjoy',valor:60} }, { funcao:'Flex', wr:{agente:'Breach',valor:49}, pr:{agente:'Fade',valor:58} } ], composicao: [ {funcao:'Duelista',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Cypher',img:'../assets/Cypher_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            bind:    { ban: '52%', bansub: '45 de 86 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:62},    pr:{agente:'Raze',valor:84}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:55},   pr:{agente:'Breach',valor:76} }, { funcao:'Controlador', wr:{agente:'Astra',valor:57},  pr:{agente:'Brim',valor:82}   }, { funcao:'Sentinela', wr:{agente:'Killjoy',valor:54}, pr:{agente:'Cypher',valor:75} }, { funcao:'Flex', wr:{agente:'Sova',valor:49},   pr:{agente:'Fade',valor:55}  } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Killjoy',img:'../assets/Killjoy_icon.png'}, {funcao:'Flex',agente:'Sova',img:'../assets/Sova_icon.png'} ] },
-        },
-        2025: {
-            split: {
-                ban: '74%', bansub: '153 de 207 drafts',
-                funcoes: [
-                    { funcao: 'Duelista',    wr: { agente: 'Neon',    valor: 64 }, pr: { agente: 'Raze',    valor: 94 } },
-                    { funcao: 'Iniciador',   wr: { agente: 'Gekko',   valor: 58 }, pr: { agente: 'Breach',  valor: 71 } },
-                    { funcao: 'Controlador', wr: { agente: 'Viper',   valor: 57 }, pr: { agente: 'Omen',    valor: 88 } },
-                    { funcao: 'Sentinela',   wr: { agente: 'Killjoy', valor: 60 }, pr: { agente: 'Cypher',  valor: 82 } },
-                    { funcao: 'Flex',        wr: { agente: 'Sova',    valor: 52 }, pr: { agente: 'Skye',    valor: 68 } },
-                ],
-                composicao: [
-                    { funcao: 'Duelista',    agente: 'Neon',    img: '../assets/Neon_icon.png'    },
-                    { funcao: 'Iniciador',   agente: 'Gekko',   img: '../assets/Gekko_icon.png'   },
-                    { funcao: 'Controlador', agente: 'Viper',   img: '../assets/Viper_icon.png'   },
-                    { funcao: 'Sentinela',   agente: 'Killjoy', img: '../assets/Killjoy_icon.png' },
-                    { funcao: 'Flex',        agente: 'Sova',    img: '../assets/Sova_icon.png'    },
-                ]
-            },
-            haven:   { ban: '58%', bansub: '120 de 207 drafts', funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:63},    pr:{agente:'Jett',valor:82}    }, { funcao:'Iniciador',   wr:{agente:'Fade',valor:59},    pr:{agente:'Skye',valor:74}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:56},  pr:{agente:'Omen',valor:96}   }, { funcao:'Sentinela', wr:{agente:'Chamber',valor:55}, pr:{agente:'Killjoy',valor:70}}, { funcao:'Flex', wr:{agente:'Sova',valor:51},   pr:{agente:'Gekko',valor:62} } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Fade',img:'../assets/Fade_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Flex',agente:'Sova',img:'../assets/Sova_icon.png'} ] },
-            pearl:   { ban: '41%', bansub: '85 de 207 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Chamber',valor:57}, pr:{agente:'Jett',valor:80}    }, { funcao:'Iniciador',   wr:{agente:'Sova',valor:58},    pr:{agente:'Fade',valor:84}   }, { funcao:'Controlador', wr:{agente:'Astra',valor:59},  pr:{agente:'Viper',valor:94}  }, { funcao:'Sentinela', wr:{agente:'Cypher',valor:54},  pr:{agente:'Killjoy',valor:72}}, { funcao:'Flex', wr:{agente:'Breach',valor:52}, pr:{agente:'Skye',valor:66}  } ], composicao: [ {funcao:'Duelista',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Iniciador',agente:'Sova',img:'../assets/Sova_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Cypher',img:'../assets/Cypher_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            abyss:   { ban: '49%', bansub: '101 de 207 drafts', funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:65},    pr:{agente:'Jett',valor:91}    }, { funcao:'Iniciador',   wr:{agente:'Gekko',valor:57},   pr:{agente:'Fade',valor:72}   }, { funcao:'Controlador', wr:{agente:'Viper',valor:58},  pr:{agente:'Omen',valor:85}   }, { funcao:'Sentinela', wr:{agente:'Killjoy',valor:59}, pr:{agente:'Cypher',valor:74} }, { funcao:'Flex', wr:{agente:'Breach',valor:51}, pr:{agente:'Skye',valor:60}  } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Gekko',img:'../assets/Gekko_icon.png'}, {funcao:'Controlador',agente:'Viper',img:'../assets/Viper_icon.png'}, {funcao:'Sentinela',agente:'Killjoy',img:'../assets/Killjoy_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            corrode: { ban: '35%', bansub: '72 de 207 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:61},    pr:{agente:'Jett',valor:80}    }, { funcao:'Iniciador',   wr:{agente:'Sova',valor:56},    pr:{agente:'Fade',valor:74}   }, { funcao:'Controlador', wr:{agente:'Astra',valor:60},  pr:{agente:'Viper',valor:90}  }, { funcao:'Sentinela', wr:{agente:'Chamber',valor:56}, pr:{agente:'Killjoy',valor:72}}, { funcao:'Flex', wr:{agente:'Breach',valor:51}, pr:{agente:'Gekko',valor:61} } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Sova',img:'../assets/Sova_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            breeze:  { ban: '47%', bansub: '97 de 207 drafts',  funcoes: [ { funcao:'Duelista', wr:{agente:'Chamber',valor:63}, pr:{agente:'Jett',valor:92}    }, { funcao:'Iniciador',   wr:{agente:'Sova',valor:58},    pr:{agente:'Fade',valor:78}   }, { funcao:'Controlador', wr:{agente:'Astra',valor:61},  pr:{agente:'Viper',valor:89}  }, { funcao:'Sentinela', wr:{agente:'Cypher',valor:54},  pr:{agente:'Killjoy',valor:68} }, { funcao:'Flex', wr:{agente:'Breach',valor:52}, pr:{agente:'Skye',valor:65}  } ], composicao: [ {funcao:'Duelista',agente:'Chamber',img:'../assets/Chamber_icon.png'}, {funcao:'Iniciador',agente:'Sova',img:'../assets/Sova_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Cypher',img:'../assets/Cypher_icon.png'}, {funcao:'Flex',agente:'Breach',img:'../assets/Breach_icon.png'} ] },
-            bind:    { ban: '62%', bansub: '128 de 207 drafts', funcoes: [ { funcao:'Duelista', wr:{agente:'Neon',valor:65},    pr:{agente:'Raze',valor:90}    }, { funcao:'Iniciador',   wr:{agente:'Skye',valor:57},    pr:{agente:'Breach',valor:74} }, { funcao:'Controlador', wr:{agente:'Astra',valor:60},  pr:{agente:'Viper',valor:86}  }, { funcao:'Sentinela', wr:{agente:'Killjoy',valor:56}, pr:{agente:'Cypher',valor:69} }, { funcao:'Flex', wr:{agente:'Sova',valor:51},   pr:{agente:'Fade',valor:63}  } ], composicao: [ {funcao:'Duelista',agente:'Neon',img:'../assets/Neon_icon.png'}, {funcao:'Iniciador',agente:'Skye',img:'../assets/Skye_icon.png'}, {funcao:'Controlador',agente:'Astra',img:'../assets/Astra_icon.png'}, {funcao:'Sentinela',agente:'Killjoy',img:'../assets/Killjoy_icon.png'}, {funcao:'Flex',agente:'Sova',img:'../assets/Sova_icon.png'} ] },
-        }
-    }
-
-    dados[2022] = dados[2021]
-    dados[2023] = dados[2025]
-    dados[2024] = dados[2025]
-    dados[2026] = dados[2025]
-
     var anoAtual    = 2026
     var mapaAtual   = null
     var chartAgentes = null
@@ -212,21 +138,39 @@
 
     function selecionarMapa(id) {
         mapaAtual = id
-        var m = dados[anoAtual][id]
 
+        fetch('/medidas/mapa/' + id + '/' + anoAtual, { cache: 'no-store' })
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    plotarDadosMapa(id, resposta);
+                });
+            } else {
+                console.error("Erro ao obter os dados do mapa");
+            }
+        })
+        .catch(function (error) {
+            console.error('Erro na obtenção dos dados do mapa:', error.message);
+        });
+    }
+
+    function plotarDadosMapa(id, dados) {
         document.getElementById('mapa-info').style.display = 'flex'
         document.getElementById('mapa-img').src            = '../assets/Loading_Screen_' + id.charAt(0).toUpperCase() + id.slice(1) + '.webp'
         document.getElementById('mapa-nome').innerHTML     = id.charAt(0).toUpperCase() + id.slice(1)
         document.getElementById('mapa-desc').innerHTML     = descs[id]
-        document.getElementById('ban-pct').innerHTML       = m.ban
-        // document.getElementById('ban-sub').innerHTML       = m.bansub
+        document.getElementById('ban-pct').innerHTML       = dados.ban_rate + '%'
 
         for (var i = 0; i < 5; i++) {
-            var a = m.composicao[i]
-            document.getElementById('slot-' + i).innerHTML =
-                '<img src="' + a.img + '" alt="' + a.agente + '">' +
-                '<div><span class="slot-funcao">' + a.funcao + '</span>' +
-                '<span class="slot-nome">'        + a.agente + '</span></div>'
+            if (i < dados.composicao.length) {
+                var a = dados.composicao[i]
+                document.getElementById('slot-' + i).innerHTML =
+                    '<img src="' + a.img + '" alt="' + a.agente + '">' +
+                    '<div><span class="slot-funcao">' + a.funcao + '</span>' +
+                    '<span class="slot-nome">'        + a.agente + '</span></div>'
+            } else {
+                document.getElementById('slot-' + i).innerHTML = ''
+            }
         }
 
         var btns = document.getElementById('botoes-lista').children
@@ -235,11 +179,11 @@
 
         if (chartAgentes) chartAgentes.destroy()
 
-        var labels   = m.funcoes.map(function(f) { return f.funcao })
-        var wrLabels = m.funcoes.map(function(f) { return f.wr.agente })
-        var prLabels = m.funcoes.map(function(f) { return f.pr.agente })
-        var wrVals   = m.funcoes.map(function(f) { return f.wr.valor })
-        var prVals   = m.funcoes.map(function(f) { return f.pr.valor })
+        var labels   = dados.funcoes.map(function(f) { return f.funcao })
+        var wrLabels = dados.funcoes.map(function(f) { return f.wr.agente })
+        var prLabels = dados.funcoes.map(function(f) { return f.pr.agente })
+        var wrVals   = dados.funcoes.map(function(f) { return f.wr.valor })
+        var prVals   = dados.funcoes.map(function(f) { return f.pr.valor })
 
         var agentLabelPlugin = {
             id: 'agentLabels',
@@ -265,10 +209,8 @@
                         ctx.textAlign = 'center'
                         ctx.textBaseline = 'bottom'
 
-                        // nome do agente
                         ctx.fillText(name, x, yTop - 18)
 
-                        // valor em %
                         ctx.font = '800 9px Unbounded, sans-serif'
                         ctx.fillStyle = color
                         ctx.fillText(value + '%', x, yTop - 6)
