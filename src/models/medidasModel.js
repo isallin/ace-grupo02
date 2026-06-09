@@ -98,8 +98,8 @@ function buscarHistoricoAgente(agente) {
             ROUND(AVG(CASE WHEN p.campeonato LIKE '%2024%' THEN ec.pick_rate END), 1) AS pr_2024,
             ROUND(AVG(CASE WHEN p.campeonato LIKE '%2025%' THEN ec.win_rate END), 1) AS wr_2025,
             ROUND(AVG(CASE WHEN p.campeonato LIKE '%2025%' THEN ec.pick_rate END), 1) AS pr_2025,
-            ROUND(AVG(CASE WHEN p.campeonato LIKE '%2026%' THEN ec.win_rate END), 1) AS wr_2026,
-            ROUND(AVG(CASE WHEN p.campeonato LIKE '%2026%' THEN ec.pick_rate END), 1) AS pr_2026
+            ROUND(AVG(CASE WHEN p.campeonato LIKE ${ano} THEN ec.win_rate END), 1) AS wr_${ano},
+            ROUND(AVG(CASE WHEN p.campeonato LIKE ${ano} THEN ec.pick_rate END), 1) AS pr_${ano}
         FROM estatistica_composicao ec
         JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
         JOIN agente a ON ca.agenteFk = a.idagente
@@ -113,150 +113,205 @@ function buscarHistoricoAgente(agente) {
 
 function buscarDadosMapa(mapa, ano) {
     var instrucao = `
-        SELECT 
-            (SELECT ROUND(COUNT(p.idpartida) * 100.0 / (SELECT COUNT(*) FROM partida WHERE campeonato LIKE '%${ano}%'), 0)
-             FROM partida p JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%') AS ban_rate,
+SELECT 
+    (SELECT ROUND(COUNT(p.idpartida) * 100.0 / (SELECT COUNT(*) FROM partida WHERE campeonato LIKE '%${ano}%'), 0)
+     FROM partida p JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%') AS ban_rate,
 
-            (SELECT ROUND(AVG(ec.win_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Duelista') AS wr_duelista,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Duelista'
-             GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_duelista,
+    -- Duelista
+    (SELECT ROUND(AVG(ec.win_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Duelista') AS wr_duelista,
 
-            (SELECT ROUND(AVG(ec.pick_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Duelista') AS pr_duelista,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Duelista'
-             GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_duelista,
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Duelista'
+     GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_duelista,
 
-            (SELECT ROUND(AVG(ec.win_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Iniciador') AS wr_iniciador,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Iniciador'
-             GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_iniciador,
+    (SELECT ROUND(AVG(ec.pick_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Duelista') AS pr_duelista,
 
-            (SELECT ROUND(AVG(ec.pick_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Iniciador') AS pr_iniciador,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Iniciador'
-             GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_iniciador,
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Duelista'
+     GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_duelista,
 
-            (SELECT ROUND(AVG(ec.win_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Controlador') AS wr_controlador,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Controlador'
-             GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_controlador,
+    -- Iniciador
+    (SELECT ROUND(AVG(ec.win_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Iniciador') AS wr_iniciador,
 
-            (SELECT ROUND(AVG(ec.pick_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Controlador') AS pr_controlador,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Controlador'
-             GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_controlador,
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Iniciador'
+     GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_iniciador,
 
-            (SELECT ROUND(AVG(ec.win_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Sentinela') AS wr_sentinela,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Sentinela'
-             GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_sentinela,
+    (SELECT ROUND(AVG(ec.pick_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Iniciador') AS pr_iniciador,
 
-            (SELECT ROUND(AVG(ec.pick_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Sentinela') AS pr_sentinela,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Sentinela'
-             GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_sentinela,
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Iniciador'
+     GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_iniciador,
 
-            (SELECT ROUND(AVG(ec.win_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Flex') AS wr_flex,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Flex'
-             GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_flex,
+    -- Controlador
+    (SELECT ROUND(AVG(ec.win_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Controlador') AS wr_controlador,
 
-            (SELECT ROUND(AVG(ec.pick_rate), 0) FROM estatistica_composicao ec
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Flex') AS pr_flex,
-            (SELECT a.nome FROM estatistica_composicao ec
-             JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-             JOIN agente a ON ca.agenteFk = a.idagente
-             JOIN composicao c ON ec.composicaoFk = c.idcomposicao
-             JOIN partida p ON c.partidaFk = p.idpartida
-             JOIN mapa m ON p.mapaFk = m.idmapa
-             WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND ec.classe = 'Flex'
-             GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_flex;
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Controlador'
+     GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_controlador,
+
+    (SELECT ROUND(AVG(ec.pick_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Controlador') AS pr_controlador,
+
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Controlador'
+     GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_controlador,
+
+    -- Sentinela
+    (SELECT ROUND(AVG(ec.win_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Sentinela') AS wr_sentinela,
+
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Sentinela'
+     GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_sentinela,
+
+    (SELECT ROUND(AVG(ec.pick_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Sentinela') AS pr_sentinela,
+
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Sentinela'
+     GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_sentinela,
+
+    -- Flex
+    (SELECT ROUND(AVG(ec.win_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Flex') AS wr_flex,
+
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Flex'
+     GROUP BY a.idagente ORDER BY AVG(ec.win_rate) DESC LIMIT 1) AS agente_wr_flex,
+
+    (SELECT ROUND(AVG(ec.pick_rate), 0)
+     FROM estatistica_composicao ec
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN composicao_agente ca ON c.idcomposicao = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Flex') AS pr_flex,
+
+    (SELECT a.nome
+     FROM estatistica_composicao ec
+     JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+     JOIN agente a ON ca.agenteFk = a.idagente
+     JOIN composicao c ON ec.composicaoFk = c.idcomposicao
+     JOIN partida p ON c.partidaFk = p.idpartida
+     JOIN mapa m ON p.mapaFk = m.idmapa
+     WHERE m.nome = '${mapa}' AND p.campeonato LIKE '%${ano}%' AND a.classe = 'Flex'
+     GROUP BY a.idagente ORDER BY AVG(ec.pick_rate) DESC LIMIT 1) AS agente_pr_flex;
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
@@ -264,10 +319,10 @@ function buscarDadosMapa(mapa, ano) {
 
 function buscarComposicaoMapa(mapa, ano) {
     var instrucao = `
-        SELECT a.nome AS agente, a.classe, a.link_image AS img
-        FROM estatistica_composicao ec
-        JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
-        JOIN agente a ON ca.agenteFk = a.idagente
+    SELECT a.nome AS agente, a.classe, a.link_image AS img
+    FROM estatistica_composicao ec
+    JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
+    JOIN agente a ON ca.agenteFk = a.idagente
         JOIN composicao c ON ec.composicaoFk = c.idcomposicao
         JOIN partida p ON c.partidaFk = p.idpartida
         JOIN mapa m ON p.mapaFk = m.idmapa
