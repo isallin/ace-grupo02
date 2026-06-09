@@ -86,3 +86,15 @@ ORDER BY data_partida ASC;
 
 use projetoace;
 select * from partidas_usuario;
+
+SELECT 
+    p.idpartidausuario,
+    p.score AS score_aliado,
+    p.scoreAdv AS score_adversario,
+    DATE_FORMAT(p.data_partida, '%d/%b') AS data_partida,
+    a.nome AS agente,
+    m.nome AS mapa
+FROM partidas_usuario p
+INNER JOIN agente a ON p.agenteFk = a.idagente
+INNER JOIN mapa m ON p.mapaFk = m.idmapa
+WHERE p.usuarioFk = 1;

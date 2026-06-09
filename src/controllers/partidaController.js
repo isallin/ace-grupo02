@@ -147,10 +147,60 @@ function obterTopMapa(req, res) {
     }
 }
 
+function obterPartidasSelect(req, res) {
+    var idusuario = req.params.idusuario;
+
+    if (idusuario == undefined) {
+        res.status(400).send("O id está undefined!");
+    } else {
+        partidaModel.obterPartidasSelect(idusuario)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao encontrar as partidas! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+function obterInfosPartida(req, res) {
+    var idPartida = req.params.idPartida;
+
+    if (idPartida == undefined) {
+        res.status(400).send("O id está undefined!");
+    } else {
+        partidaModel.obterInfosPartida(idPartida)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao encontrar informações das partidas! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
 module.exports = {
     cadastrar,
     obterKpis,
     obterStatChart,
     obterTopAgent,
-    obterTopMapa
+    obterTopMapa,
+    obterPartidasSelect,
+    obterInfosPartida
 }

@@ -17,52 +17,61 @@
     <div id="notification-container"></div>
     <div id="modalCadastro" class="modal oculto">
         <div class="modal-conteudo">
-            <h2 class="titulos" style="text-align: center;">Cadastrar Partida</h2>
+            <h2 id="modalTitulo" class="titulos" style="text-align: center;">Cadastrar Partida</h2>
 
-            <div class="container">
-                <div class="container-selects">
-                    <label for="mapa" class="subtitulos">Mapa:</label>
-                    <select id="mapa-ipt" class="mapa-select"></select>
-                    <img id="mapaPreview" src="" alt="Preview do Mapa">
-                </div>
-                <div class="container-selects">
-                    <label for="agente" class="subtitulos">Agente:</label>
-                    <select id="agente-ipt" class="agente-select"></select>
-                    <img id="agentePreview" src="" alt="Preview do Agente">
-                </div>
+            <div id="container-editar-partida" class="container oculto"
+                style="flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
+                <label for="partida-select" class="subtitulos">Selecionar Partida:</label>
+                <select id="partida-select"
+                    style="width: 100%; margin-top: 5px; padding: 6px; border-radius: 5px;"></select>
             </div>
 
-            <div class="container">
-                <div class="container-scores">
-                    <label for="aliado" class="subtitulos">Data da partida</label>
-                    <input type="date" id="data-ipt">
+            <div id="camposFormulario">
+                <div class="container">
+                    <div class="container-selects">
+                        <label for="mapa" class="subtitulos">Mapa:</label>
+                        <select id="mapa-ipt" class="mapa-select"></select>
+                        <img id="mapaPreview" src="" alt="Preview do Mapa">
+                    </div>
+                    <div class="container-selects">
+                        <label for="agente" class="subtitulos">Agente:</label>
+                        <select id="agente-ipt" class="agente-select"></select>
+                        <img id="agentePreview" src="" alt="Preview do Agente">
+                    </div>
                 </div>
-                <div class="container-scores">
-                    <label for="aliado" class="subtitulos">Score Aliado</label>
-                    <input type="number" id="score-ipt" placeholder="Ex: 13">
-                </div>
-                <div class="container-scores">
-                    <label for="aliado" class="subtitulos">Score Adversário</label>
-                    <input type="number" id="scoreAdv-ipt" placeholder="Ex: 9">
-                </div>
-                <div class="container-scores">
-                    <label for="aliado" class="subtitulos">ACS</label>
-                    <input type="number" step="any" id="acs-ipt" placeholder="0.00">
-                </div>
-            </div>
 
-            <div class="container">
-                <div class="container-scores">
-                    <label for="aliado" class="subtitulos">Abates</label>
-                    <input type="number" id="abates-ipt">
+                <div class="container">
+                    <div class="container-scores">
+                        <label for="aliado" class="subtitulos">Data da partida</label>
+                        <input type="date" id="data-ipt">
+                    </div>
+                    <div class="container-scores">
+                        <label for="aliado" class="subtitulos">Score Aliado</label>
+                        <input type="number" id="score-ipt" placeholder="Ex: 13">
+                    </div>
+                    <div class="container-scores">
+                        <label for="aliado" class="subtitulos">Score Adversário</label>
+                        <input type="number" id="scoreAdv-ipt" placeholder="Ex: 9">
+                    </div>
+                    <div class="container-scores">
+                        <label for="aliado" class="subtitulos">ACS</label>
+                        <input type="number" step="any" id="acs-ipt" placeholder="0.00">
+                    </div>
                 </div>
-                <div class="container-scores">
-                    <label for="aliado" class="subtitulos">Mortes</label>
-                    <input type="number" id="mortes-ipt">
-                </div>
-                <div class="container-scores">
-                    <label for="aliado" class="subtitulos">Assistências</label>
-                    <input type="number" id="assists-ipt">
+
+                <div class="container">
+                    <div class="container-scores">
+                        <label for="aliado" class="subtitulos">Abates</label>
+                        <input type="number" id="abates-ipt">
+                    </div>
+                    <div class="container-scores">
+                        <label for="aliado" class="subtitulos">Mortes</label>
+                        <input type="number" id="mortes-ipt">
+                    </div>
+                    <div class="container-scores">
+                        <label for="aliado" class="subtitulos">Assistências</label>
+                        <input type="number" id="assists-ipt">
+                    </div>
                 </div>
             </div>
 
@@ -91,7 +100,7 @@
             <div class="estatistica-dash">
                 <div class="user-perfil">
                     <button id="btnAbrir">Adicionar partidas</button>
-                    <button>Editar partidas</button>
+                    <button id="btnEditar">Editar partidas</button>
                 </div>
                 <div class="user-painel">
                     <div class="user-highlight">

@@ -1,12 +1,17 @@
 const modal = document.getElementById('modalCadastro');
 const btnAbrir = document.getElementById('btnAbrir');
 const btnFechar = document.getElementById('btnFechar');
+const btnEditar = document.getElementById('btnEditar');
 
 const selectMapa = document.getElementById('mapa-ipt');
 const mapaPreview = document.getElementById('mapaPreview');
 
 const selectAgente = document.getElementById('agente-ipt');
 const agentePreview = document.getElementById('agentePreview');
+
+const containerEditar = document.getElementById('container-editar-partida');
+const partidaSelect = document.getElementById('partida-select');
+const camposFormulario = document.getElementById('camposFormulario');
 
 const mapas = [
     { id: "Ascent", nome: "Ascent" },
@@ -101,7 +106,19 @@ renderizarAgentes();
 
 // controles modal
 btnAbrir.addEventListener('click', () => {
+    modalTitulo.textContent = "Cadastrar Partida";
+    containerEditar.classList.add('oculto');
+    camposFormulario.classList.remove('oculto');
     modal.classList.remove('oculto');
+});
+
+btnEditar.addEventListener('click', async () => {
+    modalTitulo.textContent = "Editar Partida";
+    containerEditar.classList.remove('oculto');
+    camposFormulario.classList.add('oculto');
+    modal.classList.remove('oculto');
+
+    await renderPartidas();
 });
 
 btnFechar.addEventListener('click', () => {

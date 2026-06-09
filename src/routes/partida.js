@@ -23,4 +23,12 @@ router.get("/obterTopMapa/:idusuario", function (req, res) {
     partidaController.obterTopMapa(req, res);
 });
 
+router.get("/obterPartidasSelect/:idusuario", function (req, res) {
+    partidaController.obterPartidasSelect(req, res);
+});
+
+router.get("/obterInfosPartida/:idPartida", function (req, res) {
+    partidaController.obterInfosPartida(req, res);
+});
+
 module.exports = router;
