@@ -90,13 +90,13 @@ async function cadastrar() {
     const dados = await validacao();
     if (!dados) return;
 
-    let funcao = "OUTROS";
+    let funcao = "outros";
     const sufixo = dados.codigo.slice(-1).toUpperCase();
 
     if (sufixo === "C") {
-        funcao = "COACH";
-    } else if (sufixo === "J") {
-        funcao = "JOGADOR";
+        funcao = "coach";
+    } else if (sufixo === "P") {
+        funcao = "player";
     }
 
     try {

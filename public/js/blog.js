@@ -215,7 +215,7 @@ function editarPost() {
     if (getUsuario().funcao === 'coach' && currentId) {
         window.location.href = `add-post.html?id=${currentId}`;
     } else {
-        alert("Ação permitida apenas para coaches.");
+        mostrarAlerta("Acesso restrito a coaches.");
     }
 }
 
@@ -283,9 +283,8 @@ if (formAddPost) {
 
     formAddPost.addEventListener('submit', function (e) {
         e.preventDefault();
-        // Re-validação no submit
         if (usuario.funcao !== 'coach') {
-            alert("Erro: Você não tem permissão para postar.");
+            mostrarAlerta("Acesso restrito a coaches.");
             return;
         }
 

@@ -4,7 +4,8 @@
   --preto: #131319;
   --branco: #D9D9D9;
   --fundo1: #172739;
-  --frente1: #838690;
+  --frente1: #dbdee7;
+  --frente2: #b4b7c2;
 }
 
 * {
@@ -15,19 +16,24 @@
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: var(--fundo1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--fundo1);
+}
+
+.texto-menor {
+    color: var(--frente2);
+    font-size: clamp(0.6rem, 0.8vw, 0.7rem);
 }
 
 #central {
-    height: 92%;
-    width: 97%;
-    filter: drop-shadow(0 0 6px rgba(100, 216, 202, 0.393));
-    border: 2px solid #6ad6ee35;
-    display: flex;
+  height: 92%;
+  width: 97%;
+  filter: drop-shadow(0 0 6px rgba(100, 216, 202, 0.393));
+  border: 2px solid #6ad6ee35;
+  display: flex;
 }
 
 #sidebar {
@@ -55,7 +61,8 @@ body {
   gap: 20px;
 }
 
-#botoes button, #userinfo button {
+#botoes button,
+#userinfo button {
   padding: 9px;
   background-color: transparent;
   border: 1px solid #6ad6ee35;
@@ -65,7 +72,8 @@ body {
   transition: 0.2s;
 }
 
-#botoes button:hover, #userinfo button:hover {
+#botoes button:hover,
+#userinfo button:hover {
   filter: drop-shadow(0px 1px 4px rgba(75, 255, 234, 0.741));
   border-color: var(--destaque);
   cursor: pointer;
@@ -416,29 +424,32 @@ body {
 
 /* Estilos do gatilho */
 .kpi-tooltip-trigger {
-    font-size: 1rem;
-    cursor: help;
-    border-bottom: 1px dotted #ccc; /* Linha pontilhada opcional para indicar interatividade */
+  font-size: 1rem;
+  cursor: help;
+  border-bottom: 1px dotted #ccc;
+  /* Linha pontilhada opcional para indicar interatividade */
 }
 
 /* Estilo do Tooltip Customizado */
 .custom-tooltip {
-    position: absolute;
-    background-color: rgba(20, 20, 25, 0.95);
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    max-width: 220px;
-    line-height: 1.4;
-    border: 1px solid var(--destaque); /* Cor vermelha temática do Valorant */
-    pointer-events: none; /* Evita que o tooltip atrapalhe o mouse */
-    opacity: 0;
-    transition: opacity 0.15s ease-in-out;
-    z-index: 9999;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: absolute;
+  background-color: rgba(20, 20, 25, 0.95);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  max-width: 220px;
+  line-height: 1.4;
+  border: 1px solid var(--destaque);
+  /* Cor vermelha temática do Valorant */
+  pointer-events: none;
+  /* Evita que o tooltip atrapalhe o mouse */
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+  z-index: 9999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .custom-tooltip.active {
-    opacity: 1;
+  opacity: 1;
 }

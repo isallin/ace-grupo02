@@ -27,9 +27,13 @@ function obterKpis(idusuario) {
         ROUND(SUM(kills) / NULLIF(SUM(deaths), 0), 2) AS kdr,
         ROUND((SUM(kills) + SUM(assists)) / NULLIF(SUM(deaths), 0), 2) AS kda,
         ROUND(AVG(acs), 0) AS media_acs,
-        CONCAT(ROUND(AVG(CASE WHEN score > scoreAdv THEN 1 ELSE 0 END) * 100, 0), '%') AS winrate,
+        CONCAT(
+            ROUND(AVG(CASE WHEN score > scoreAdv THEN 1 ELSE 0 END) * 100, 0),
+            '%'
+        ) AS winrate,
+        SUM(CASE WHEN score > scoreAdv THEN 1 ELSE 0 END) AS partidas_ganhas,
         COUNT(idpartidausuario) AS total_partidas
-    FROM partidas_usuario 
+    FROM partidas_usuario
     WHERE usuarioFk = ${idusuario};
     `;
 

@@ -1,4 +1,7 @@
 const btnSalvar = document.getElementById('btnSalvar');
+let meuGraficoStats = null;
+let meuGraficoAgentes = null;
+let meuGraficoMapas = null;
 
 async function cadastrarPartida(dados) {
     const idusuario = sessionStorage.ID_USUARIO;
@@ -153,6 +156,7 @@ async function renderKpis() {
         document.getElementById("kpi-kda").innerHTML = dados.kda;
         document.getElementById("kpi-media-acs").innerHTML = dados.media_acs;
         document.getElementById("kpi-winrate").innerHTML = dados.winrate;
+        document.getElementById("kpi-winrateinfo").innerHTML = `${dados.partidas_ganhas} vitórias / ${dados.total_partidas} partidas`;
     }
 }
 
@@ -165,43 +169,30 @@ async function renderStatChart() {
     const assistencias = statChart.map(p => p.assistencias);
 
     const ctx = document.getElementById('statsChart').getContext('2d');
-    new Chart(ctx, {
+
+    if (meuGraficoStats) {
+        meuGraficoStats.destroy();
+    }
+
+    meuGraficoStats = new Chart(ctx, {
         type: 'line',
         data: {
             labels: datas,
             datasets: [
-                {
-                    label: 'Abates',
-                    data: abates,
-                    borderColor: '#7EC94C',
-                    tension: 0.2
-                },
-                {
-                    label: 'Mortes',
-                    data: mortes,
-                    borderColor: '#c3423f',
-                    tension: 0.2
-                },
-                {
-                    label: 'Assistências',
-                    data: assistencias,
-                    borderColor: '#ffa500',
-                    tension: 0.2
-                }
+                { label: 'Abates', data: abates, borderColor: '#7EC94C', tension: 0.2 },
+                { label: 'Mortes', data: mortes, borderColor: '#c3423f', tension: 0.2 },
+                { label: 'Assistências', data: assistencias, borderColor: '#ffa500', tension: 0.2 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true }
-            }
+            scales: { y: { beginAtZero: true } }
         }
     });
 }
 
 async function renderAgentChart() {
-    let meuGraficoAgentes = null;
     const topAgent = await obterTopAgent();
 
     if (!topAgent || topAgent.length === 0) {
@@ -225,11 +216,7 @@ async function renderAgentChart() {
             datasets: [{
                 label: 'Win Rate (%)',
                 data: winrates,
-                backgroundColor: [
-                    'rgba(106, 214, 238, 0.8)',
-                    'rgba(106, 214, 238, 0.6)',
-                    'rgba(106, 214, 238, 0.4)'
-                ],
+                backgroundColor: ['rgba(106, 214, 238, 0.8)', 'rgba(106, 214, 238, 0.6)', 'rgba(106, 214, 238, 0.4)'],
                 borderColor: '#6AD6EE',
                 borderWidth: 1,
                 borderRadius: 4
@@ -239,24 +226,13 @@ async function renderAgentChart() {
             indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        callback: function (value) { return value + '%'; }
-                    }
-                }
-            }
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, max: 100, ticks: { callback: function (value) { return value + '%'; } } } }
         }
     });
 }
 
 async function renderMapChart() {
-    let mapChart = null;
     const dadosMapa = await obterTopMapa();
 
     if (!dadosMapa || dadosMapa.length === 0) {
@@ -269,22 +245,18 @@ async function renderMapChart() {
 
     const ctx = document.getElementById('mapGraph').getContext('2d');
 
-    if (mapChart) {
-        mapChart.destroy();
+    if (meuGraficoMapas) {
+        meuGraficoMapas.destroy();
     }
 
-    mapChart = new Chart(ctx, {
+    meuGraficoMapas = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: nomesMapas,
             datasets: [{
                 label: 'Win Rate (%)',
                 data: winrates,
-                backgroundColor: [
-                    'rgba(106, 214, 238, 0.8)',
-                    'rgba(106, 214, 238, 0.6)',
-                    'rgba(106, 214, 238, 0.4)'
-                ],
+                backgroundColor: ['rgba(106, 214, 238, 0.8)', 'rgba(106, 214, 238, 0.6)', 'rgba(106, 214, 238, 0.4)'],
                 borderColor: '#6AD6EE',
                 borderWidth: 1,
                 borderRadius: 4
@@ -294,18 +266,8 @@ async function renderMapChart() {
             indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        callback: function (value) { return value + '%'; }
-                    }
-                }
-            }
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, max: 100, ticks: { callback: function (value) { return value + '%'; } } } }
         }
     });
 }

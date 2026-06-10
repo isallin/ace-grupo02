@@ -238,3 +238,71 @@ CREATE TABLE partidas_usuario (
     CONSTRAINT fk_mapa_partida FOREIGN KEY (mapaFk) REFERENCES mapa(idmapa),
     CONSTRAINT fk_agente_partida FOREIGN KEY (agenteFk) REFERENCES agente(idagente)
 );
+
+-- -----------------------------------------------------
+-- INSERINDO DADOS
+-- -----------------------------------------------------
+INSERT INTO
+    usuarios (nickname, email, senha, funcao)
+VALUES (
+        'Administrador',
+        'ace@teste',
+        '123',
+        'admin'
+    );
+
+-- -----------------------------------------------------
+-- INSERINDO DADOS
+-- -----------------------------------------------------
+INSERT INTO
+    usuarios (nickname, email, senha, funcao)
+VALUES (
+        'Administrador',
+        'ace@teste',
+        '123',
+        'admin'
+    );
+
+-- ORGANIZAÇÕES
+INSERT INTO organizacao (nome, contato, codAtivacao) VALUES
+('LOUD', 'contato@loud.gg', 'LOUD2026VAL'),
+('Sentinels', 'info@sentinels.gg', 'SEN2026WIN'),
+('Fnatic', 'support@fnatic.com', 'FNC2026VLR');
+
+-- USUÁRIOS
+INSERT INTO usuarios (nome_completo, nickname, email, senha, funcao, organizacaofk) VALUES
+('Erick Santos', 'aspas', 'aspas@loud', 'loud123', 'player', 1),
+('Tyson Ngo', 'TenZ', 'tenz@sentinels.gg', 'sen2026', 'player', 2),
+('Jake Howlett', 'Boaster', 'boaster@fnatic.com', 'fnc789', 'player', 3),
+('Matias Delipetro', 'Saadhak', 'saadhak@loud.gg', 'coach99', 'coach', 1),
+('Coach da Silva', 'coach', 'coach@teste', 'coach123', 'coach', 1),
+('Player da Silva', 'player', 'player@teste', 'player123', 'player', 1);
+
+INSERT INTO partidas_usuario 
+(score, scoreAdv, acs, kills, deaths, assists, data_partida, usuarioFk, mapaFk, agenteFk) 
+VALUES
+(13,8,  298.4, 24,19,6,'2026-06-08',7,1,12),
+(13,10, 287.1, 22,18,5,'2026-06-09',7,5,12),
+(13,11, 301.5, 25,20,4,'2026-06-10',7,7,12),
+(13,7,  315.2, 28,21,6,'2026-06-11',7,1,12),
+(13,9,  276.8, 21,17,7,'2026-06-12',7,9,12),
+(13,6,  322.0, 29,22,5,'2026-06-13',7,10,12),
+(13,12, 264.5, 20,16,8,'2026-06-14',7,1,12),
+(13,8,  309.3, 26,21,4,'2026-06-15',7,5,12),
+(13,10, 284.7, 23,18,6,'2026-06-16',7,7,12),
+(11,13, 235.9, 19,25,5,'2026-06-17',7,1,12),
+(13,8,  281.2, 23,24,7,'2026-06-18',7,2,18),
+(13,10, 295.4, 25,20,4,'2026-06-19',7,6,18),
+(13,11, 274.8, 22,17,8,'2026-06-20',7,2,18),
+(13,7,  312.7, 27,21,5,'2026-06-21',7,8,18),
+(13,10, 283.3, 23,18,5,'2026-06-24',7,2,18),
+(10,13, 227.5, 18,16,4,'2026-06-25',7,8,18),
+(8,13,  218.9, 17,15,6,'2026-06-26',7,6,18),
+(11,13, 233.7, 19,17,5,'2026-06-27',7,2,18),
+(13,10, 268.5, 21,17,7,'2026-06-28',7,8,27),
+(13,8,  282.1, 23,18,5,'2026-06-29',7,3,27),
+(13,11, 259.4, 20,16,8,'2026-06-30',7,8,27),
+(13,9,  274.6, 22,18,6,'2026-07-01',7,4,27),
+(13,12, 251.8, 19,15,9,'2026-07-02',7,8,27),
+(10,13, 216.4, 17,15,4,'2026-07-03',7,3,27),
+(9,13,  209.8, 16,14,5,'2026-07-04',7,8,27);
