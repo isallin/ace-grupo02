@@ -23,7 +23,7 @@ function buscarDadosGerais(req, res) {
             kpi1: {
                 nome: resKpi1.length > 0 ? resKpi1[0].nome : "--",
                 acs: resKpi1.length > 0 ? resKpi1[0].acs : "--",
-                img: resKpi1.length > 0 ? resKpi1[0].img : ""
+                img: resKpi1.length > 0 && resKpi1[0].nome ? `../assets/${resKpi1[0].nome}_icon.png` : ""
             },
             kpi2: [],
             mapas: {
@@ -103,11 +103,11 @@ function buscarDadosAgente(req, res) {
 
         // Mapeamento dos anos de lançamento dos agentes para evitar exibir dados de antes de existirem
         var anoLancamentoAgente = {
-            "Sage": 2021, "Phoenix": 2021, "Jett": 2021, "Omen": 2021, "Brimstone": 2021, 
-            "Sova": 2021, "Breach": 2021, "Cypher": 2021, "Raze": 2021, "Viper": 2021, 
-            "Reyna": 2021, "Killjoy": 2021, "Skye": 2021, "Yoru": 2021, "Astra": 2021, 
-            "Chamber": 2021, "Neon": 2022, "Fade": 2022, "Harbor": 2022, "Gekko": 2023, 
-            "Deadlock": 2023, "Iso": 2023, "Clove": 2024, "Vyse": 2024, "Miks": 2025, 
+            "Sage": 2021, "Phoenix": 2021, "Jett": 2021, "Omen": 2021, "Brimstone": 2021,
+            "Sova": 2021, "Breach": 2021, "Cypher": 2021, "Raze": 2021, "Viper": 2021,
+            "Reyna": 2021, "Killjoy": 2021, "Skye": 2021, "Yoru": 2021, "Astra": 2021,
+            "Chamber": 2021, "Neon": 2022, "Fade": 2022, "Harbor": 2022, "Gekko": 2023,
+            "Deadlock": 2023, "Iso": 2023, "Clove": 2024, "Vyse": 2024, "Miks": 2025,
             "Tejo": 2025, "Veto": 2025, "Waylay": 2025
         };
 
