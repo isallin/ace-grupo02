@@ -10,7 +10,7 @@ function autenticar(email, senha) {
 
 function cadastrar(usuario, email, senha, funcao, codigo) {
     var instrucaoSql = `
-        INSERT INTO usuarios (nickname, email, senha, funcao, idorganizacao) 
+        INSERT INTO usuarios (nickname, email, senha, funcao, organizacaofk) 
         SELECT '${usuario}', '${email}', '${senha}', '${funcao}', idorganizacao 
         FROM organizacao 
         WHERE codAtivacao = '${codigo}';
