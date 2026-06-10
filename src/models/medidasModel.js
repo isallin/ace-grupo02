@@ -98,8 +98,8 @@ function buscarHistoricoAgente(agente) {
             ROUND(AVG(CASE WHEN p.campeonato LIKE '%2024%' THEN ec.pick_rate END), 1) AS pr_2024,
             ROUND(AVG(CASE WHEN p.campeonato LIKE '%2025%' THEN ec.win_rate END), 1) AS wr_2025,
             ROUND(AVG(CASE WHEN p.campeonato LIKE '%2025%' THEN ec.pick_rate END), 1) AS pr_2025,
-            ROUND(AVG(CASE WHEN p.campeonato LIKE ${ano} THEN ec.win_rate END), 1) AS wr_${ano},
-            ROUND(AVG(CASE WHEN p.campeonato LIKE ${ano} THEN ec.pick_rate END), 1) AS pr_${ano}
+            ROUND(AVG(CASE WHEN p.campeonato LIKE 2026 THEN ec.win_rate END), 1) AS wr_2026,
+            ROUND(AVG(CASE WHEN p.campeonato LIKE 2026 THEN ec.pick_rate END), 1) AS pr_2026
         FROM estatistica_composicao ec
         JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
         JOIN agente a ON ca.agenteFk = a.idagente
