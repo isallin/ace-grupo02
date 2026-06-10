@@ -270,7 +270,6 @@ if (formAddPost) {
 
     formAddPost.addEventListener('submit', function (e) {
         e.preventDefault();
-        mostrarSucesso()
         const titulo = document.getElementById('titulo').value;
         const mapa = document.getElementById('mapa').value;
         const agentesSelecionados = Array.from(document.querySelectorAll('.agente-select')).map(s => s.value);
@@ -321,19 +320,6 @@ function mostrarAlerta() {
     const closeBtn = document.getElementById('alert-close-btn');
 
     alertMsg.textContent = "Acesso restrito a coaches.";
-    alertBox.classList.remove('hidden');
-
-    closeBtn.onclick = function () {
-        alertBox.classList.add('hidden');
-    };
-}
-
-function mostrarSucesso() {
-    const alertBox = document.getElementById('custom-alert');
-    const alertMsg = document.getElementById('alert-message');
-    const closeBtn = document.getElementById('alert-close-btn');
-
-    alertMsg.textContent = "Post publicado!";
     alertBox.classList.remove('hidden');
 
     closeBtn.onclick = function () {
