@@ -231,7 +231,7 @@ function deletarPost() {
 function verificarAcesso() {
     const usuario = getUsuario();
 
-    if (usuario.funcao == 'coach' || usuario.funcao == 'admin') {
+    if (usuario.funcao == 'coach') {
         window.location.href = 'add-post.html';
     } else {
         mostrarAlerta("Acesso restrito a coaches.");

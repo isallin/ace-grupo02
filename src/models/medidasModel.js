@@ -53,14 +53,22 @@ function buscarClasses(ano) {
 function buscarDadosAgente(agente, ano) {
     var instrucao = `
         SELECT 
-            (SELECT ROUND(AVG(ec.win_rate), 1) FROM estatistica_composicao ec
+            (SELECT ROUND(AVG(ec.win_rate), 1)
+             FROM estatistica_composicao ec
              JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
              JOIN agente a ON ca.agenteFk = a.idagente
              JOIN composicao c ON ec.composicaoFk = c.idcomposicao
              JOIN partida p ON c.partidaFk = p.idpartida
              WHERE a.nome = '${agente}' AND p.campeonato LIKE '%${ano}%') AS win_rate,
 
-            (SELECT ROUND(AVG(ec.pick_rate), 1) FROM estatistica_composicao ec
+            (SELECT ROUND(
+                COUNT(DISTINCT ec.composicaoFk) * 100.0 / (
+                    SELECT COUNT(DISTINCT c2.idcomposicao)
+                    FROM composicao c2
+                    JOIN partida p2 ON c2.partidaFk = p2.idpartida
+                    WHERE p2.campeonato LIKE '%${ano}%'
+                ), 1)
+             FROM estatistica_composicao ec
              JOIN composicao_agente ca ON ec.composicaoFk = ca.composicaoFk
              JOIN agente a ON ca.agenteFk = a.idagente
              JOIN composicao c ON ec.composicaoFk = c.idcomposicao
