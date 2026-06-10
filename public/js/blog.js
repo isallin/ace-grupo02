@@ -45,13 +45,23 @@ function formatarData(dataStr) {
     return d.toLocaleDateString('pt-BR');
 }
 
+function verificarAcesso() {
+    const usuario = getUsuario();
+
+    if (usuario.funcao == 'coach' || usuario.funcao == 'admin') {
+        window.location.href = 'add-post.html';
+    } else {
+        mostrarAlerta("Acesso restrito a coaches.");
+    }
+}
+
 // =====================================================
 // PÁGINA: blog.html
 // =====================================================
 const containerBlog = document.getElementById("lista-posts");
 if (containerBlog) {
     const btnNovoPost = document.getElementById("btn-novo-post");
-    if (btnNovoPost && getUsuario().funcao == 'player') {
+    if (btnNovoPost && getUsuario().funcao !== 'coach') {
         btnNovoPost.style.display = 'none';
     }
 
@@ -225,30 +235,7 @@ function deletarPost() {
 
     fetch(`${BASE_URL}/blog/posts/${currentId}`, { method: 'DELETE' })
         .then(() => window.location.href = "blog.html")
-        .catch(() => alert("Erro ao deletar post."));
-}
-
-function verificarAcesso() {
-    const usuario = getUsuario();
-
-    if (usuario.funcao == 'coach') {
-        window.location.href = 'add-post.html';
-    } else {
-        mostrarAlerta("Acesso restrito a coaches.");
-    }
-}
-
-function mostrarAlerta() {
-    const alertBox = document.getElementById('custom-alert');
-    const alertMsg = document.getElementById('alert-message');
-    const closeBtn = document.getElementById('alert-close-btn');
-
-    alertMsg.textContent = "Acesso restrito a coaches.";
-    alertBox.classList.remove('hidden');
-
-    closeBtn.onclick = function () {
-        alertBox.classList.add('hidden');
-    };
+        .catch(() => mostrarAlerta("Erro ao deletar posts."));
 }
 
 // =====================================================
@@ -283,17 +270,13 @@ if (formAddPost) {
 
     formAddPost.addEventListener('submit', function (e) {
         e.preventDefault();
-        if (usuario.funcao !== 'coach') {
-            mostrarAlerta("Acesso restrito a coaches.");
-            return;
-        }
-
+        mostrarSucesso()
         const titulo = document.getElementById('titulo').value;
         const mapa = document.getElementById('mapa').value;
         const agentesSelecionados = Array.from(document.querySelectorAll('.agente-select')).map(s => s.value);
 
         if (new Set(agentesSelecionados).size !== agentesSelecionados.length) {
-            alert("Erro: Você selecionou agentes repetidos!");
+            mostrarAlerta("Você selecionou agentes repetidos");
             return;
         }
 
@@ -306,6 +289,7 @@ if (formAddPost) {
         });
 
         if (currentId) {
+            
             fetch(`${BASE_URL}/blog/posts/${currentId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -315,7 +299,7 @@ if (formAddPost) {
                     if (!r.ok) throw new Error("Erro ao atualizar");
                     window.location.href = `post.html?id=${currentId}`;
                 })
-                .catch(() => alert("Erro ao atualizar post."));
+                .catch(() => mostrarAlerta("Erro ao atualizar posts"));
         } else {
             fetch(`${BASE_URL}/blog/posts`, {
                 method: 'POST',
@@ -326,8 +310,33 @@ if (formAddPost) {
                     if (!r.ok) throw new Error("Erro ao publicar");
                     window.location.href = "blog.html";
                 })
-                .catch(() => alert("Erro ao publicar post."));
+                .catch(() => mostrarAlerta("Erro ao publicar posts"));
         }
     });
 }
 
+function mostrarAlerta() {
+    const alertBox = document.getElementById('custom-alert');
+    const alertMsg = document.getElementById('alert-message');
+    const closeBtn = document.getElementById('alert-close-btn');
+
+    alertMsg.textContent = "Acesso restrito a coaches.";
+    alertBox.classList.remove('hidden');
+
+    closeBtn.onclick = function () {
+        alertBox.classList.add('hidden');
+    };
+}
+
+function mostrarSucesso() {
+    const alertBox = document.getElementById('custom-alert');
+    const alertMsg = document.getElementById('alert-message');
+    const closeBtn = document.getElementById('alert-close-btn');
+
+    alertMsg.textContent = "Post publicado!";
+    alertBox.classList.remove('hidden');
+
+    closeBtn.onclick = function () {
+        alertBox.classList.add('hidden');
+    };
+}
