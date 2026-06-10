@@ -216,12 +216,14 @@ function buscarDadosMapa(req, res) {
         var clasesUsadas = {};
         for (var j = 0; j < resComp.length; j++) {
             var comp = resComp[j];
+            var nomeAgente = comp.nome || comp.agente;
+
             if (!clasesUsadas[comp.classe]) {
                 clasesUsadas[comp.classe] = true;
                 composicao.push({
                     funcao: comp.classe,
-                    agente: comp.nome || comp.agente,
-                    img: comp.img || ''
+                    agente: nomeAgente || '--',
+                    img: nomeAgente ? '../assets/' + nomeAgente + '_icon.png' : ''
                 });
             }
         }

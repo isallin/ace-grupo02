@@ -13,10 +13,10 @@ exports.criarPost = async (req, res) => {
     try {
         const novoPost = {
             titulo: req.body.titulo,
-            autor_nome: req.body.autor,          // nickname vindo do sessionStorage
+            autor_nome: req.body.autor,
             agentes: req.body.agentes,
             banner: `Loading_Screen_${req.body.mapa}.webp`,
-            usuario_id: req.body.usuario_id      // idusuario vindo do sessionStorage
+            usuario_id: req.body.usuario_id
         };
         const result = await Post.criar(novoPost);
         res.json({ message: "Post criado!", id: result.insertId });
