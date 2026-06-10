@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800&display=swap" rel="stylesheet">
     <title>Painel de Mapas</title>
 </head>
+
 <body onload="switchMenu()">
     <div id="central">
         <div id="sidebar">
@@ -47,13 +49,20 @@
             <div id="mapa-botoes">
                 <span id="botoes-titulo">Selecione um mapa para análise</span>
                 <div id="botoes-lista">
-                    <button class="mapa-btn" id="btn-haven"   onclick="selecionarMapa('haven')">  <img src="../assets/Loading_Screen_Haven.webp">   <span>Haven</span>   </button>
-                    <button class="mapa-btn" id="btn-pearl"   onclick="selecionarMapa('pearl')">  <img src="../assets/Loading_Screen_Pearl.webp">   <span>Pearl</span>   </button>
-                    <button class="mapa-btn" id="btn-abyss"   onclick="selecionarMapa('abyss')">  <img src="../assets/Loading_Screen_Abyss.webp">   <span>Abyss</span>   </button>
-                    <button class="mapa-btn" id="btn-split"   onclick="selecionarMapa('split')">  <img src="../assets/Loading_Screen_Split.webp">   <span>Split</span>   </button>
-                    <button class="mapa-btn" id="btn-corrode" onclick="selecionarMapa('corrode')"><img src="../assets/Loading_Screen_Corrode.webp"> <span>Corrode</span> </button>
-                    <button class="mapa-btn" id="btn-breeze"  onclick="selecionarMapa('breeze')"> <img src="../assets/Loading_Screen_Breeze.webp">  <span>Breeze</span>  </button>
-                    <button class="mapa-btn" id="btn-bind"    onclick="selecionarMapa('bind')">   <img src="../assets/Loading_Screen_Bind.webp">    <span>Bind</span>    </button>
+                    <button class="mapa-btn" id="btn-haven" onclick="selecionarMapa('haven')"> <img
+                            src="../assets/Loading_Screen_Haven.webp"> <span>Haven</span> </button>
+                    <button class="mapa-btn" id="btn-pearl" onclick="selecionarMapa('pearl')"> <img
+                            src="../assets/Loading_Screen_Pearl.webp"> <span>Pearl</span> </button>
+                    <button class="mapa-btn" id="btn-abyss" onclick="selecionarMapa('abyss')"> <img
+                            src="../assets/Loading_Screen_Abyss.webp"> <span>Abyss</span> </button>
+                    <button class="mapa-btn" id="btn-split" onclick="selecionarMapa('split')"> <img
+                            src="../assets/Loading_Screen_Split.webp"> <span>Split</span> </button>
+                    <button class="mapa-btn" id="btn-corrode" onclick="selecionarMapa('corrode')"><img
+                            src="../assets/Loading_Screen_Corrode.webp"> <span>Corrode</span> </button>
+                    <button class="mapa-btn" id="btn-breeze" onclick="selecionarMapa('breeze')"> <img
+                            src="../assets/Loading_Screen_Breeze.webp"> <span>Breeze</span> </button>
+                    <button class="mapa-btn" id="btn-bind" onclick="selecionarMapa('bind')"> <img
+                            src="../assets/Loading_Screen_Bind.webp"> <span>Bind</span> </button>
                 </div>
             </div>
 
@@ -97,18 +106,18 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../js/switchMenu.js"></script>
 <script>
-    var anoAtual    = 2026
-    var mapaAtual   = null
+    var anoAtual = 2026
+    var mapaAtual = null
     var chartAgentes = null
 
     var descs = {
-        haven:   'Sob um mosteiro esquecido, um clamor surge de Agentes rivais em confronto pelo controle de três locais. Há mais território para controlar, mas os defensores podem usar a área extra para investidas agressivas.',
-        pearl:   'Neste mapa de dois locais, ambientado em uma vibrante cidade subaquática, os atacantes avançam contra os defensores. Leve a luta para o meio do mapa ou para as alas de longo alcance.',
-        abyss:   'Contemple o Abismo, uma base clandestina enterrada nas profundezas de um desfiladeiro impenetrável e sem fim. Utilize quedas da morte para jogadas inteligentes.',
-        split:   'Se você quiser ir longe, terá que subir. Dois pontos de ancoragem separados por um centro elevado permitem movimentação rápida com o uso de dois ascensores de corda.',
+        haven: 'Sob um mosteiro esquecido, um clamor surge de Agentes rivais em confronto pelo controle de três locais. Há mais território para controlar, mas os defensores podem usar a área extra para investidas agressivas.',
+        pearl: 'Neste mapa de dois locais, ambientado em uma vibrante cidade subaquática, os atacantes avançam contra os defensores. Leve a luta para o meio do mapa ou para as alas de longo alcance.',
+        abyss: 'Contemple o Abismo, uma base clandestina enterrada nas profundezas de um desfiladeiro impenetrável e sem fim. Utilize quedas da morte para jogadas inteligentes.',
+        split: 'Se você quiser ir longe, terá que subir. Dois pontos de ancoragem separados por um centro elevado permitem movimentação rápida com o uso de dois ascensores de corda.',
         corrode: 'Uma cidade castelo francesa transformada em uma instalação de mineração de sal radianita. Abra caminho pelas ruas medievais neste mapa tradicional de três corredores.',
-        breeze:  'Admire as ruínas históricas ou as cavernas à beira-mar neste paraíso tropical. Fique atento aos seus flancos e será moleza.',
-        bind:    'Dois locais. Sem meio termo. Tem que escolher entre esquerda e direita. Um par de teletransportadores unidirecionais facilita o flanqueamento.',
+        breeze: 'Admire as ruínas históricas ou as cavernas à beira-mar neste paraíso tropical. Fique atento aos seus flancos e será moleza.',
+        bind: 'Dois locais. Sem meio termo. Tem que escolher entre esquerda e direita. Um par de teletransportadores unidirecionais facilita o flanqueamento.',
     }
 
     function toggleDropdown() {
@@ -116,7 +125,7 @@
         opcoes.style.display = opcoes.style.display === 'flex' ? 'none' : 'flex'
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!document.getElementById('filtro-ano').contains(e.target)) {
             document.getElementById('filtro-opcoes').style.display = 'none'
         }
@@ -140,36 +149,38 @@
         mapaAtual = id
 
         fetch('/medidas/mapa/' + id + '/' + anoAtual, { cache: 'no-store' })
-        .then(function (response) {
-            if (response.ok) {
-                response.json().then(function (resposta) {
-                    plotarDadosMapa(id, resposta);
-                });
-            } else {
-                console.error("Erro ao obter os dados do mapa");
-            }
-        })
-        .catch(function (error) {
-            console.error('Erro na obtenção dos dados do mapa:', error.message);
-        });
+            .then(function (response) {
+                if (response.ok) {
+                    response.json().then(function (resposta) {
+                        plotarDadosMapa(id, resposta);
+                    });
+                } else {
+                    console.error("Erro ao obter os dados do mapa");
+                }
+            })
+            .catch(function (error) {
+                console.error('Erro na obtenção dos dados do mapa:', error.message);
+            });
     }
 
     function plotarDadosMapa(id, dados) {
         document.getElementById('mapa-info').style.display = 'flex'
-        document.getElementById('mapa-img').src            = '../assets/Loading_Screen_' + id.charAt(0).toUpperCase() + id.slice(1) + '.webp'
-        document.getElementById('mapa-nome').innerHTML     = id.charAt(0).toUpperCase() + id.slice(1)
-        document.getElementById('mapa-desc').innerHTML     = descs[id]
-        document.getElementById('ban-pct').innerHTML       = dados.ban_rate + '%'
+        document.getElementById('mapa-img').src = '../assets/Loading_Screen_' + id.charAt(0).toUpperCase() + id.slice(1) + '.webp'
+        document.getElementById('mapa-nome').innerHTML = id.charAt(0).toUpperCase() + id.slice(1)
+        document.getElementById('mapa-desc').innerHTML = descs[id]
+        document.getElementById('ban-pct').innerHTML = dados.ban_rate + '%'
 
         for (var i = 0; i < 5; i++) {
             if (i < dados.composicao.length) {
-                var a = dados.composicao[i]
+                var a = dados.composicao[i];
+                var srcImagem = a.img || (a.agente && a.agente !== '--' ? '../assets/' + a.agente + '_icon.png' : '');
+
                 document.getElementById('slot-' + i).innerHTML =
-                    '<img src="' + a.img + '" alt="' + a.agente + '">' +
+                    '<img src="' + srcImagem + '" alt="' + a.agente + '">' +
                     '<div><span class="slot-funcao">' + a.funcao + '</span>' +
-                    '<span class="slot-nome">'        + a.agente + '</span></div>'
+                    '<span class="slot-nome">' + a.agente + '</span></div>';
             } else {
-                document.getElementById('slot-' + i).innerHTML = ''
+                document.getElementById('slot-' + i).innerHTML = '';
             }
         }
 
@@ -179,17 +190,17 @@
 
         if (chartAgentes) chartAgentes.destroy()
 
-        var labels   = dados.funcoes.map(function(f) { return f.funcao })
-        var wrLabels = dados.funcoes.map(function(f) { return f.wr.agente })
-        var prLabels = dados.funcoes.map(function(f) { return f.pr.agente })
-        var wrVals   = dados.funcoes.map(function(f) { return f.wr.valor })
-        var prVals   = dados.funcoes.map(function(f) { return f.pr.valor })
+        var labels = dados.funcoes.map(function (f) { return f.funcao })
+        var wrLabels = dados.funcoes.map(function (f) { return f.wr.agente })
+        var prLabels = dados.funcoes.map(function (f) { return f.pr.agente })
+        var wrVals = dados.funcoes.map(function (f) { return f.wr.valor })
+        var prVals = dados.funcoes.map(function (f) { return f.pr.valor })
 
         var agentLabelPlugin = {
             id: 'agentLabels',
-            afterDatasetsDraw: function(chart) {
+            afterDatasetsDraw: function (chart) {
                 var ctx = chart.ctx
-                chart.data.datasets.forEach(function(dataset, datasetIndex) {
+                chart.data.datasets.forEach(function (dataset, datasetIndex) {
                     var meta = chart.getDatasetMeta(datasetIndex)
                     if (meta.hidden) return
 
@@ -197,11 +208,11 @@
                     var names = isWR ? wrLabels : prLabels
                     var color = isWR ? '#6AD6EE' : '#B87333'
 
-                    meta.data.forEach(function(bar, index) {
-                        var value  = dataset.data[index]
-                        var name   = names[index]
-                        var x      = bar.x
-                        var yTop   = bar.y
+                    meta.data.forEach(function (bar, index) {
+                        var value = dataset.data[index]
+                        var name = names[index]
+                        var x = bar.x
+                        var yTop = bar.y
 
                         ctx.save()
                         ctx.font = '700 8px Unbounded, sans-serif'
@@ -272,7 +283,7 @@
                     y: {
                         min: 0, max: 100,
                         grid: { color: 'rgba(106,214,238,0.07)' },
-                        ticks: { color: '#838690', font: { size: 8, family: 'Unbounded' }, callback: function(v) { return v + '%' } },
+                        ticks: { color: '#838690', font: { size: 8, family: 'Unbounded' }, callback: function (v) { return v + '%' } },
                         border: { color: '#6ad6ee20' }
                     }
                 }
@@ -281,4 +292,5 @@
     }
 
 </script>
+
 </html>
