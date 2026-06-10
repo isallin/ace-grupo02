@@ -121,10 +121,10 @@
 <script>
     b_usuario.innerHTML = sessionStorage.NOME_USUARIO || 'Visitante';
 
-    var anoAtual  = 2026;
+    var anoAtual = 2026;
     var kpi2atual = 0;
-    var chart1    = null;
-    var chart2    = null;
+    var chart1 = null;
+    var chart2 = null;
     var dadosDashboard = null;
 
     function abrirFecharDropdown() {
@@ -154,9 +154,9 @@
     function trocarKpi2() {
         if (!dadosDashboard || !dadosDashboard.kpi2 || dadosDashboard.kpi2.length === 0) {
             document.getElementById('kpi2-label').innerHTML = "Sem Dados";
-            document.getElementById('kpi2-mapa').innerHTML  = "--";
-            document.getElementById('kpi2-atk').innerHTML   = "--";
-            document.getElementById('kpi2-def').innerHTML   = "--";
+            document.getElementById('kpi2-mapa').innerHTML = "--";
+            document.getElementById('kpi2-atk').innerHTML = "--";
+            document.getElementById('kpi2-def').innerHTML = "--";
             return;
         }
         var k = dadosDashboard.kpi2[kpi2atual];
@@ -169,7 +169,7 @@
     function passarKpi2(direcao) {
         if (!dadosDashboard || !dadosDashboard.kpi2) return;
         var total = dadosDashboard.kpi2.length;
-        if(total === 0) return;
+        if (total === 0) return;
         kpi2atual = kpi2atual + direcao
         if (kpi2atual < 0) kpi2atual = total - 1
         if (kpi2atual >= total) kpi2atual = 0
@@ -178,27 +178,29 @@
 
     function carregarDados() {
         fetch('/medidas/geral/' + anoAtual, { cache: 'no-store' })
-        .then(function (response) {
-            if (response.ok) {
-                response.json().then(function (resposta) {
-                    dadosDashboard = resposta;
-                    plotarPainel();
-                });
-            } else {
-                console.error("Nenhum dado encontrado ou erro na API");
-            }
-        })
-        .catch(function (error) {
-            console.error('Erro na obtenção dos dados p/ gráfico:', error.message);
-        });
+            .then(function (response) {
+                if (response.ok) {
+                    response.json().then(function (resposta) {
+                        dadosDashboard = resposta;
+                        plotarPainel();
+                    });
+                } else {
+                    console.error("Nenhum dado encontrado ou erro na API");
+                }
+            })
+            .catch(function (error) {
+                console.error('Erro na obtenção dos dados p/ gráfico:', error.message);
+            });
     }
 
     function plotarPainel() {
         if (!dadosDashboard) return;
         var d = dadosDashboard;
-        
-        document.getElementById('kpi1-img').src             = d.kpi1.img || '';
-        document.getElementById('kpi1-nome').innerHTML      = d.kpi1.nome || 'N/D';
+
+        document.getElementById('kpi1-img').src = d.kpi1.nome && d.kpi1.nome !== '--'
+            ? `../assets/${d.kpi1.nome}_icon.png`
+            : '';
+        document.getElementById('kpi1-nome').innerHTML = d.kpi1.nome || 'N/D';
         document.getElementById('kpi1-acs-valor').innerHTML = d.kpi1.acs || 0;
 
         trocarKpi2();
@@ -249,7 +251,7 @@
                         x: {
                             min: 30, max: 70,
                             grid: { color: 'rgba(106,214,238,0.07)' },
-                            ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function(v) { return v + '%' } },
+                            ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function (v) { return v + '%' } },
                             border: { color: '#6ad6ee20' }
                         },
                         y: {
@@ -300,7 +302,7 @@
                         y: {
                             min: 40, max: 70,
                             grid: { color: 'rgba(106,214,238,0.07)' },
-                            ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function(v) { return v + '%' } },
+                            ticks: { color: '#838690', font: { size: 9, family: 'Unbounded' }, callback: function (v) { return v + '%' } },
                             border: { color: '#6ad6ee20' }
                         }
                     }
